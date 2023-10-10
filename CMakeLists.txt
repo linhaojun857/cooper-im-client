@@ -13,6 +13,7 @@ find_package(Qt6 COMPONENTS
         Gui
         Widgets
         Network
+        Core5Compat
         REQUIRED)
 
 add_executable(cooper_im_client
@@ -28,7 +29,15 @@ add_executable(cooper_im_client
         # view
         view/LRWidget.hpp
         view/LRWidget.cpp
-        view/LRWidget.ui)
+        view/LRWidget.ui
+        # core
+        core/IMKernel.hpp
+        core/IMKernel.cpp
+        # util
+        util/HttpUtil.cpp
+        util/HttpUtil.hpp
+        # config
+        config/IMDefine.hpp)
 
 target_include_directories(cooper_im_client PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
@@ -37,6 +46,7 @@ target_link_libraries(cooper_im_client
         Qt::Gui
         Qt::Widgets
         Qt::Network
+        Qt::Core5Compat
 )
 
 if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)

@@ -1,6 +1,7 @@
-#ifndef COOPER_IM_CLIENT_VIEW_LRWIDGET_HPP_
-#define COOPER_IM_CLIENT_VIEW_LRWIDGET_HPP_
+#ifndef view_LRWIDGET_HPP_
+#define view_LRWIDGET_HPP_
 
+#include <QPushButton>
 #include <QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -14,7 +15,19 @@ class LRWidget : public QWidget {
 
 public:
     explicit LRWidget(QWidget* parent = nullptr);
+
     ~LRWidget() override;
+
+private:
+    void getVFCode(QPushButton* pushButton);
+
+    void userLogin();
+
+    void userRegister();
+
+    void resetLoginWidget();
+
+    void resetRegisterWidget();
 
 private:
     Ui::LRWidget* ui;
