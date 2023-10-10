@@ -108,7 +108,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>注册</string>
+      <string>前往注册</string>
      </property>
     </widget>
     <widget class="QLabel" name="vfCodeLabel">
@@ -154,7 +154,7 @@
       </font>
      </property>
      <property name="text">
-      <string>1234</string>
+      <string>Get</string>
      </property>
     </widget>
    </widget>
@@ -162,6 +162,162 @@
     <attribute name="title">
      <string>Tab 2</string>
     </attribute>
+    <widget class="QLabel" name="vfCodeLabel_r">
+     <property name="geometry">
+      <rect>
+       <x>87</x>
+       <y>155</y>
+       <width>70</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>验证码：</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="m_passwordLineEdit_r">
+     <property name="geometry">
+      <rect>
+       <x>157</x>
+       <y>65</y>
+       <width>150</width>
+       <height>30</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="passwordLabel_r">
+     <property name="geometry">
+      <rect>
+       <x>87</x>
+       <y>65</y>
+       <width>70</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>密码：</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="phoneLabel_r">
+     <property name="geometry">
+      <rect>
+       <x>87</x>
+       <y>20</y>
+       <width>70</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>手机号：</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_r">
+     <property name="geometry">
+      <rect>
+       <x>257</x>
+       <y>155</y>
+       <width>50</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Get</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="m_vfCodeLineEdit_r">
+     <property name="geometry">
+      <rect>
+       <x>157</x>
+       <y>155</y>
+       <width>90</width>
+       <height>30</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="m_phoneLineEdit_r">
+     <property name="geometry">
+      <rect>
+       <x>157</x>
+       <y>20</y>
+       <width>150</width>
+       <height>30</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="m_registerPushButton_r">
+     <property name="geometry">
+      <rect>
+       <x>87</x>
+       <y>200</y>
+       <width>100</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>注册</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="rePasswordLabel_r">
+     <property name="geometry">
+      <rect>
+       <x>87</x>
+       <y>110</y>
+       <width>70</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>re密码：</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="m_rePasswordLineEdit_r">
+     <property name="geometry">
+      <rect>
+       <x>157</x>
+       <y>110</y>
+       <width>150</width>
+       <height>30</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="m_loginPushButton_r">
+     <property name="geometry">
+      <rect>
+       <x>207</x>
+       <y>200</y>
+       <width>100</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>返回登录</string>
+     </property>
+    </widget>
    </widget>
   </widget>
  </widget>
