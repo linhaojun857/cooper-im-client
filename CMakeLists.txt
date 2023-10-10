@@ -12,13 +12,31 @@ find_package(Qt6 COMPONENTS
         Core
         Gui
         Widgets
+        Network
         REQUIRED)
 
-add_executable(cooper_im_client main.cpp)
+add_executable(cooper_im_client
+        main.cpp
+        # net
+        net/INet.hpp
+        net/TcpClientNet.hpp
+        net/TcpClientNet.cpp
+        # mediator
+        mediator/INetMediator.hpp
+        mediator/TcpClientMediator.hpp
+        mediator/TcpClientMediator.cpp
+        # view
+        view/LRWidget.hpp
+        view/LRWidget.cpp
+        view/LRWidget.ui)
+
+target_include_directories(cooper_im_client PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+
 target_link_libraries(cooper_im_client
         Qt::Core
         Qt::Gui
         Qt::Widgets
+        Qt::Network
 )
 
 if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
