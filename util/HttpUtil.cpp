@@ -9,6 +9,7 @@ QJsonObject HttpUtil::get(const QString& url) {
     auto manager = new QNetworkAccessManager();
     QNetworkRequest request;
     request.setUrl(QUrl(url));
+    request.setRawHeader("Connection", "close");
     auto reply = manager->get(request);
     QEventLoop loop;
     QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
@@ -26,6 +27,9 @@ QJsonObject HttpUtil::post(const QString& url, const QJsonObject& json) {
     QNetworkRequest request;
     request.setUrl(QUrl(url));
     request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
+    request.setHeader(QNetworkRequest::ContentLengthHeader,
+                      QVariant(QJsonDocument(json).toJson(QJsonDocument::Compact).size()));
+    request.setRawHeader("Connection", "close");
     auto reply = manager->post(request, QJsonDocument(json).toJson(QJsonDocument::Compact));
     QEventLoop loop;
     QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);

@@ -19,7 +19,8 @@ public:
     ~LRWidget() override;
 
 private:
-    void getVFCode(QPushButton* pushButton);
+    // 0: login 1: register
+    void getVFCode(int type);
 
     void userLogin();
 

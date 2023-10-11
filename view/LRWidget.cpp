@@ -20,10 +20,10 @@ LRWidget::LRWidget(QWidget* parent) : QWidget(parent), ui(new Ui::LRWidget) {
         ui->m_lRTabWidget->setCurrentIndex(0);
     });
     connect(ui->m_getVfCodepushButton, &QPushButton::clicked, this, [&]() {
-        getVFCode(ui->m_getVfCodepushButton);
+        getVFCode(0);
     });
     connect(ui->m_getVfCodepushButton_r, &QPushButton::clicked, this, [&]() {
-        getVFCode(ui->m_getVfCodepushButton_r);
+        getVFCode(1);
     });
     connect(ui->m_loginPushButton, &QPushButton::clicked, this, &LRWidget::userLogin);
     connect(ui->m_registerPushButton_r, &QPushButton::clicked, this, &LRWidget::userRegister);
@@ -33,8 +33,17 @@ LRWidget::~LRWidget() {
     delete ui;
 }
 
-void LRWidget::getVFCode(QPushButton* pushButton) {
-    QString username = ui->m_phoneLineEdit->text();
+void LRWidget::getVFCode(int type) {
+    QPushButton* pushButton;
+    QLineEdit* lineEdit;
+    if (type == 0) {
+        pushButton = ui->m_getVfCodepushButton;
+        lineEdit = ui->m_phoneLineEdit;
+    } else {
+        pushButton = ui->m_getVfCodepushButton_r;
+        lineEdit = ui->m_phoneLineEdit_r;
+    }
+    QString username = lineEdit->text();
     QString usernameTemp = username;
     if (username.isEmpty() || usernameTemp.remove(" ").isEmpty()) {
         QMessageBox::about(this, "提示", "请输入手机号码");
@@ -57,7 +66,6 @@ void LRWidget::getVFCode(QPushButton* pushButton) {
         }
     });
     QJsonObject json;
-    json["type"] = GET_VFCODE_TYPE;
     json["username"] = username;
     auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/getVFCode", json);
     if (ret["code"].toInt() == 20000) {
@@ -96,7 +104,6 @@ void LRWidget::userLogin() {
         return;
     }
     QJsonObject json;
-    json["type"] = LOGIN_TYPE;
     json["username"] = username;
     json["password"] = password;
     json["vfCode"] = vfCode;
@@ -149,7 +156,6 @@ void LRWidget::userRegister() {
         return;
     }
     QJsonObject json;
-    json["type"] = REGISTER_TYPE;
     json["username"] = username;
     json["password"] = password;
     json["vfCode"] = vfCode;
