@@ -1,26 +1,20 @@
-#include "MainWidget.hpp"
+#include "CotPWidget.hpp"
 
-#include <QLayout>
 #include <QTabBar>
 
-#include "ui_MainWidget.h"
+#include "ui_CotPWidget.h"
 
-MainWidget::MainWidget(QWidget* parent) : QWidget(parent), ui(new Ui::MainWidget) {
+CotPWidget::CotPWidget(QWidget* parent) : QWidget(parent), ui(new Ui::CotPWidget) {
     ui->setupUi(this);
-    setWindowTitle("Cooper");
-    setWindowIcon(QIcon(":/img/logo.ico"));
-    m_cotPWidget = new CotPWidget(ui->m_tabWidget->widget(1));
-    m_cotPWidget->setGeometry(0, 0, 300, 474);
-    setMinimumWidth(294);
-    setMaximumWidth(294);
-    setMinimumHeight(600);
-    setMaximumHeight(600);
-    ui->m_infoTabWidget->tabBar()->hide();
+    setMinimumWidth(300);
+    setMaximumWidth(300);
+    setMinimumHeight(474);
+    setMaximumHeight(474);
     ui->m_tabWidget->tabBar()->hide();
-    m_tabBtnMap[0] = ui->m_msgPushButton;
-    m_tabBtnMap[1] = ui->m_cotPPushButton;
-    m_tabBtnMap[2] = ui->m_pyqPushButton;
-    connect(ui->m_msgPushButton, &QPushButton::clicked, this, [&]() {
+    m_tabBtnMap[0] = ui->m_friendPushButton;
+    m_tabBtnMap[1] = ui->m_groupPushButton;
+    m_tabBtnMap[2] = ui->m_newFriPushButton;
+    connect(ui->m_friendPushButton, &QPushButton::clicked, [this]() {
         m_tabBtnMap[m_tabCurrentIndex]->setStyleSheet("border: 0px;");
         ui->m_tabWidget->setCurrentIndex(0);
         m_tabCurrentIndex = 0;
@@ -28,7 +22,7 @@ MainWidget::MainWidget(QWidget* parent) : QWidget(parent), ui(new Ui::MainWidget
             "border: 0px;\n"
             "background-color: #d9d9d9;");
     });
-    connect(ui->m_cotPPushButton, &QPushButton::clicked, this, [&]() {
+    connect(ui->m_groupPushButton, &QPushButton::clicked, [this]() {
         m_tabBtnMap[m_tabCurrentIndex]->setStyleSheet("border: 0px;");
         ui->m_tabWidget->setCurrentIndex(1);
         m_tabCurrentIndex = 1;
@@ -36,7 +30,7 @@ MainWidget::MainWidget(QWidget* parent) : QWidget(parent), ui(new Ui::MainWidget
             "border: 0px;\n"
             "background-color: #d9d9d9;");
     });
-    connect(ui->m_pyqPushButton, &QPushButton::clicked, this, [&]() {
+    connect(ui->m_newFriPushButton, &QPushButton::clicked, [this]() {
         m_tabBtnMap[m_tabCurrentIndex]->setStyleSheet("border: 0px;");
         ui->m_tabWidget->setCurrentIndex(2);
         m_tabCurrentIndex = 2;
@@ -46,6 +40,6 @@ MainWidget::MainWidget(QWidget* parent) : QWidget(parent), ui(new Ui::MainWidget
     });
 }
 
-MainWidget::~MainWidget() {
+CotPWidget::~CotPWidget() {
     delete ui;
 }

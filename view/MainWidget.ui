@@ -99,7 +99,7 @@
      <x>0</x>
      <y>100</y>
      <width>300</width>
-     <height>30</height>
+     <height>26</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -127,7 +127,7 @@ background-color: #d9d9d9;</string>
      <string>消息</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="m_friendPushButton">
+   <widget class="QPushButton" name="m_cotPPushButton">
     <property name="geometry">
      <rect>
       <x>98</x>
@@ -165,7 +165,7 @@ background-color: #d9d9d9;</string>
     </property>
    </widget>
   </widget>
-  <widget class="QTabWidget" name="m_listTabWidget">
+  <widget class="QTabWidget" name="m_tabWidget">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -199,29 +199,27 @@ background-color: #d9d9d9;</string>
       <string>这是消息页面</string>
      </property>
     </widget>
-   </widget>
-   <widget class="QWidget" name="tab2">
-    <attribute name="title">
-     <string>tab2</string>
-    </attribute>
-    <widget class="QLabel" name="label_5">
+    <widget class="QPushButton" name="pushButton">
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>0</y>
-       <width>150</width>
-       <height>50</height>
+       <y>50</y>
+       <width>100</width>
+       <height>30</height>
       </rect>
      </property>
-     <property name="font">
-      <font>
-       <pointsize>16</pointsize>
-      </font>
-     </property>
      <property name="text">
-      <string>这是好友页面</string>
+      <string>TEST</string>
      </property>
     </widget>
+   </widget>
+   <widget class="QWidget" name="tab2">
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <attribute name="title">
+     <string>tab2</string>
+    </attribute>
    </widget>
    <widget class="QWidget" name="tab3">
     <attribute name="title">

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CotPWidget</class>
+ <widget class="QWidget" name="CotPWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>300</width>
+    <height>474</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>CotPWidget</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">border: 0px;
+background-color: #ffffff;</string>
+  </property>
+  <widget class="QTabWidget" name="m_tabWidget">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>23</y>
+     <width>300</width>
+     <height>474</height>
+    </rect>
+   </property>
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
+   <widget class="QWidget" name="tab1">
+    <attribute name="title">
+     <string>tab1</string>
+    </attribute>
+   </widget>
+   <widget class="QWidget" name="tab2">
+    <attribute name="title">
+     <string>tab2</string>
+    </attribute>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="m_friendPushButton">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>98</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 0px;
+background-color: #d9d9d9;
+</string>
+   </property>
+   <property name="text">
+    <string>好友</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="m_groupPushButton">
+   <property name="geometry">
+    <rect>
+     <x>98</x>
+     <y>0</y>
+     <width>98</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 0px;</string>
+   </property>
+   <property name="text">
+    <string>群聊</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="m_newFriPushButton">
+   <property name="geometry">
+    <rect>
+     <x>196</x>
+     <y>0</y>
+     <width>98</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 0px;</string>
+   </property>
+   <property name="text">
+    <string>新朋友</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

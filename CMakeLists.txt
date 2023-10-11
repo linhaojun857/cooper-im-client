@@ -33,6 +33,12 @@ add_executable(cooper_im_client
         view/MainWidget.hpp
         view/MainWidget.cpp
         view/MainWidget.ui
+        view/MsgWidget.hpp
+        view/MsgWidget.cpp
+        view/MsgWidget.ui
+        view/CotPWidget.hpp
+        view/CotPWidget.cpp
+        view/CotPWidget.ui
         # core
         core/IMKernel.hpp
         core/IMKernel.cpp
@@ -42,7 +48,10 @@ add_executable(cooper_im_client
         # config
         config/IMDefine.hpp
         # qrc
-        res/res.qrc)
+        res/res.qrc
+        view/PyqWidget.cpp
+        view/PyqWidget.hpp
+        view/PyqWidget.ui)
 
 target_include_directories(cooper_im_client PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 

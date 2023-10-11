@@ -4,6 +4,8 @@
 #include <QPushButton>
 #include <QWidget>
 
+#include "view/CotPWidget.hpp"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWidget;
@@ -22,6 +24,7 @@ private:
     Ui::MainWidget* ui;
     int m_tabCurrentIndex = 0;
     QMap<int, QPushButton*> m_tabBtnMap;
+    CotPWidget* m_cotPWidget = nullptr;
 };
 
 #endif
