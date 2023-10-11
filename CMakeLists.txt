@@ -37,7 +37,9 @@ add_executable(cooper_im_client
         util/HttpUtil.cpp
         util/HttpUtil.hpp
         # config
-        config/IMDefine.hpp)
+        config/IMDefine.hpp
+        # qrc
+        res/res.qrc)
 
 target_include_directories(cooper_im_client PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
