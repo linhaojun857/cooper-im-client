@@ -18,6 +18,9 @@ LRWidget::LRWidget(QWidget* parent) : QWidget(parent), ui(new Ui::LRWidget) {
     setMinimumHeight(260);
     setMaximumHeight(260);
     ui->m_lRTabWidget->tabBar()->hide();
+    setLineEditLimit();
+    ui->m_passwordLineEdit->setEchoMode(QLineEdit::Password);
+    ui->m_passwordLineEdit_r->setEchoMode(QLineEdit::Password);
     connect(ui->m_registerPushButton, &QPushButton::clicked, this, [&]() {
         ui->m_lRTabWidget->setCurrentIndex(1);
     });
@@ -32,10 +35,59 @@ LRWidget::LRWidget(QWidget* parent) : QWidget(parent), ui(new Ui::LRWidget) {
     });
     connect(ui->m_loginPushButton, &QPushButton::clicked, this, &LRWidget::userLogin);
     connect(ui->m_registerPushButton_r, &QPushButton::clicked, this, &LRWidget::userRegister);
+
+    // dev use
+    {
+        ui->m_phoneLineEdit->setText("13401792631");
+        ui->m_passwordLineEdit->setText("123");
+        ui->m_vfCodeLineEdit->setText("1234");
+    }
 }
 
 LRWidget::~LRWidget() {
     delete ui;
+}
+
+void LRWidget::setMainWidget(MainWidget* mainWidget) {
+    m_mainWidget = mainWidget;
+}
+
+void LRWidget::setLineEditLimit() {
+    connect(ui->m_phoneLineEdit, &QLineEdit::textChanged, this, [&](const QString& text) {
+        if (text.length() > 11) {
+            ui->m_phoneLineEdit->setText(text.left(11));
+        }
+    });
+    connect(ui->m_passwordLineEdit, &QLineEdit::textChanged, this, [&](const QString& text) {
+        if (text.length() > 20) {
+            ui->m_passwordLineEdit->setText(text.left(20));
+        }
+    });
+    connect(ui->m_vfCodeLineEdit, &QLineEdit::textChanged, this, [&](const QString& text) {
+        if (text.length() > 4) {
+            ui->m_vfCodeLineEdit->setText(text.left(4));
+        }
+    });
+    connect(ui->m_phoneLineEdit_r, &QLineEdit::textChanged, this, [&](const QString& text) {
+        if (text.length() > 11) {
+            ui->m_phoneLineEdit_r->setText(text.left(11));
+        }
+    });
+    connect(ui->m_passwordLineEdit_r, &QLineEdit::textChanged, this, [&](const QString& text) {
+        if (text.length() > 20) {
+            ui->m_passwordLineEdit_r->setText(text.left(20));
+        }
+    });
+    connect(ui->m_rePasswordLineEdit_r, &QLineEdit::textChanged, this, [&](const QString& text) {
+        if (text.length() > 20) {
+            ui->m_rePasswordLineEdit_r->setText(text.left(20));
+        }
+    });
+    connect(ui->m_vfCodeLineEdit_r, &QLineEdit::textChanged, this, [&](const QString& text) {
+        if (text.length() > 4) {
+            ui->m_vfCodeLineEdit_r->setText(text.left(4));
+        }
+    });
 }
 
 void LRWidget::getVFCode(int type) {
@@ -81,6 +133,12 @@ void LRWidget::getVFCode(int type) {
 }
 
 void LRWidget::userLogin() {
+    // dev use
+    {
+//        hide();
+        m_mainWidget->show();
+        return;
+    }
     QString username = ui->m_phoneLineEdit->text();
     QString usernameTemp = username;
     if (username.isEmpty() || usernameTemp.remove(" ").isEmpty()) {
@@ -116,7 +174,8 @@ void LRWidget::userLogin() {
     if (ret["code"].toInt() == 20000) {
         QMessageBox::information(this, "提示", "登录成功");
         resetLoginWidget();
-        // TODO: 登录成功的后续逻辑
+        hide();
+        m_mainWidget->show();
     } else {
         QMessageBox::warning(this, "提示", ret["msg"].toString());
     }

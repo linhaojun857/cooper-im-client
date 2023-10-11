@@ -30,6 +30,9 @@ add_executable(cooper_im_client
         view/LRWidget.hpp
         view/LRWidget.cpp
         view/LRWidget.ui
+        view/MainWidget.hpp
+        view/MainWidget.cpp
+        view/MainWidget.ui
         # core
         core/IMKernel.hpp
         core/IMKernel.cpp

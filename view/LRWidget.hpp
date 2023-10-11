@@ -4,6 +4,8 @@
 #include <QPushButton>
 #include <QWidget>
 
+#include "view/MainWidget.hpp"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class LRWidget;
@@ -18,7 +20,10 @@ public:
 
     ~LRWidget() override;
 
+    void setMainWidget(MainWidget* mainWidget);
+
 private:
+    void setLineEditLimit();
     // 0: login 1: register
     void getVFCode(int type);
 
@@ -32,6 +37,7 @@ private:
 
 private:
     Ui::LRWidget* ui;
+    MainWidget* m_mainWidget = nullptr;
 };
 
 #endif

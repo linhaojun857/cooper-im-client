@@ -1,10 +1,9 @@
 #include <QApplication>
 
-#include "view/LRWidget.hpp"
+#include "core/IMKernel.hpp"
 
 int main(int argc, char* argv[]) {
     QApplication a(argc, argv);
-    auto lRWidget = new LRWidget();
-    lRWidget->show();
+    IMKernel kernel;
     return QApplication::exec();
 }
