@@ -1,6 +1,7 @@
 #ifndef view_MainWidget_HPP_
 #define view_MainWidget_HPP_
 
+#include <QPushButton>
 #include <QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -19,6 +20,8 @@ public:
 
 private:
     Ui::MainWidget* ui;
+    int m_tabCurrentIndex = 0;
+    QMap<int, QPushButton*> m_tabBtnMap;
 };
 
 #endif

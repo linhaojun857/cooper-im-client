@@ -13,102 +13,91 @@
   <property name="windowTitle">
    <string>MainWidget</string>
   </property>
-  <widget class="QWidget" name="m_infoWidget" native="true">
+  <widget class="QTabWidget" name="m_infoTabWidget">
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>1</y>
+     <y>0</y>
      <width>300</width>
-     <height>100</height>
+     <height>101</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: #ffffff;</string>
    </property>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>20</y>
-      <width>60</width>
-      <height>60</height>
-     </rect>
-    </property>
-    <property name="minimumSize">
-     <size>
-      <width>60</width>
-      <height>60</height>
-     </size>
-    </property>
-    <property name="maximumSize">
-     <size>
-      <width>60</width>
-      <height>60</height>
-     </size>
-    </property>
-    <property name="text">
+   <widget class="QWidget" name="tab" native="true">
+    <attribute name="title">
      <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap resource="../res/res.qrc">:/img/avatar.jpg</pixmap>
-    </property>
-    <property name="scaledContents">
-     <bool>true</bool>
-    </property>
+    </attribute>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>20</y>
+       <width>60</width>
+       <height>60</height>
+      </rect>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>60</width>
+       <height>60</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>60</width>
+       <height>60</height>
+      </size>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap resource="../res/res.qrc">:/img/avatar.jpg</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>105</x>
+       <y>20</y>
+       <width>150</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>花未眠</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_3">
+     <property name="geometry">
+      <rect>
+       <x>105</x>
+       <y>55</y>
+       <width>150</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>这是一个测试个性签名</string>
+     </property>
+    </widget>
    </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>105</x>
-      <y>20</y>
-      <width>150</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>花未眠</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>105</x>
-      <y>55</y>
-      <width>150</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>这是一个测试个性签名</string>
-    </property>
-   </widget>
-  </widget>
-  <widget class="Line" name="line1">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>101</y>
-     <width>300</width>
-     <height>1</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true"/>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
   </widget>
   <widget class="QWidget" name="m_buttonWidget" native="true">
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>102</y>
+     <y>100</y>
      <width>300</width>
      <height>30</height>
     </rect>
@@ -176,45 +165,13 @@ background-color: #d9d9d9;</string>
     </property>
    </widget>
   </widget>
-  <widget class="Line" name="line0">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>300</width>
-     <height>2</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true"/>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-  </widget>
-  <widget class="Line" name="line2">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>132</y>
-     <width>300</width>
-     <height>2</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true"/>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-  </widget>
   <widget class="QTabWidget" name="m_listTabWidget">
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>132</y>
+     <y>130</y>
      <width>300</width>
-     <height>468</height>
+     <height>470</height>
     </rect>
    </property>
    <property name="currentIndex">
