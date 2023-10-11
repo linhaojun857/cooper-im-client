@@ -27,7 +27,7 @@
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
-     <string/>
+     <string>tab1</string>
     </attribute>
     <widget class="QLabel" name="m_avatarLabel">
      <property name="geometry">
@@ -175,11 +175,11 @@ background-color: #d9d9d9;</string>
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab1">
     <attribute name="title">
-     <string>Tab 1</string>
+     <string>tab1</string>
     </attribute>
     <widget class="QLabel" name="label_4">
      <property name="geometry">
@@ -202,7 +202,7 @@ background-color: #d9d9d9;</string>
    </widget>
    <widget class="QWidget" name="tab2">
     <attribute name="title">
-     <string>Tab 2</string>
+     <string>tab2</string>
     </attribute>
     <widget class="QLabel" name="label_5">
      <property name="geometry">
@@ -225,7 +225,7 @@ background-color: #d9d9d9;</string>
    </widget>
    <widget class="QWidget" name="tab3">
     <attribute name="title">
-     <string>页</string>
+     <string>tab3</string>
     </attribute>
     <widget class="QLabel" name="label_6">
      <property name="geometry">
