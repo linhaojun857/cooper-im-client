@@ -14,8 +14,8 @@ public:
     ~IMKernel() override;
 
 private:
-    LRWidget* m_lRWidget;
-    MainWidget* m_mainWidget;
+    LRWidget* m_lRWidget = nullptr;
+    MainWidget* m_mainWidget = nullptr;
 };
 
 #endif

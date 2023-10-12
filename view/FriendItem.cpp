@@ -23,7 +23,7 @@ void FriendItem::setAvatar(const QString& url) {
             ui->m_avatarPushButton->setIconSize(ui->m_avatarPushButton->size());
             ui->m_avatarPushButton->setFlat(true);
         } else {
-            qDebug() << "Download failed:" << reply->errorString();
+            qDebug() << "load failed: " << reply->errorString();
         }
         reply->deleteLater();
     });

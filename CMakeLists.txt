@@ -7,6 +7,10 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_PREFIX_PATH "D:/Qt6/6.5.2/mingw_64")
 
+set(FRAMELESSHELPER_BUILD_STATIC ON)
+set(FRAMELESSHELPER_NO_DEBUG_OUTPUT ON)
+set(FRAMELESSHELPER_BUILD_QUICK OFF)
+add_subdirectory(third_party/framelesshelper)
 
 find_package(Qt6 COMPONENTS
         Core
@@ -54,6 +58,9 @@ add_executable(cooper_im_client
         view/FriendItem.hpp
         view/FriendItem.cpp
         view/FriendItem.ui
+        view/ChatDialog.hpp
+        view/ChatDialog.cpp
+        view/ChatDialog.ui
         # core
         core/IMKernel.hpp
         core/IMKernel.cpp
@@ -76,6 +83,8 @@ target_link_libraries(cooper_im_client
         Qt::Widgets
         Qt::Network
         Qt::Core5Compat
+        FramelessHelper::Core
+        FramelessHelper::Widgets
 )
 
 if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
