@@ -22,8 +22,14 @@
      <height>280</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: #ffffff;</string>
+   </property>
    <property name="currentIndex">
     <number>0</number>
+   </property>
+   <property name="documentMode">
+    <bool>true</bool>
    </property>
    <widget class="QWidget" name="loginTab">
     <attribute name="title">

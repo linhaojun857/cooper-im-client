@@ -11,11 +11,10 @@ MainWidget::MainWidget(QWidget* parent) : QWidget(parent), ui(new Ui::MainWidget
     setWindowIcon(QIcon(":/img/logo.ico"));
     m_cotPWidget = new CotPWidget(ui->m_tabWidget->widget(1));
     m_cotPWidget->setGeometry(0, 0, 300, 474);
-    setMinimumWidth(294);
-    setMaximumWidth(294);
+    setMinimumWidth(300);
+    setMaximumWidth(300);
     setMinimumHeight(600);
     setMaximumHeight(600);
-    ui->m_infoTabWidget->tabBar()->hide();
     ui->m_tabWidget->tabBar()->hide();
     m_tabBtnMap[0] = ui->m_msgPushButton;
     m_tabBtnMap[1] = ui->m_cotPPushButton;

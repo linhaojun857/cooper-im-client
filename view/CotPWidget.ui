@@ -35,6 +35,9 @@ background-color: #ffffff;</string>
    <property name="currentIndex">
     <number>0</number>
    </property>
+   <property name="documentMode">
+    <bool>true</bool>
+   </property>
    <widget class="QWidget" name="tab1">
     <attribute name="title">
      <string>tab1</string>
@@ -51,7 +54,7 @@ background-color: #ffffff;</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>98</width>
+     <width>100</width>
      <height>23</height>
     </rect>
    </property>
@@ -67,9 +70,9 @@ background-color: #d9d9d9;
   <widget class="QPushButton" name="m_groupPushButton">
    <property name="geometry">
     <rect>
-     <x>98</x>
+     <x>100</x>
      <y>0</y>
-     <width>98</width>
+     <width>100</width>
      <height>23</height>
     </rect>
    </property>
@@ -83,9 +86,9 @@ background-color: #d9d9d9;
   <widget class="QPushButton" name="m_newFriPushButton">
    <property name="geometry">
     <rect>
-     <x>196</x>
+     <x>200</x>
      <y>0</y>
-     <width>98</width>
+     <width>100</width>
      <height>23</height>
     </rect>
    </property>
