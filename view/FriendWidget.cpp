@@ -22,6 +22,7 @@ FriendWidget::FriendWidget(QWidget* parent) : QWidget(parent), ui(new Ui::Friend
         item->setAvatar(MockData::urls[i % MockData::urls.size()]);
         item->setNickName(MockData::nicknames[i % MockData::nicknames.size()]);
         item->setStatus(QString("[%1]").arg(MockData::statuses[i % MockData::statuses.size()]));
+        item->setFeeling(MockData::feelings[i % MockData::feelings.size()]);
         friendItems.append(item);
         layout->addWidget(item);
     }

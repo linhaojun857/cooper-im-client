@@ -45,7 +45,18 @@ void FriendItem::setStatus(const QString& status) {
 }
 
 void FriendItem::setFeeling(const QString& feeling) {
-    ui->m_feelingLabel->setText(feeling);
+    QString ret = feeling;
+    if (feeling.size() * 12 > ui->m_feelingLabel->width()) {
+        int cutSize = 12;
+        for (int i = 0; i < cutSize; ++i) {
+            if (feeling.at(i) == QChar(' ') || feeling.at(i) == QChar(',')) {
+                cutSize++;
+                continue;
+            }
+        }
+        ret = feeling.left(cutSize - 1) + "...";
+    }
+    ui->m_feelingLabel->setText(ret);
 }
 
 FriendItem::~FriendItem() {

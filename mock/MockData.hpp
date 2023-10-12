@@ -10,6 +10,8 @@ public:
     static QVector<QString> nicknames;
 
     static QVector<QString> statuses;
+
+    static QVector<QString> feelings;
 };
 
 #endif
