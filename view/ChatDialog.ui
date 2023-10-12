@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>450</width>
-    <height>400</height>
+    <width>560</width>
+    <height>500</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,8 +22,8 @@ background-color: #ffffff;</string>
     <rect>
      <x>0</x>
      <y>30</y>
-     <width>450</width>
-     <height>250</height>
+     <width>560</width>
+     <height>317</height>
     </rect>
    </property>
    <property name="widgetResizable">
@@ -34,8 +34,8 @@ background-color: #ffffff;</string>
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>450</width>
-      <height>250</height>
+      <width>560</width>
+      <height>317</height>
      </rect>
     </property>
    </widget>
@@ -44,8 +44,8 @@ background-color: #ffffff;</string>
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>280</y>
-     <width>450</width>
+     <y>370</y>
+     <width>560</width>
      <height>170</height>
     </rect>
    </property>
@@ -57,8 +57,8 @@ background-color: #ffffff;</string>
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>380</x>
-     <y>377</y>
+     <x>488</x>
+     <y>475</y>
      <width>70</width>
      <height>23</height>
     </rect>
@@ -79,7 +79,7 @@ background-color: #ffffff;</string>
   <widget class="QLabel" name="m_peerNicknameLabel">
    <property name="geometry">
     <rect>
-     <x>150</x>
+     <x>205</x>
      <y>5</y>
      <width>150</width>
      <height>20</height>
@@ -103,7 +103,7 @@ background-color: #ffffff;</string>
   <widget class="QPushButton" name="m_closePushButton">
    <property name="geometry">
     <rect>
-     <x>414</x>
+     <x>524</x>
      <y>0</y>
      <width>36</width>
      <height>30</height>
@@ -120,7 +120,7 @@ background-color: #ffffff;</string>
   <widget class="QPushButton" name="m_minimizePushButton">
    <property name="geometry">
     <rect>
-     <x>370</x>
+     <x>480</x>
      <y>0</y>
      <width>40</width>
      <height>30</height>
@@ -133,6 +133,50 @@ background-color: #ffffff;</string>
    <property name="text">
     <string>最小化</string>
    </property>
+  </widget>
+  <widget class="QWidget" name="widget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>347</y>
+     <width>560</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>60</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 1px solid #000000;
+background-color: #ffffff;</string>
+    </property>
+    <property name="text">
+     <string>表情包</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_3">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>0</y>
+      <width>60</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 1px solid #000000;
+background-color: #ffffff;</string>
+    </property>
+    <property name="text">
+     <string>文件</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

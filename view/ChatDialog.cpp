@@ -9,7 +9,7 @@ FRAMELESSHELPER_USE_NAMESPACE
 ChatDialog::ChatDialog(QWidget* parent) : QDialog(parent), ui(new Ui::ChatDialog) {
     ui->setupUi(this);
     m_headerWidget = new QWidget(this);
-    m_headerWidget->setGeometry(0, 0, 450, 30);
+    m_headerWidget->setGeometry(0, 0, 560, 30);
     m_headerWidget->setStyleSheet("QWidget{border-bottom: 1px solid #000000;}");
     ui->m_peerNicknameLabel->setStyleSheet("border-bottom: 0px;");
     ui->m_peerNicknameLabel->setParent(m_headerWidget);
