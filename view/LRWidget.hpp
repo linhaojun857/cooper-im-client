@@ -1,5 +1,5 @@
-#ifndef view_LRWIDGET_HPP_
-#define view_LRWIDGET_HPP_
+#ifndef view_LRWIDGET_HPP
+#define view_LRWIDGET_HPP
 
 #include <QPushButton>
 #include <QWidget>

@@ -1,5 +1,5 @@
-#ifndef view_MainWidget_HPP_
-#define view_MainWidget_HPP_
+#ifndef view_MainWidget_HPP
+#define view_MainWidget_HPP
 
 #include <QPushButton>
 #include <QWidget>

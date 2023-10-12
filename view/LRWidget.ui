@@ -80,6 +80,10 @@
        <height>30</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">border: 1px solid #000000;
+background-color: #ffffff;</string>
+     </property>
     </widget>
     <widget class="QLineEdit" name="m_passwordLineEdit">
      <property name="geometry">
@@ -90,6 +94,10 @@
        <height>30</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">border: 1px solid #000000;
+background-color: #ffffff;</string>
+     </property>
     </widget>
     <widget class="QPushButton" name="m_loginPushButton">
      <property name="geometry">
@@ -99,6 +107,10 @@
        <width>100</width>
        <height>30</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border: 1px solid #000000;
+background-color: #ffffff;</string>
      </property>
      <property name="text">
       <string>登录</string>
@@ -112,6 +124,10 @@
        <width>100</width>
        <height>30</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border: 1px solid #000000;
+background-color: #ffffff;</string>
      </property>
      <property name="text">
       <string>前往注册</string>
@@ -144,6 +160,10 @@
        <height>30</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">border: 1px solid #000000;
+background-color: #ffffff;</string>
+     </property>
     </widget>
     <widget class="QPushButton" name="m_getVfCodepushButton">
      <property name="geometry">
@@ -158,6 +178,10 @@
       <font>
        <pointsize>12</pointsize>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border: 1px solid #000000;
+background-color: #ffffff;</string>
      </property>
      <property name="text">
       <string>Get</string>
@@ -194,6 +218,10 @@
        <width>150</width>
        <height>30</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border: 1px solid #000000;
+background-color: #ffffff;</string>
      </property>
     </widget>
     <widget class="QLabel" name="passwordLabel_r">
@@ -246,6 +274,10 @@
        <pointsize>12</pointsize>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">border: 1px solid #000000;
+background-color: #ffffff;</string>
+     </property>
      <property name="text">
       <string>Get</string>
      </property>
@@ -259,6 +291,10 @@
        <height>30</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">border: 1px solid #000000;
+background-color: #ffffff;</string>
+     </property>
     </widget>
     <widget class="QLineEdit" name="m_phoneLineEdit_r">
      <property name="geometry">
@@ -269,6 +305,10 @@
        <height>30</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">border: 1px solid #000000;
+background-color: #ffffff;</string>
+     </property>
     </widget>
     <widget class="QPushButton" name="m_registerPushButton_r">
      <property name="geometry">
@@ -278,6 +318,10 @@
        <width>100</width>
        <height>30</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border: 1px solid #000000;
+background-color: #ffffff;</string>
      </property>
      <property name="text">
       <string>注册</string>
@@ -310,6 +354,10 @@
        <height>30</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">border: 1px solid #000000;
+background-color: #ffffff;</string>
+     </property>
     </widget>
     <widget class="QPushButton" name="m_loginPushButton_r">
      <property name="geometry">
@@ -319,6 +367,10 @@
        <width>100</width>
        <height>30</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border: 1px solid #000000;
+background-color: #ffffff;</string>
      </property>
      <property name="text">
       <string>返回登录</string>

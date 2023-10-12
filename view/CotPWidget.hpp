@@ -1,8 +1,12 @@
-#ifndef view_CotPWidget_HPP_
-#define view_CotPWidget_HPP_
+#ifndef view_CotPWidget_HPP
+#define view_CotPWidget_HPP
 
-#include <QWidget>
 #include <QPushButton>
+#include <QWidget>
+
+#include "view/FriendWidget.hpp"
+#include "view/GroupWidget.hpp"
+#include "view/NewFriWidget.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -22,6 +26,9 @@ private:
     Ui::CotPWidget* ui;
     int m_tabCurrentIndex = 0;
     QMap<int, QPushButton*> m_tabBtnMap;
+    FriendWidget* m_friendWidget = nullptr;
+    GroupWidget* m_groupWidget = nullptr;
+    NewFriWidget* m_newFriWidget = nullptr;
 };
 
 #endif

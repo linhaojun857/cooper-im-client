@@ -1,5 +1,5 @@
-#ifndef view_PyqWidget_HPP_
-#define view_PyqWidget_HPP_
+#ifndef view_PyqWidget_HPP
+#define view_PyqWidget_HPP
 
 #include <QWidget>
 

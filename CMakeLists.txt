@@ -39,6 +39,21 @@ add_executable(cooper_im_client
         view/CotPWidget.hpp
         view/CotPWidget.cpp
         view/CotPWidget.ui
+        view/PyqWidget.hpp
+        view/PyqWidget.cpp
+        view/PyqWidget.ui
+        view/FriendWidget.hpp
+        view/FriendWidget.cpp
+        view/FriendWidget.ui
+        view/GroupWidget.hpp
+        view/GroupWidget.cpp
+        view/GroupWidget.ui
+        view/NewFriWidget.hpp
+        view/NewFriWidget.cpp
+        view/NewFriWidget.ui
+        view/FriendItem.hpp
+        view/FriendItem.cpp
+        view/FriendItem.ui
         # core
         core/IMKernel.hpp
         core/IMKernel.cpp
@@ -47,11 +62,11 @@ add_executable(cooper_im_client
         util/HttpUtil.hpp
         # config
         config/IMDefine.hpp
+        # mock
+        mock/MockData.hpp
+        mock/MockData.cpp
         # qrc
-        res/res.qrc
-        view/PyqWidget.cpp
-        view/PyqWidget.hpp
-        view/PyqWidget.ui)
+        res/res.qrc)
 
 target_include_directories(cooper_im_client PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 

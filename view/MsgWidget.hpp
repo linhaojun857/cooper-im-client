@@ -1,5 +1,5 @@
-#ifndef view_MsgWidget_hpp_
-#define view_MsgWidget_hpp_
+#ifndef view_MsgWidget_hpp
+#define view_MsgWidget_hpp
 
 #include <QWidget>
 

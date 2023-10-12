@@ -135,7 +135,7 @@ void LRWidget::getVFCode(int type) {
 void LRWidget::userLogin() {
     // dev use
     {
-//        hide();
+        hide();
         m_mainWidget->show();
         return;
     }

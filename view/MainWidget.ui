@@ -200,19 +200,6 @@ background-color: #d9d9d9;</string>
       <string>这是消息页面</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>50</y>
-       <width>100</width>
-       <height>30</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>TEST</string>
-     </property>
-    </widget>
    </widget>
    <widget class="QWidget" name="tab2">
     <property name="styleSheet">
