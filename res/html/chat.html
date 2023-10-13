@@ -113,7 +113,7 @@
             margin-bottom: 10px;
         }
 
-        .file-id1 {
+        .file-info {
             display: inline-block;
             margin-right: 10px;
         }
@@ -125,6 +125,7 @@
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
+            cursor: pointer;
         }
 
         .file-size {
@@ -133,7 +134,7 @@
 
         .file-img {
             width: 40px;
-            height: 100%;
+            height: 43px;
             display: inline-block;
         }
 
@@ -141,10 +142,6 @@
             background-color: #ffffff;
             float: right;
             max-width: 240px;
-        }
-
-        .chat-file {
-            background-color: #ffffff;
         }
 
         .chat-bubble-triangle-send-file {
@@ -158,13 +155,16 @@
             border-bottom: 8px solid transparent;
         }
 
-        .qian-file {
-            display: inline-block;
-        }
-
-        .test {
+        .show-right {
             display: flex;
             margin-left: auto;
+        }
+
+        .download-button {
+            background-color: transparent;
+            border: none;
+            outline: none;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -183,7 +183,7 @@
     </div>
 </div>
 <div class="chat-container-send">
-    <div class="test">
+    <div class="show-right">
         <div class="chat-bubble-send">
             <div class="chat-bubble-triangle-send"></div>
             This is a text message sent by your side.
@@ -204,22 +204,22 @@
          src="http://thirdqq.qlogo.cn/g?b=oidb&k=khiaicSsyibl4MWCic8b5ue0wQ&kti=Y9yMMAAAAAA&s=40&t=1667226008">
     <div class="chat-bubble chat-bubble-file">
         <div class="chat-bubble-triangle"></div>
-        <div class="file-id1">
-            <span class="file-name">成都渣女1+2被曝.pdf</span>
+        <div class="file-info">
+            <span class="file-name" onclick="download('../img/pdf.png')">Effective STL.pdf</span>
             <span class="file-size">9.6MB</span>
         </div>
-        <img class="file-img" src="../img/pdf.png">
+        <img class="file-img" src="pdf.png">
     </div>
 </div>
 <div class="chat-container-send">
-    <div class="test">
+    <div class="show-right">
         <div class="chat-bubble-send chat-bubble-file">
             <div class="chat-bubble-triangle-send-file"></div>
-            <div class="file-id1">
-                <span class="file-name">成都渣女1+2被曝成都渣女1+2被曝.pdf</span>
+            <div class="file-info">
+                <span class="file-name" onclick="download('../img/pdf.png')">Effective STL.pdf</span>
                 <span class="file-size">9.6MB</span>
             </div>
-            <img class="file-img" src="../img/pdf.png">
+            <img class="file-img" src="pdf.png">
         </div>
         <img class="avatar-send"
              src="http://thirdqq.qlogo.cn/g?b=oidb&k=khiaicSsyibl4MWCic8b5ue0wQ&kti=Y9yMMAAAAAA&s=40&t=1667226008">
@@ -227,9 +227,8 @@
 </div>
 <span class="timeline">12:00</span>
 <div class="chat-container">
-    <div class="test">
-        <img class="avatar"
-             src="https://static.linhaojun.top/aurora/config/6e4f47f4bb66d2d30722d20e789b220e.jpg">
+    <div class="show-right">
+        <img class="avatar" src="https://static.linhaojun.top/aurora/config/6e4f47f4bb66d2d30722d20e789b220e.jpg">
         <div class="chat-bubble chat-bubble-image">
             <div class="chat-bubble-triangle"></div>
             <img src="https://static.linhaojun.top/aurora/articles/3ec095cd9b7bd3f766166a4db14160c6.jpg"
@@ -238,9 +237,8 @@
     </div>
 </div>
 <div class="chat-container">
-    <div class="test">
-        <img class="avatar"
-             src="https://static.linhaojun.top/aurora/config/6e4f47f4bb66d2d30722d20e789b220e.jpg">
+    <div class="show-right">
+        <img class="avatar" src="https://static.linhaojun.top/aurora/config/6e4f47f4bb66d2d30722d20e789b220e.jpg">
         <div class="chat-bubble chat-bubble-video">
             <div class="chat-bubble-triangle"></div>
             <video src="https://www.w3schools.com/html/mov_bbb.mp4" controls></video>
@@ -248,8 +246,7 @@
     </div>
 </div>
 <div class="chat-container-send">
-    <div class="test">
-        <div class="qian"></div>
+    <div class="show-right">
         <div class="chat-bubble-send chat-bubble-image-send">
             <div class="chat-bubble-triangle-send"></div>
             <img src="https://static.linhaojun.top/aurora/articles/3ec095cd9b7bd3f766166a4db14160c6.jpg"
@@ -260,8 +257,7 @@
     </div>
 </div>
 <div class="chat-container-send">
-    <div class="test">
-        <div class="qian"></div>
+    <div class="show-right">
         <div class="chat-bubble-send chat-bubble-video-send">
             <div class="chat-bubble-triangle-send"></div>
             <video src="https://www.w3schools.com/html/mov_bbb.mp4" controls></video>
@@ -272,18 +268,27 @@
 </div>
 </body>
 <script>
+    // 下载文件的方法
+    function download(url) {
+        let a = document.createElement("a");
+        a.href = url;
+        let arr = url.split("/");
+        a.download = arr[arr.length - 1];
+        a.click();
+    }
+
     // 添加对方文字消息的方法
     function addPeerTextMessage(avatarUrl, message) {
-        var chatContainer = document.createElement("div");
+        let chatContainer = document.createElement("div");
         chatContainer.className = "chat-container";
-        var avatar = document.createElement("img");
+        let avatar = document.createElement("img");
         avatar.className = "avatar";
         avatar.src = avatarUrl;
-        var chatBubble = document.createElement("div");
+        let chatBubble = document.createElement("div");
         chatBubble.className = "chat-bubble";
-        var chatBubbleTriangle = document.createElement("div");
+        let chatBubbleTriangle = document.createElement("div");
         chatBubbleTriangle.className = "chat-bubble-triangle";
-        var chatBubbleText = document.createTextNode(message);
+        let chatBubbleText = document.createTextNode(message);
         chatBubble.appendChild(chatBubbleTriangle);
         chatBubble.appendChild(chatBubbleText);
         chatContainer.appendChild(avatar);
@@ -293,16 +298,16 @@
 
     // 添加对方图片消息的方法
     function addPeerImageMessage(avatarUrl, imageUrl) {
-        var chatContainer = document.createElement("div");
+        let chatContainer = document.createElement("div");
         chatContainer.className = "chat-container";
-        var avatar = document.createElement("img");
+        let avatar = document.createElement("img");
         avatar.className = "avatar";
         avatar.src = avatarUrl;
-        var chatBubble = document.createElement("div");
+        let chatBubble = document.createElement("div");
         chatBubble.className = "chat-bubble chat-bubble-image";
-        var chatBubbleTriangle = document.createElement("div");
+        let chatBubbleTriangle = document.createElement("div");
         chatBubbleTriangle.className = "chat-bubble-triangle";
-        var image = document.createElement("img");
+        let image = document.createElement("img");
         image.src = imageUrl;
         chatBubble.appendChild(chatBubbleTriangle);
         chatBubble.appendChild(image);
@@ -313,16 +318,16 @@
 
     // 添加对方视频消息的方法
     function addPeerVideoMessage(avatarUrl, videoUrl) {
-        var chatContainer = document.createElement("div");
+        let chatContainer = document.createElement("div");
         chatContainer.className = "chat-container";
-        var avatar = document.createElement("img");
+        let avatar = document.createElement("img");
         avatar.className = "avatar";
         avatar.src = avatarUrl;
-        var chatBubble = document.createElement("div");
+        let chatBubble = document.createElement("div");
         chatBubble.className = "chat-bubble chat-bubble-video";
-        var chatBubbleTriangle = document.createElement("div");
+        let chatBubbleTriangle = document.createElement("div");
         chatBubbleTriangle.className = "chat-bubble-triangle";
-        var video = document.createElement("video");
+        let video = document.createElement("video");
         video.src = videoUrl;
         video.controls = true;
         chatBubble.appendChild(chatBubbleTriangle);
@@ -333,93 +338,169 @@
     }
 
     // 添加对方文件消息的方法
-    function addPeerFileMessage(filename, filesize) {
-
+    function addPeerFileMessage(avatarUrl, fileName, fileSize, fileUrl) {
+        let fileExtension = fileName.split(".")[1];
+        let chatContainer = document.createElement("div");
+        chatContainer.className = "chat-container";
+        let avatar = document.createElement("img");
+        avatar.className = "avatar";
+        avatar.src = avatarUrl;
+        let chatBubble = document.createElement("div");
+        chatBubble.className = "chat-bubble chat-bubble-file";
+        let chatBubbleTriangle = document.createElement("div");
+        chatBubbleTriangle.className = "chat-bubble-triangle";
+        let fileInfo = document.createElement("div");
+        fileInfo.className = "file-info";
+        let fileNameElement = document.createElement("span");
+        fileNameElement.className = "file-name";
+        fileNameElement.innerText = fileName;
+        fileNameElement.addEventListener("click", function () {
+            download(fileUrl)
+        });
+        let fileSizeElement = document.createElement("span");
+        fileSizeElement.className = "file-size";
+        fileSizeElement.innerText = fileSize;
+        let fileImg = document.createElement("img");
+        fileImg.className = "file-img";
+        fileImg.src = fileExtension + ".png";
+        fileInfo.appendChild(fileNameElement);
+        fileInfo.appendChild(fileSizeElement);
+        chatBubble.appendChild(chatBubbleTriangle);
+        chatBubble.appendChild(fileInfo);
+        chatBubble.appendChild(fileImg);
+        chatContainer.appendChild(avatar);
+        chatContainer.appendChild(chatBubble);
+        document.body.appendChild(chatContainer);
     }
 
     // 添加自己文字消息的方法
     function addSelfTextMessage(avatarUrl, message) {
-        var chatContainerSend = document.createElement("div");
-        chatContainerSend.className = "chat-container-send";
-        var qian = document.createElement("div");
-        qian.className = "qian";
-        var avatarSend = document.createElement("img");
-        avatarSend.className = "avatar-send";
-        avatarSend.src = avatarUrl;
-        var chatBubbleSend = document.createElement("div");
-        chatBubbleSend.className = "chat-bubble-send";
-        var chatBubbleTriangleSend = document.createElement("div");
-        chatBubbleTriangleSend.className = "chat-bubble-triangle-send";
-        var chatBubbleTextSend = document.createTextNode(message);
-        chatBubbleSend.appendChild(chatBubbleTriangleSend);
-        chatBubbleSend.appendChild(chatBubbleTextSend);
-        chatContainerSend.appendChild(qian);
-        chatContainerSend.appendChild(chatBubbleSend);
-        chatContainerSend.appendChild(avatarSend);
-        document.body.appendChild(chatContainerSend);
+        let chatContainer = document.createElement("div");
+        chatContainer.className = "chat-container-send";
+        let showRight = document.createElement("div");
+        showRight.className = "show-right";
+        let chatBubble = document.createElement("div");
+        chatBubble.className = "chat-bubble-send";
+        let chatBubbleTriangle = document.createElement("div");
+        chatBubbleTriangle.className = "chat-bubble-triangle-send";
+        let chatBubbleText = document.createTextNode(message);
+        chatBubble.appendChild(chatBubbleTriangle);
+        chatBubble.appendChild(chatBubbleText);
+        let avatar = document.createElement("img");
+        avatar.className = "avatar-send";
+        avatar.src = avatarUrl;
+        showRight.appendChild(chatBubble);
+        showRight.appendChild(avatar);
+        chatContainer.appendChild(showRight);
+        document.body.appendChild(chatContainer);
     }
 
     // 添加自己图片消息的方法
     function addSelfImageMessage(avatarUrl, imageUrl) {
-        var chatContainerSend = document.createElement("div");
-        chatContainerSend.className = "chat-container-send";
-        var qian = document.createElement("div");
-        qian.className = "qian";
-        var avatarSend = document.createElement("img");
-        avatarSend.className = "avatar-send";
-        avatarSend.src = avatarUrl;
-        var chatBubbleSend = document.createElement("div");
-        chatBubbleSend.className = "chat-bubble-send chat-bubble-image-send";
-        var chatBubbleTriangleSend = document.createElement("div");
-        chatBubbleTriangleSend.className = "chat-bubble-triangle-send";
-        var image = document.createElement("img");
+        let chatContainer = document.createElement("div");
+        chatContainer.className = "chat-container-send";
+        let showRight = document.createElement("div");
+        showRight.className = "show-right";
+        let chatBubble = document.createElement("div");
+        chatBubble.className = "chat-bubble-send chat-bubble-image-send";
+        let chatBubbleTriangle = document.createElement("div");
+        chatBubbleTriangle.className = "chat-bubble-triangle-send";
+        let image = document.createElement("img");
         image.src = imageUrl;
-        chatBubbleSend.appendChild(chatBubbleTriangleSend);
-        chatBubbleSend.appendChild(image);
-        chatContainerSend.appendChild(qian);
-        chatContainerSend.appendChild(chatBubbleSend);
-        chatContainerSend.appendChild(avatarSend);
-        document.body.appendChild(chatContainerSend);
+        chatBubble.appendChild(chatBubbleTriangle);
+        chatBubble.appendChild(image);
+        let avatar = document.createElement("img");
+        avatar.className = "avatar-send";
+        avatar.src = avatarUrl;
+        showRight.appendChild(chatBubble);
+        showRight.appendChild(avatar);
+        chatContainer.appendChild(showRight);
+        document.body.appendChild(chatContainer);
     }
 
     // 添加自己视频消息的方法
     function addSelfVideoMessage(avatarUrl, videoUrl) {
-        var chatContainerSend = document.createElement("div");
-        chatContainerSend.className = "chat-container-send";
-        var qian = document.createElement("div");
-        qian.className = "qian";
-        var avatarSend = document.createElement("img");
-        avatarSend.className = "avatar-send";
-        avatarSend.src = avatarUrl;
-        var chatBubbleSend = document.createElement("div");
-        chatBubbleSend.className = "chat-bubble-send chat-bubble-video-send";
-        var chatBubbleTriangleSend = document.createElement("div");
-        chatBubbleTriangleSend.className = "chat-bubble-triangle-send";
-        var video = document.createElement("video");
+        let chatContainer = document.createElement("div");
+        chatContainer.className = "chat-container-send";
+        let showRight = document.createElement("div");
+        showRight.className = "show-right";
+        let chatBubble = document.createElement("div");
+        chatBubble.className = "chat-bubble-send chat-bubble-video-send";
+        let chatBubbleTriangle = document.createElement("div");
+        chatBubbleTriangle.className = "chat-bubble-triangle-send";
+        let video = document.createElement("video");
         video.src = videoUrl;
         video.controls = true;
-        chatBubbleSend.appendChild(chatBubbleTriangleSend);
-        chatBubbleSend.appendChild(video);
-        chatContainerSend.appendChild(qian);
-        chatContainerSend.appendChild(chatBubbleSend);
-        chatContainerSend.appendChild(avatarSend);
-        document.body.appendChild(chatContainerSend);
+        chatBubble.appendChild(chatBubbleTriangle);
+        chatBubble.appendChild(video);
+        let avatar = document.createElement("img");
+        avatar.className = "avatar-send";
+        avatar.src = avatarUrl;
+        showRight.appendChild(chatBubble);
+        showRight.appendChild(avatar);
+        chatContainer.appendChild(showRight);
+        document.body.appendChild(chatContainer);
     }
 
-    function addTimeline() {
-
+    // 添加自己文件消息的方法
+    function addSelfFileMessage(avatarUrl, fileName, fileSize, fileUrl) {
+        let fileExtension = fileName.split(".")[1];
+        let chatContainer = document.createElement("div");
+        chatContainer.className = "chat-container-send";
+        let showRight = document.createElement("div");
+        showRight.className = "show-right";
+        let chatBubble = document.createElement("div");
+        chatBubble.className = "chat-bubble-send chat-bubble-file";
+        let chatBubbleTriangle = document.createElement("div");
+        chatBubbleTriangle.className = "chat-bubble-triangle-send-file";
+        let fileInfo = document.createElement("div");
+        fileInfo.className = "file-info";
+        let fileNameElement = document.createElement("span");
+        fileNameElement.className = "file-name";
+        fileNameElement.innerText = fileName;
+        fileNameElement.addEventListener("click", function () {
+            download(fileUrl)
+        });
+        let fileSizeElement = document.createElement("span");
+        fileSizeElement.className = "file-size";
+        fileSizeElement.innerText = fileSize;
+        let fileImg = document.createElement("img");
+        fileImg.className = "file-img";
+        fileImg.src = fileExtension + ".png";
+        fileInfo.appendChild(fileNameElement);
+        fileInfo.appendChild(fileSizeElement);
+        chatBubble.appendChild(chatBubbleTriangle);
+        chatBubble.appendChild(fileInfo);
+        chatBubble.appendChild(fileImg);
+        let avatar = document.createElement("img");
+        avatar.className = "avatar-send";
+        avatar.src = avatarUrl;
+        showRight.appendChild(chatBubble);
+        showRight.appendChild(avatar);
+        chatContainer.appendChild(showRight);
+        document.body.appendChild(chatContainer);
     }
 
-    var peerAvatarUrl = "http://thirdqq.qlogo.cn/g?b=oidb&k=khiaicSsyibl4MWCic8b5ue0wQ&kti=Y9yMMAAAAAA&s=40&t=1667226008";
-    var selfAvatarUrl = "https://static.linhaojun.top/aurora/config/6e4f47f4bb66d2d30722d20e789b220e.jpg";
+    // 添加时间线
+    function addTimeline(time) {
+        let timeline = document.createElement("span");
+        timeline.className = "timeline";
+        timeline.innerText = time;
+        document.body.appendChild(timeline);
+    }
 
-    // addPeerTextMessage(peerAvatarUrl, "This is a text message.");
-    // addPeerImageMessage(peerAvatarUrl, "https://static.linhaojun.top/aurora/articles/3ec095cd9b7bd3f766166a4db14160c6.jpg");
-    // addPeerVideoMessage(peerAvatarUrl, "https://www.w3schools.com/html/mov_bbb.mp4");
+    let peerAvatarUrl = "http://thirdqq.qlogo.cn/g?b=oidb&k=khiaicSsyibl4MWCic8b5ue0wQ&kti=Y9yMMAAAAAA&s=40&t=1667226008";
+    let selfAvatarUrl = "https://static.linhaojun.top/aurora/config/6e4f47f4bb66d2d30722d20e789b220e.jpg";
 
-    // addSelfTextMessage(selfAvatarUrl, "This is a text message sent by your side.");
-    // addSelfImageMessage(selfAvatarUrl, "https://static.linhaojun.top/aurora/articles/3ec095cd9b7bd3f766166a4db14160c6.jpg");
-    // addSelfVideoMessage(selfAvatarUrl, "https://www.w3schools.com/html/mov_bbb.mp4");
+    addPeerTextMessage(peerAvatarUrl, "This is a text message.");
+    addPeerImageMessage(peerAvatarUrl, "https://static.linhaojun.top/aurora/articles/3ec095cd9b7bd3f766166a4db14160c6.jpg");
+    addPeerVideoMessage(peerAvatarUrl, "https://www.w3schools.com/html/mov_bbb.mp4");
+    addPeerFileMessage(peerAvatarUrl, "Effective STL.pdf", "9.6MB", "../img/pdf.png");
+    addTimeline("12:10");
+    addSelfTextMessage(selfAvatarUrl, "This is a text message");
+    addSelfImageMessage(selfAvatarUrl, "https://static.linhaojun.top/aurora/articles/3ec095cd9b7bd3f766166a4db14160c6.jpg");
+    addSelfVideoMessage(selfAvatarUrl, "https://www.w3schools.com/html/mov_bbb.mp4");
+    addSelfFileMessage(selfAvatarUrl, "Effective STL.pdf", "9.6MB", "../img/pdf.png");
 </script>
 
 </html>
