@@ -120,12 +120,13 @@
 
         .file-name {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             max-width: 160px;
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
             cursor: pointer;
+            font-size: small;
         }
 
         .file-size {
@@ -133,8 +134,8 @@
         }
 
         .file-img {
-            width: 40px;
-            height: 43px;
+            width: 34px;
+            height: 39px;
             display: inline-block;
         }
 
@@ -142,6 +143,7 @@
             background-color: #ffffff;
             float: right;
             max-width: 240px;
+            padding: 8px;
         }
 
         .chat-bubble-triangle-send-file {
@@ -211,103 +213,69 @@
         <div id="loading-spinner"></div>
     </div>
     <div class="container">
-        <div class="chat-container">
-            <img class="avatar"
-                src="http://thirdqq.qlogo.cn/g?b=oidb&k=khiaicSsyibl4MWCic8b5ue0wQ&kti=Y9yMMAAAAAA&s=40&t=1667226008">
+        <div class="chat-container"><img class="avatar"
+                src="http://thirdqq.qlogo.cn/g?b=oidb&amp;k=khiaicSsyibl4MWCic8b5ue0wQ&amp;kti=Y9yMMAAAAAA&amp;s=40&amp;t=1667226008">
             <div class="chat-bubble">
-                <div class="chat-bubble-triangle"></div>
-                This is a text message.
-                This is a text message.
-                This is a text message.
-                This is a text message.
-                This is a text message.
+                <div class="chat-bubble-triangle"></div>这是测试聊天记录
             </div>
         </div>
+        <div class="chat-container"><img class="avatar"
+                src="http://thirdqq.qlogo.cn/g?b=oidb&amp;k=khiaicSsyibl4MWCic8b5ue0wQ&amp;kti=Y9yMMAAAAAA&amp;s=40&amp;t=1667226008">
+            <div class="chat-bubble chat-bubble-image">
+                <div class="chat-bubble-triangle"></div><img
+                    src="https://static.linhaojun.top/aurora/articles/3ec095cd9b7bd3f766166a4db14160c6.jpg">
+            </div>
+        </div>
+        <div class="chat-container"><img class="avatar"
+                src="http://thirdqq.qlogo.cn/g?b=oidb&amp;k=khiaicSsyibl4MWCic8b5ue0wQ&amp;kti=Y9yMMAAAAAA&amp;s=40&amp;t=1667226008">
+            <div class="chat-bubble chat-bubble-video">
+                <div class="chat-bubble-triangle"></div><video src="https://www.w3schools.com/html/mov_bbb.mp4"
+                    controls=""></video>
+            </div>
+        </div>
+        <div class="chat-container"><img class="avatar"
+                src="http://thirdqq.qlogo.cn/g?b=oidb&amp;k=khiaicSsyibl4MWCic8b5ue0wQ&amp;kti=Y9yMMAAAAAA&amp;s=40&amp;t=1667226008">
+            <div class="chat-bubble chat-bubble-file">
+                <div class="chat-bubble-triangle"></div>
+                <div class="file-info"><span class="file-name">Effective STL.pdf</span><span
+                        class="file-size">9.6MB</span></div><img class="file-img"
+                    src="http://localhost:9999/static/img/pdf.png">
+            </div>
+        </div><span class="timeline">12:10</span>
         <div class="chat-container-send">
             <div class="show-right">
                 <div class="chat-bubble-send">
-                    <div class="chat-bubble-triangle-send"></div>
-                    This is a text message sent by your side.
-                    This is a text message sent by your side.
-                    This is a text message sent by your side.
-                    This is a text message sent by your side.
-                    This is a text message sent by your side.
-                    This is a text message sent by your side.
-                    This is a text message sent by your side.
-                    This is a text message sent by your side.
-                </div>
-                <img class="avatar-send"
+                    <div class="chat-bubble-triangle-send"></div>This is a text message
+                </div><img class="avatar-send"
                     src="https://static.linhaojun.top/aurora/config/6e4f47f4bb66d2d30722d20e789b220e.jpg">
-            </div>
-        </div>
-        <div class="chat-container">
-            <img class="avatar"
-                src="http://thirdqq.qlogo.cn/g?b=oidb&k=khiaicSsyibl4MWCic8b5ue0wQ&kti=Y9yMMAAAAAA&s=40&t=1667226008">
-            <div class="chat-bubble chat-bubble-file">
-                <div class="chat-bubble-triangle"></div>
-                <div class="file-info">
-                    <span class="file-name" onclick="download('http://localhost:9999/static/img/pdf.png')">Effective
-                        STL.pdf</span>
-                    <span class="file-size">9.6MB</span>
-                </div>
-                <img class="file-img" src="http://localhost:9999/static/img/pdf.png">
-            </div>
-        </div>
-        <div class="chat-container-send">
-            <div class="show-right">
-                <div class="chat-bubble-send chat-bubble-file">
-                    <div class="chat-bubble-triangle-send-file"></div>
-                    <div class="file-info">
-                        <span class="file-name" onclick="download('http://localhost:9999/static/img/pdf.png')">Effective
-                            STL.pdf</span>
-                        <span class="file-size">9.6MB</span>
-                    </div>
-                    <img class="file-img" src="http://localhost:9999/static/img/pdf.png">
-                </div>
-                <img class="avatar-send"
-                    src="http://thirdqq.qlogo.cn/g?b=oidb&k=khiaicSsyibl4MWCic8b5ue0wQ&kti=Y9yMMAAAAAA&s=40&t=1667226008">
-            </div>
-        </div>
-        <span class="timeline">12:00</span>
-        <div class="chat-container">
-            <div class="show-right">
-                <img class="avatar"
-                    src="https://static.linhaojun.top/aurora/config/6e4f47f4bb66d2d30722d20e789b220e.jpg">
-                <div class="chat-bubble chat-bubble-image">
-                    <div class="chat-bubble-triangle"></div>
-                    <img src="https://static.linhaojun.top/aurora/articles/3ec095cd9b7bd3f766166a4db14160c6.jpg"
-                        alt="Image">
-                </div>
-            </div>
-        </div>
-        <div class="chat-container">
-            <div class="show-right">
-                <img class="avatar"
-                    src="https://static.linhaojun.top/aurora/config/6e4f47f4bb66d2d30722d20e789b220e.jpg">
-                <div class="chat-bubble chat-bubble-video">
-                    <div class="chat-bubble-triangle"></div>
-                    <video src="https://www.w3schools.com/html/mov_bbb.mp4" controls></video>
-                </div>
             </div>
         </div>
         <div class="chat-container-send">
             <div class="show-right">
                 <div class="chat-bubble-send chat-bubble-image-send">
-                    <div class="chat-bubble-triangle-send"></div>
-                    <img src="https://static.linhaojun.top/aurora/articles/3ec095cd9b7bd3f766166a4db14160c6.jpg"
-                        alt="Image">
-                </div>
-                <img class="avatar-send"
+                    <div class="chat-bubble-triangle-send"></div><img
+                        src="https://static.linhaojun.top/aurora/articles/3ec095cd9b7bd3f766166a4db14160c6.jpg">
+                </div><img class="avatar-send"
                     src="https://static.linhaojun.top/aurora/config/6e4f47f4bb66d2d30722d20e789b220e.jpg">
             </div>
         </div>
         <div class="chat-container-send">
             <div class="show-right">
                 <div class="chat-bubble-send chat-bubble-video-send">
-                    <div class="chat-bubble-triangle-send"></div>
-                    <video src="https://www.w3schools.com/html/mov_bbb.mp4" controls></video>
-                </div>
-                <img class="avatar-send"
+                    <div class="chat-bubble-triangle-send"></div><video src="https://www.w3schools.com/html/mov_bbb.mp4"
+                        controls=""></video>
+                </div><img class="avatar-send"
+                    src="https://static.linhaojun.top/aurora/config/6e4f47f4bb66d2d30722d20e789b220e.jpg">
+            </div>
+        </div>
+        <div class="chat-container-send">
+            <div class="show-right">
+                <div class="chat-bubble-send chat-bubble-file">
+                    <div class="chat-bubble-triangle-send-file"></div>
+                    <div class="file-info"><span class="file-name">Effective STL.pdf</span><span
+                            class="file-size">9.6MB</span></div><img class="file-img"
+                        src="http://localhost:9999/static/img/pdf.png">
+                </div><img class="avatar-send"
                     src="https://static.linhaojun.top/aurora/config/6e4f47f4bb66d2d30722d20e789b220e.jpg">
             </div>
         </div>
@@ -564,7 +532,7 @@
     let peerAvatarUrl = "http://thirdqq.qlogo.cn/g?b=oidb&k=khiaicSsyibl4MWCic8b5ue0wQ&kti=Y9yMMAAAAAA&s=40&t=1667226008";
     let selfAvatarUrl = "https://static.linhaojun.top/aurora/config/6e4f47f4bb66d2d30722d20e789b220e.jpg";
 
-    addPeerTextMessage(peerAvatarUrl, "This is a text message.");
+    addPeerTextMessage(peerAvatarUrl, "这是测试聊天记录");
     addPeerImageMessage(peerAvatarUrl, "https://static.linhaojun.top/aurora/articles/3ec095cd9b7bd3f766166a4db14160c6.jpg");
     addPeerVideoMessage(peerAvatarUrl, "https://www.w3schools.com/html/mov_bbb.mp4");
     addPeerFileMessage(peerAvatarUrl, "Effective STL.pdf", "9.6MB", "http://localhost:9999/static/img/pdf.png");
