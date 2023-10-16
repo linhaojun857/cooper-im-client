@@ -1,6 +1,7 @@
 #include "Mock.hpp"
 
 #include "view/FriendWidget.hpp"
+#include "view/NotifyWidget.hpp"
 
 QVector<QString> Mock::urls = {
     "http://thirdqq.qlogo.cn/g?b=oidb&k=jWGicCEAEOGTsXtzplbsBSA&s=40&t=1658928554",
@@ -45,6 +46,11 @@ QVector<QString> Mock::feelings = {"每一天都是一个新的开始。", "梦�
 
 QMap<int, QVector<QString>> Mock::chatHistory;
 
+QVector<QString> Mock::addFriendReasons{
+    "我是你的粉丝，能加个好友吗？", "你好，我是你的同事，能加个好友吗？", "你的开源项目太棒了",
+    "你好，我和你一个高中的",       "Hello，Can you add me as a friend?", "I listened to your song, it's great",
+};
+
 void Mock::InitMockData() {
     for (int i = 0; i < 10; ++i) {
         chatHistory.insert(i, {});
@@ -66,5 +72,17 @@ void Mock::addMockFriendItems() {
         item->setStatus(QString("[%1]").arg(Mock::statuses[i % Mock::statuses.size()]));
         item->setFeeling(Mock::feelings[i % Mock::feelings.size()]);
         friendWidget->addFriendItem(item);
+    }
+}
+
+NotifyWidget* Mock::notifyWidget = nullptr;
+
+void Mock::addMockNewFriendItems() {
+    for (int i = 0; i < 20; ++i) {
+        auto item = new NewFriendItem();
+        item->setAvatar(Mock::urls[i % Mock::urls.size()]);
+        item->setNickname(Mock::nicknames[i % Mock::nicknames.size()]);
+        item->setReason(Mock::addFriendReasons[i % Mock::addFriendReasons.size()]);
+        notifyWidget->addNewFriendItem(item);
     }
 }

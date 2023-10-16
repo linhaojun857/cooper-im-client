@@ -37,7 +37,7 @@ ChatDialog::ChatDialog(QWidget* parent) : QDialog(parent), ui(new Ui::ChatDialog
     FramelessWidgetsHelper::get(this)->setHitTestVisible(ui->m_closePushButton);
     FramelessWidgetsHelper::get(this)->setHitTestVisible(ui->m_minimizePushButton);
 
-    QFile file(":/html/friend_chat.html");
+    QFile file(":/html/chat.html");
     file.open(QIODevice::ReadOnly);
     m_friendChatView = new QWebEngineView(this);
     m_friendChatView->setHtml(file.readAll());

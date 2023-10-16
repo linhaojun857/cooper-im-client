@@ -69,18 +69,9 @@ void FriendItem::setStatus(const QString& status) {
 
 void FriendItem::setFeeling(const QString& feeling) {
     m_feeling = feeling;
-    QString ret = feeling;
-    if (feeling.size() * 12 > ui->m_feelingLabel->width()) {
-        int cutSize = 12;
-        for (int i = 0; i < cutSize; ++i) {
-            if (feeling.at(i) == QChar(' ') || feeling.at(i) == QChar(',')) {
-                cutSize++;
-                continue;
-            }
-        }
-        ret = feeling.left(cutSize - 1) + "...";
-    }
-    ui->m_feelingLabel->setText(ret);
+    QFontMetrics fontMetrics(ui->m_feelingLabel->font());
+    QString elideText = fontMetrics.elidedText(feeling, Qt::ElideRight, ui->m_feelingLabel->width());
+    ui->m_feelingLabel->setText(elideText);
 }
 
 FriendItem::~FriendItem() {

@@ -6,7 +6,7 @@
 
 #include "view/FriendWidget.hpp"
 #include "view/GroupWidget.hpp"
-#include "view/NewFriWidget.hpp"
+#include "view/NotifyWidget.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -28,7 +28,7 @@ private:
     QMap<int, QPushButton*> m_tabBtnMap;
     FriendWidget* m_friendWidget = nullptr;
     GroupWidget* m_groupWidget = nullptr;
-    NewFriWidget* m_newFriWidget = nullptr;
+    NotifyWidget* m_notifyWidget = nullptr;
 };
 
 #endif

@@ -48,6 +48,11 @@ background-color: #ffffff;</string>
      <string>tab2</string>
     </attribute>
    </widget>
+   <widget class="QWidget" name="tab3">
+    <attribute name="title">
+     <string>tab3</string>
+    </attribute>
+   </widget>
   </widget>
   <widget class="QPushButton" name="m_friendPushButton">
    <property name="geometry">
@@ -83,7 +88,7 @@ background-color: #d9d9d9;
     <string>群聊</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="m_newFriPushButton">
+  <widget class="QPushButton" name="m_notifyPushButton">
    <property name="geometry">
     <rect>
      <x>200</x>
@@ -96,7 +101,7 @@ background-color: #d9d9d9;
     <string notr="true">border: 0px;</string>
    </property>
    <property name="text">
-    <string>新朋友</string>
+    <string>通知</string>
    </property>
   </widget>
  </widget>

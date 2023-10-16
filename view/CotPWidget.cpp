@@ -12,11 +12,14 @@ CotPWidget::CotPWidget(QWidget* parent) : QWidget(parent), ui(new Ui::CotPWidget
     setMaximumHeight(474);
     m_friendWidget = new FriendWidget(ui->m_tabWidget->widget(0));
     m_friendWidget->setGeometry(0, 0, 300, 451);
+    m_notifyWidget = new NotifyWidget(ui->m_tabWidget->widget(2));
+    m_notifyWidget->setGeometry(0, 0, 300, 451);
     ui->m_tabWidget->tabBar()->hide();
     m_tabBtnMap[0] = ui->m_friendPushButton;
     m_tabBtnMap[1] = ui->m_groupPushButton;
-    m_tabBtnMap[2] = ui->m_newFriPushButton;
+    m_tabBtnMap[2] = ui->m_notifyPushButton;
     connect(ui->m_friendPushButton, &QPushButton::clicked, [this]() {
+        qDebug() << "m_friendPushButton clicked";
         m_tabBtnMap[m_tabCurrentIndex]->setStyleSheet("border: 0px;");
         ui->m_tabWidget->setCurrentIndex(0);
         m_tabCurrentIndex = 0;
@@ -25,6 +28,7 @@ CotPWidget::CotPWidget(QWidget* parent) : QWidget(parent), ui(new Ui::CotPWidget
             "background-color: #d9d9d9;");
     });
     connect(ui->m_groupPushButton, &QPushButton::clicked, [this]() {
+        qDebug() << "m_groupPushButton clicked";
         m_tabBtnMap[m_tabCurrentIndex]->setStyleSheet("border: 0px;");
         ui->m_tabWidget->setCurrentIndex(1);
         m_tabCurrentIndex = 1;
@@ -32,7 +36,8 @@ CotPWidget::CotPWidget(QWidget* parent) : QWidget(parent), ui(new Ui::CotPWidget
             "border: 0px;\n"
             "background-color: #d9d9d9;");
     });
-    connect(ui->m_newFriPushButton, &QPushButton::clicked, [this]() {
+    connect(ui->m_notifyPushButton, &QPushButton::clicked, [this]() {
+        qDebug() << "m_newFriPushButton clicked";
         m_tabBtnMap[m_tabCurrentIndex]->setStyleSheet("border: 0px;");
         ui->m_tabWidget->setCurrentIndex(2);
         m_tabCurrentIndex = 2;

@@ -8,5 +8,6 @@ int main(int argc, char* argv[]) {
     IMKernel kernel;
     Mock::InitMockData();
     Mock::addMockFriendItems();
+    Mock::addMockNewFriendItems();
     return QApplication::exec();
 }
