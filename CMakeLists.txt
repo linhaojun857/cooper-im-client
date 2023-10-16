@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
-set(CMAKE_PREFIX_PATH "D:/Qt6/6.5.2/mingw_64")
+set(CMAKE_PREFIX_PATH "D:/Qt6/6.5.2/msvc2019_64")
 
 set(FRAMELESSHELPER_BUILD_STATIC ON)
 set(FRAMELESSHELPER_NO_DEBUG_OUTPUT ON)
@@ -17,7 +17,10 @@ find_package(Qt6 COMPONENTS
         Gui
         Widgets
         Network
+        Concurrent
         Core5Compat
+        WebEngineWidgets
+
         REQUIRED)
 
 add_executable(cooper_im_client
@@ -70,10 +73,16 @@ add_executable(cooper_im_client
         # config
         config/IMDefine.hpp
         # mock
-        mock/MockData.hpp
-        mock/MockData.cpp
+        mock/Mock.hpp
+        mock/Mock.cpp
+        # store
+        store/IMStore.hpp
+        store/IMStore.cpp
         # qrc
-        res/res.qrc)
+        res/res.qrc
+        view/ChatItem.cpp
+        view/ChatItem.hpp
+        view/ChatItem.ui)
 
 target_include_directories(cooper_im_client PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
@@ -82,7 +91,9 @@ target_link_libraries(cooper_im_client
         Qt::Gui
         Qt::Widgets
         Qt::Network
+        Qt::Concurrent
         Qt::Core5Compat
+        Qt::WebEngineWidgets
         FramelessHelper::Core
         FramelessHelper::Widgets
 )

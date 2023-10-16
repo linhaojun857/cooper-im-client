@@ -1,6 +1,7 @@
 #ifndef view_FriendWidget_hpp
 #define view_FriendWidget_hpp
 
+#include <QVBoxLayout>
 #include <QWidget>
 
 #include "view/FriendItem.hpp"
@@ -12,6 +13,7 @@ class FriendWidget;
 QT_END_NAMESPACE
 
 class FriendWidget : public QWidget {
+    friend class Mock;
     Q_OBJECT
 
 public:
@@ -19,9 +21,12 @@ public:
 
     ~FriendWidget() override;
 
+    void addFriendItem(FriendItem* friendItem);
+
 private:
     Ui::FriendWidget* ui;
-    QList<FriendItem*> friendItems;
+    QList<FriendItem*> m_friendItems;
+    QVBoxLayout* m_friendItemLayout = nullptr;
 };
 
 #endif

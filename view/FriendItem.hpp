@@ -17,6 +17,8 @@ public:
 
     ~FriendItem() override;
 
+    void setId(int id);
+
     void setAvatar(const QString& url);
 
     void setNickName(const QString& nickName);
@@ -27,6 +29,11 @@ public:
 
 private:
     Ui::FriendItem* ui;
+    int m_id = 0;
+    QString m_avatar;
+    QString m_nickName;
+    QString m_status;
+    QString m_feeling;
 };
 
 #endif

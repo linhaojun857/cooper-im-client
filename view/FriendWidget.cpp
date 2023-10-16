@@ -1,11 +1,11 @@
 #include "FriendWidget.hpp"
 
-#include <QVBoxLayout>
-
-#include "mock/MockData.hpp"
+#include "mock/Mock.hpp"
 #include "ui_FriendWidget.h"
 
 FriendWidget::FriendWidget(QWidget* parent) : QWidget(parent), ui(new Ui::FriendWidget) {
+    // mock
+    Mock::friendWidget = this;
     ui->setupUi(this);
     ui->m_scrollArea->setFrameStyle(QFrame::NoFrame);
     ui->m_scrollArea->setFrameShape(QFrame::NoFrame);
@@ -13,22 +13,19 @@ FriendWidget::FriendWidget(QWidget* parent) : QWidget(parent), ui(new Ui::Friend
     ui->m_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     auto widget = new QWidget();
     ui->m_scrollArea->setWidget(widget);
-    auto layout = new QVBoxLayout();
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(0);
-    widget->setLayout(layout);
-    for (int i = 0; i < 20; ++i) {
-        auto item = new FriendItem();
-        item->setAvatar(MockData::urls[i % MockData::urls.size()]);
-        item->setNickName(MockData::nicknames[i % MockData::nicknames.size()]);
-        item->setStatus(QString("[%1]").arg(MockData::statuses[i % MockData::statuses.size()]));
-        item->setFeeling(MockData::feelings[i % MockData::feelings.size()]);
-        friendItems.append(item);
-        layout->addWidget(item);
-    }
-    layout->addStretch();
+    m_friendItemLayout = new QVBoxLayout();
+    m_friendItemLayout->setContentsMargins(0, 0, 0, 0);
+    m_friendItemLayout->setSpacing(0);
+    widget->setLayout(m_friendItemLayout);
+    m_friendItemLayout->addStretch();
 }
 
 FriendWidget::~FriendWidget() {
     delete ui;
+}
+
+void FriendWidget::addFriendItem(FriendItem* friendItem) {
+    qDebug() << "FriendWidget::addFriendItem";
+    m_friendItems.append(friendItem);
+    m_friendItemLayout->insertWidget(m_friendItemLayout->count() - 1, friendItem);
 }

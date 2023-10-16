@@ -6,6 +6,8 @@
 
 #include "view/CotPWidget.hpp"
 
+class IMKernel;
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWidget;

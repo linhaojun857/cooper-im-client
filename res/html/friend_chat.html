@@ -160,11 +160,8 @@
             margin-left: auto;
         }
 
-        .download-button {
-            background-color: transparent;
-            border: none;
-            outline: none;
-            cursor: pointer;
+        body::-webkit-scrollbar {
+            display: none;
         }
     </style>
 </head>
@@ -205,10 +202,11 @@
     <div class="chat-bubble chat-bubble-file">
         <div class="chat-bubble-triangle"></div>
         <div class="file-info">
-            <span class="file-name" onclick="download('../img/pdf.png')">Effective STL.pdf</span>
+            <span class="file-name"
+                  onclick="download('http://localhost:9999/static/img/pdf.png')">Effective STL.pdf</span>
             <span class="file-size">9.6MB</span>
         </div>
-        <img class="file-img" src="pdf.png">
+        <img class="file-img" src="http://localhost:9999/static/img/pdf.png">
     </div>
 </div>
 <div class="chat-container-send">
@@ -216,10 +214,11 @@
         <div class="chat-bubble-send chat-bubble-file">
             <div class="chat-bubble-triangle-send-file"></div>
             <div class="file-info">
-                <span class="file-name" onclick="download('../img/pdf.png')">Effective STL.pdf</span>
+                <span class="file-name"
+                      onclick="download('http://localhost:9999/static/img/pdf.png')">Effective STL.pdf</span>
                 <span class="file-size">9.6MB</span>
             </div>
-            <img class="file-img" src="pdf.png">
+            <img class="file-img" src="http://localhost:9999/static/img/pdf.png">
         </div>
         <img class="avatar-send"
              src="http://thirdqq.qlogo.cn/g?b=oidb&k=khiaicSsyibl4MWCic8b5ue0wQ&kti=Y9yMMAAAAAA&s=40&t=1667226008">
@@ -355,14 +354,14 @@
         fileNameElement.className = "file-name";
         fileNameElement.innerText = fileName;
         fileNameElement.addEventListener("click", function () {
-            download(fileUrl)
+            download(fileUrl);
         });
         let fileSizeElement = document.createElement("span");
         fileSizeElement.className = "file-size";
         fileSizeElement.innerText = fileSize;
         let fileImg = document.createElement("img");
         fileImg.className = "file-img";
-        fileImg.src = fileExtension + ".png";
+        fileImg.src = "http://localhost:9999/static/img/" + fileExtension + ".png";
         fileInfo.appendChild(fileNameElement);
         fileInfo.appendChild(fileSizeElement);
         chatBubble.appendChild(chatBubbleTriangle);
@@ -459,14 +458,14 @@
         fileNameElement.className = "file-name";
         fileNameElement.innerText = fileName;
         fileNameElement.addEventListener("click", function () {
-            download(fileUrl)
+            download(fileUrl);
         });
         let fileSizeElement = document.createElement("span");
         fileSizeElement.className = "file-size";
         fileSizeElement.innerText = fileSize;
         let fileImg = document.createElement("img");
         fileImg.className = "file-img";
-        fileImg.src = fileExtension + ".png";
+        fileImg.src = "http://localhost:9999/static/img/" + fileExtension + ".png";
         fileInfo.appendChild(fileNameElement);
         fileInfo.appendChild(fileSizeElement);
         chatBubble.appendChild(chatBubbleTriangle);
@@ -489,18 +488,25 @@
         document.body.appendChild(timeline);
     }
 
+    function clearAllElement() {
+        let body = document.body;
+        body.innerHTML = "";
+    }
+
     let peerAvatarUrl = "http://thirdqq.qlogo.cn/g?b=oidb&k=khiaicSsyibl4MWCic8b5ue0wQ&kti=Y9yMMAAAAAA&s=40&t=1667226008";
     let selfAvatarUrl = "https://static.linhaojun.top/aurora/config/6e4f47f4bb66d2d30722d20e789b220e.jpg";
 
     addPeerTextMessage(peerAvatarUrl, "This is a text message.");
     addPeerImageMessage(peerAvatarUrl, "https://static.linhaojun.top/aurora/articles/3ec095cd9b7bd3f766166a4db14160c6.jpg");
     addPeerVideoMessage(peerAvatarUrl, "https://www.w3schools.com/html/mov_bbb.mp4");
-    addPeerFileMessage(peerAvatarUrl, "Effective STL.pdf", "9.6MB", "../img/pdf.png");
+    addPeerFileMessage(peerAvatarUrl, "Effective STL.pdf", "9.6MB", "http://localhost:9999/static/img/pdf.png");
     addTimeline("12:10");
     addSelfTextMessage(selfAvatarUrl, "This is a text message");
     addSelfImageMessage(selfAvatarUrl, "https://static.linhaojun.top/aurora/articles/3ec095cd9b7bd3f766166a4db14160c6.jpg");
     addSelfVideoMessage(selfAvatarUrl, "https://www.w3schools.com/html/mov_bbb.mp4");
-    addSelfFileMessage(selfAvatarUrl, "Effective STL.pdf", "9.6MB", "../img/pdf.png");
+    addSelfFileMessage(selfAvatarUrl, "Effective STL.pdf", "9.6MB", "http://localhost:9999/static/img/pdf.png");
+
+    window.scrollTo(0, document.body.scrollHeight);
 </script>
 
 </html>

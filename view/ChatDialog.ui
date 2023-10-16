@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>560</width>
+    <width>730</width>
     <height>500</height>
    </rect>
   </property>
@@ -17,48 +17,25 @@
    <string notr="true">border: 0px;
 background-color: #ffffff;</string>
   </property>
-  <widget class="QScrollArea" name="scrollArea">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>30</y>
-     <width>560</width>
-     <height>317</height>
-    </rect>
-   </property>
-   <property name="widgetResizable">
-    <bool>true</bool>
-   </property>
-   <widget class="QWidget" name="scrollAreaWidgetContents">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>560</width>
-      <height>317</height>
-     </rect>
-    </property>
-   </widget>
-  </widget>
   <widget class="QPlainTextEdit" name="plainTextEdit">
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>170</x>
      <y>370</y>
      <width>560</width>
      <height>170</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">border-top: 1px solid #000000;
-background-color: #ffffff;</string>
+    <string notr="true">background-color: #ffffff;
+border-top: 1px solid #000000;</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="m_sendPushButton">
    <property name="geometry">
     <rect>
-     <x>488</x>
-     <y>475</y>
+     <x>658</x>
+     <y>470</y>
      <width>70</width>
      <height>23</height>
     </rect>
@@ -69,8 +46,7 @@ background-color: #ffffff;</string>
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">border: 1px solid #000000;
-background-color: #ffffff;</string>
+    <string notr="true">background-color: #ffffff;</string>
    </property>
    <property name="text">
     <string>发送</string>
@@ -79,7 +55,7 @@ background-color: #ffffff;</string>
   <widget class="QLabel" name="m_peerNicknameLabel">
    <property name="geometry">
     <rect>
-     <x>205</x>
+     <x>375</x>
      <y>5</y>
      <width>150</width>
      <height>20</height>
@@ -103,15 +79,14 @@ background-color: #ffffff;</string>
   <widget class="QPushButton" name="m_closePushButton">
    <property name="geometry">
     <rect>
-     <x>524</x>
+     <x>694</x>
      <y>0</y>
      <width>36</width>
      <height>30</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">border: 1px solid #000000;
-background-color: #ffffff;</string>
+    <string notr="true">background-color: #ffffff;</string>
    </property>
    <property name="text">
     <string>关闭</string>
@@ -120,15 +95,14 @@ background-color: #ffffff;</string>
   <widget class="QPushButton" name="m_minimizePushButton">
    <property name="geometry">
     <rect>
-     <x>480</x>
+     <x>650</x>
      <y>0</y>
      <width>40</width>
      <height>30</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">border: 1px solid #000000;
-background-color: #ffffff;</string>
+    <string notr="true">background-color: #ffffff;</string>
    </property>
    <property name="text">
     <string>最小化</string>
@@ -137,7 +111,7 @@ background-color: #ffffff;</string>
   <widget class="QWidget" name="widget" native="true">
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>170</x>
      <y>347</y>
      <width>560</width>
      <height>23</height>
@@ -153,8 +127,7 @@ background-color: #ffffff;</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border: 1px solid #000000;
-background-color: #ffffff;</string>
+     <string notr="true">background-color: #ffffff;</string>
     </property>
     <property name="text">
      <string>表情包</string>
@@ -170,11 +143,33 @@ background-color: #ffffff;</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border: 1px solid #000000;
-background-color: #ffffff;</string>
+     <string notr="true">background-color: #ffffff;</string>
     </property>
     <property name="text">
      <string>文件</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QScrollArea" name="m_scrollArea">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>170</width>
+     <height>500</height>
+    </rect>
+   </property>
+   <property name="widgetResizable">
+    <bool>true</bool>
+   </property>
+   <widget class="QWidget" name="scrollAreaWidgetContents">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>170</width>
+      <height>500</height>
+     </rect>
     </property>
    </widget>
   </widget>

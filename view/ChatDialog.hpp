@@ -3,6 +3,10 @@
 
 #include <QDialog>
 #include <QLabel>
+#include <QVBoxLayout>
+#include <QWebEngineView>
+
+#include "view/ChatItem.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -18,9 +22,19 @@ public:
 
     ~ChatDialog() override;
 
+    void addChatItem(ChatItem* chatItem);
+
+    void changeChatHistory(int userId);
+
+private:
+    void runJavaScript(const QString& script);
+
 private:
     Ui::ChatDialog* ui;
     QWidget* m_headerWidget = nullptr;
+    QWebEngineView* m_friendChatView = nullptr;
+    QMap<int, ChatItem*> m_chatItemMap;
+    QVBoxLayout* m_chatItemLayout = nullptr;
 };
 
 #endif
