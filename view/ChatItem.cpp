@@ -55,3 +55,7 @@ void ChatItem::setName(const QString& name) {
     m_name = name;
     ui->m_nameLabel->setText(name);
 }
+
+QString ChatItem::getName() {
+    return m_name;
+}

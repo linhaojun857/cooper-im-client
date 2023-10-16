@@ -27,6 +27,8 @@ public:
 
     void setName(const QString& name);
 
+    QString getName();
+
 private:
     Ui::ChatItem* ui;
     int m_id = 0;

@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QListWidget>
 #include <QMessageBox>
+#include <QTimer>
 
 #include "core/IMKernel.hpp"
 #include "mock/Mock.hpp"
@@ -75,15 +76,15 @@ void ChatDialog::addChatItem(ChatItem* chatItem) {
 void ChatDialog::changeChatHistory(int userId) {
     qDebug() << "ChatDialog::changeChatHistory";
     runJavaScript("clearAllElement();");
+    runJavaScript("openLoading();");
     int mockId = userId % Mock::chatHistory.size();
     auto chatHistory = Mock::chatHistory[mockId];
     for (const auto& history : chatHistory) {
-        qDebug() << m_chatItemMap[userId]->getAvatar();
-        qDebug() << history;
         runJavaScript(
             QString("addPeerTextMessage(%1, %2);").arg("\"" + m_chatItemMap[userId]->getAvatar() + "\"", history));
     }
     runJavaScript("window.scrollTo(0, document.body.scrollHeight);");
+    runJavaScript("closeLoading();");
 }
 
 void ChatDialog::runJavaScript(const QString& script) {
