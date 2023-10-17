@@ -5,7 +5,7 @@
 #include <QTabBar>
 #include <QTimer>
 
-#include "config/IMDefine.hpp"
+#include "define/IMDefine.hpp"
 #include "ui_LRWidget.h"
 #include "util/HttpUtil.hpp"
 

@@ -8,12 +8,12 @@ CotPWidget::CotPWidget(QWidget* parent) : QWidget(parent), ui(new Ui::CotPWidget
     ui->setupUi(this);
     setMinimumWidth(300);
     setMaximumWidth(300);
-    setMinimumHeight(474);
-    setMaximumHeight(474);
+    setMinimumHeight(494);
+    setMaximumHeight(494);
     m_friendWidget = new FriendWidget(ui->m_tabWidget->widget(0));
-    m_friendWidget->setGeometry(0, 0, 300, 451);
+    m_friendWidget->setGeometry(0, 0, 300, 471);
     m_notifyWidget = new NotifyWidget(ui->m_tabWidget->widget(2));
-    m_notifyWidget->setGeometry(0, 0, 300, 451);
+    m_notifyWidget->setGeometry(0, 0, 300, 471);
     ui->m_tabWidget->tabBar()->hide();
     m_tabBtnMap[0] = ui->m_friendPushButton;
     m_tabBtnMap[1] = ui->m_groupPushButton;

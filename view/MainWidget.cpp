@@ -10,7 +10,7 @@ MainWidget::MainWidget(QWidget* parent) : QWidget(parent), ui(new Ui::MainWidget
     setWindowTitle("Cooper");
     setWindowIcon(QIcon(":/img/logo.ico"));
     m_cotPWidget = new CotPWidget(ui->m_tabWidget->widget(1));
-    m_cotPWidget->setGeometry(0, 0, 300, 474);
+    m_cotPWidget->setGeometry(0, 0, 300, 494);
     setMinimumWidth(300);
     setMaximumWidth(300);
     setMinimumHeight(600);

@@ -20,7 +20,6 @@ find_package(Qt6 COMPONENTS
         Concurrent
         Core5Compat
         WebEngineWidgets
-
         REQUIRED)
 
 add_executable(cooper_im_client
@@ -77,7 +76,7 @@ add_executable(cooper_im_client
         util/HttpUtil.cpp
         util/HttpUtil.hpp
         # config
-        config/IMDefine.hpp
+        define/IMDefine.hpp
         # mock
         mock/Mock.hpp
         mock/Mock.cpp

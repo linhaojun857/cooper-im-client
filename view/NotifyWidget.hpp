@@ -26,7 +26,7 @@ public:
 private:
     Ui::NotifyWidget* ui;
     QList<NewFriendItem*> m_newFriendItems;
-    QVBoxLayout* m_layout;
+    QVBoxLayout* m_layout = nullptr;
 };
 
 #endif
