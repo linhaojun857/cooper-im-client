@@ -1,6 +1,7 @@
 #include "Mock.hpp"
 
 #include "view/FriendWidget.hpp"
+#include "view/GroupWidget.hpp"
 #include "view/NotifyWidget.hpp"
 
 QVector<QString> Mock::urls = {
@@ -26,12 +27,12 @@ QVector<QString> Mock::urls = {
     "https://static.linhaojun.top/aurora/avatar/8ac9c63f9d0ba11c7d4d45191c406d18.jpg",
 };
 
-QVector<QString> Mock::nicknames{"开心的火龙果", "二爷",      "你仔细听", "小乖乖",         "忆生i",
-                                 "杨酷酷",       "五行缺钱",  "MRBEE",    "星川",           "怀念",
-                                 "没毛的小狐狸", "八尺妖剑",  "提露",     "一个超人的角色", "所念皆星河",
-                                 "远辰",         "Cold moon", "永恒",     "ZVerify",        "明天一定吃早饭"};
+QVector<QString> Mock::nicknames = {"开心的火龙果", "二爷",      "你仔细听", "小乖乖",         "忆生i",
+                                    "杨酷酷",       "五行缺钱",  "MRBEE",    "星川",           "怀念",
+                                    "没毛的小狐狸", "八尺妖剑",  "提露",     "一个超人的角色", "所念皆星河",
+                                    "远辰",         "Cold moon", "永恒",     "ZVerify",        "明天一定吃早饭"};
 
-QVector<QString> Mock::statuses{"忙碌", "在线", "离开", "求锦鲤", "发呆", "胡思乱想"};
+QVector<QString> Mock::statuses = {"忙碌", "在线", "离开", "求锦鲤", "发呆", "胡思乱想"};
 
 QVector<QString> Mock::feelings = {"每一天都是一个新的开始。", "梦想，永不放弃。",
                                    "阳光总在风雨后。",         "不忘初心，方得始终。",
@@ -45,6 +46,12 @@ QVector<QString> Mock::feelings = {"每一天都是一个新的开始。", "梦�
                                    "不忙于奔波，不迷失方向。", "活出自己的精彩。"};
 
 QMap<int, QVector<QString>> Mock::chatHistory;
+
+QVector<QString> Mock::groupNames = {"Aurora博客交流群", "SpringBoot交流群", "Java交流群",  "MySQL交流群",
+                                     "Linux交流群",      "Redis交流群",      "ES甲流群",    "MyBatis交流群",
+                                     "Kafka交流群",      "RabbitMQ交流群",   "测试交流群1", "测试交流群2",
+                                     "测试交流群3",      "测试交流群4",      "测试交流群5", "测试交流群6",
+                                     "测试交流群7",      "测试交流群8",      "测试交流群9", "测试交流群10"};
 
 QVector<QString> Mock::addFriendReasons{
     "我是你的粉丝，能加个好友吗？", "你好，我是你的同事，能加个好友吗？", "你的开源项目太棒了",
@@ -72,6 +79,18 @@ void Mock::addMockFriendItems() {
         item->setStatus(QString("[%1]").arg(Mock::statuses[i % Mock::statuses.size()]));
         item->setFeeling(Mock::feelings[i % Mock::feelings.size()]);
         friendWidget->addFriendItem(item);
+    }
+}
+
+GroupWidget* Mock::groupWidget = nullptr;
+
+void Mock::addMockGroupItems() {
+    for (int i = 0; i < 20; ++i) {
+        auto item = new GroupItem();
+        item->setId(i);
+        item->setAvatar(Mock::urls[i % Mock::urls.size()]);
+        item->setGroupName(Mock::groupNames[i % Mock::groupNames.size()]);
+        groupWidget->addGroupItem(item);
     }
 }
 

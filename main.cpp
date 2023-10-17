@@ -9,5 +9,6 @@ int main(int argc, char* argv[]) {
     Mock::InitMockData();
     Mock::addMockFriendItems();
     Mock::addMockNewFriendItems();
+    Mock::addMockGroupItems();
     return QApplication::exec();
 }

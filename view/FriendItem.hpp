@@ -21,7 +21,7 @@ public:
 
     void setAvatar(const QString& url);
 
-    void setNickName(const QString& nickName);
+    void setNickName(const QString& nickname);
 
     void setStatus(const QString& status);
 
@@ -30,7 +30,7 @@ public:
 private:
     Ui::FriendItem* ui;
     int m_id = 0;
-    QString m_avatar;
+    QString m_avatarUrl;
     QString m_nickName;
     QString m_status;
     QString m_feeling;

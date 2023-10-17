@@ -19,7 +19,7 @@ FriendItem::FriendItem(QWidget* parent) : QWidget(parent), ui(new Ui::FriendItem
             IMStore::getInstance()->openChatPage(m_id);
             auto chatItem = new ChatItem();
             chatItem->setId(m_id);
-            chatItem->setAvatar(m_avatar);
+            chatItem->setAvatar(m_avatarUrl);
             chatItem->setName(m_nickName);
             IMStore::getInstance()->getChatDialog()->addChatItem(chatItem);
         }
@@ -31,7 +31,7 @@ void FriendItem::setId(int id) {
 }
 
 void FriendItem::setAvatar(const QString& url) {
-    m_avatar = url;
+    m_avatarUrl = url;
     auto manager = new QNetworkAccessManager();
     QNetworkRequest request(url);
     QNetworkReply* reply = manager->get(request);
@@ -50,9 +50,11 @@ void FriendItem::setAvatar(const QString& url) {
     });
 }
 
-void FriendItem::setNickName(const QString& nickName) {
-    m_nickName = nickName;
-    ui->m_nicknameLabel->setText(nickName);
+void FriendItem::setNickName(const QString& nickname) {
+    m_nickName = nickname;
+    QFontMetrics fontMetrics(ui->m_nicknameLabel->font());
+    QString elideText = fontMetrics.elidedText(nickname, Qt::ElideRight, ui->m_nicknameLabel->width());
+    ui->m_nicknameLabel->setText(elideText);
 }
 
 void FriendItem::setStatus(const QString& status) {

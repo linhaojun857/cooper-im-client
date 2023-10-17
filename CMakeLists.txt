@@ -69,6 +69,9 @@ add_executable(cooper_im_client
         view/NotifyWidget.hpp
         view/NotifyWidget.cpp
         view/NotifyWidget.ui
+        view/GroupItem.hpp
+        view/GroupItem.cpp
+        view/GroupItem.ui
         # core
         core/IMKernel.hpp
         core/IMKernel.cpp

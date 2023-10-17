@@ -4,6 +4,7 @@
 #include <QVector>
 
 class FriendWidget;
+class GroupWidget;
 class NotifyWidget;
 
 class Mock {
@@ -20,12 +21,19 @@ public:
 
     static QVector<QString> addFriendReasons;
 
+    static QVector<QString> groupNames;
+
     static void InitMockData();
 
     // FriendWidget Mock Data
     static FriendWidget* friendWidget;
 
     static void addMockFriendItems();
+
+    // GroupWidget Mock Data
+    static GroupWidget* groupWidget;
+
+    static void addMockGroupItems();
 
     // NotifyWidget Mock Data
     static NotifyWidget* notifyWidget;
