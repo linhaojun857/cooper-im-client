@@ -22,6 +22,9 @@ public:
 
     ~MainWidget() override;
 
+private slots:
+    void handleAddFriendAndGroupAction();
+
 private:
     Ui::MainWidget* ui;
     int m_tabCurrentIndex = 0;

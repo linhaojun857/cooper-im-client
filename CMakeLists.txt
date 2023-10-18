@@ -74,6 +74,12 @@ add_executable(cooper_im_client
         view/GroupItem.hpp
         view/GroupItem.cpp
         view/GroupItem.ui
+        view/FGSWidget.cpp
+        view/FGSWidget.hpp
+        view/FGSWidget.ui
+        view/FSRWidget.cpp
+        view/FSRWidget.hpp
+        view/FSRWidget.ui
         # core
         core/IMKernel.hpp
         core/IMKernel.cpp

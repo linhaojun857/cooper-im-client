@@ -274,6 +274,10 @@ background-color: #ffffff;</string>
       <height>26</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">border: 0px;
+background-color: #ffffff;</string>
+    </property>
     <property name="text">
      <string>关闭</string>
     </property>
@@ -287,8 +291,42 @@ background-color: #ffffff;</string>
       <height>26</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">border: 0px;
+background-color: #ffffff;</string>
+    </property>
     <property name="text">
      <string>最小化</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="m_optionPushButton">
+    <property name="geometry">
+     <rect>
+      <x>195</x>
+      <y>0</y>
+      <width>30</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 0px;
+background-color: #ffffff;</string>
+    </property>
+    <property name="text">
+     <string>选项</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="m_appNameLabel">
+    <property name="geometry">
+     <rect>
+      <x>27</x>
+      <y>4</y>
+      <width>60</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Cooper</string>
     </property>
    </widget>
   </widget>
