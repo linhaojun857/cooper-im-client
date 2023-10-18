@@ -3,6 +3,7 @@
 
 #include <QObject>
 
+#include "mediator/TcpClientMediator.hpp"
 #include "view/LRWidget.hpp"
 #include "view/MainWidget.hpp"
 
@@ -18,6 +19,7 @@ public:
     void createMainWidget();
 
 private:
+    TcpClientMediator* m_mediator = nullptr;
     LRWidget* m_lRWidget = nullptr;
     MainWidget* m_mainWidget = nullptr;
 };

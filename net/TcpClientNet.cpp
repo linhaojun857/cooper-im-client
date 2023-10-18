@@ -1,5 +1,6 @@
 #include "TcpClientNet.hpp"
 
+#include <QDebug>
 #include <thread>
 
 #include "mediator/INetMediator.hpp"
@@ -17,17 +18,17 @@ bool TcpClientNet::openNet() {
     // 加载库
     int error = WSAStartup(version, &wsaData);
     if (0 != error) {
-        std::cout << "WSAStartup error" << std::endl;
+        qDebug() << "WSAStartup error";
         return false;
     }
 
     // 检查版本
     if (2 != LOBYTE(wsaData.wVersion) || 2 != HIBYTE(wsaData.wVersion)) {
-        std::cout << "Version error" << std::endl;
+        qDebug() << "Version error";
         WSACleanup();
         return false;
     } else {
-        std::cout << "Version success" << std::endl;
+        qDebug() << "Version success";
     }
 
     // 创建套接字
@@ -40,10 +41,10 @@ bool TcpClientNet::openNet() {
     serverAddr.sin_port = htons(SERVER_PORT);
     int ret = connect(m_sock, (sockaddr*)&serverAddr, sizeof(serverAddr));
     if (SOCKET_ERROR == ret) {
-        std::cout << "Connect error: " << WSAGetLastError() << std::endl;
+        qDebug() << "Connect error: " << WSAGetLastError();
         return false;
     } else {
-        std::cout << "Connect success" << std::endl;
+        qDebug() << "Connect success";
     }
 
     // 启动接收线程
@@ -68,13 +69,13 @@ void TcpClientNet::closeNet() {
 }
 
 bool TcpClientNet::send(std::string str) {
-    std::cout << __FUNCTION__ << std::endl;
+    qDebug() << __FUNCTION__;
     if (str.empty()) {
-        std::cout << "TcpClientNet::send() str is empty" << std::endl;
+        qDebug() << "TcpClientNet::send() str is empty";
     }
     // 再发包的内容
     if (::send(m_sock, str.c_str(), (int)str.size(), 0) == SOCKET_ERROR) {
-        std::cout << "TcpClientNet::send() send err: " << WSAGetLastError() << std::endl;
+        qDebug() << "TcpClientNet::send() send err: " << WSAGetLastError();
         return false;
     }
     return true;
@@ -82,18 +83,18 @@ bool TcpClientNet::send(std::string str) {
 
 bool TcpClientNet::sendData(char* buf, int size, long peerSock) {
     (void)peerSock;
-    std::cout << __FUNCTION__ << std::endl;
+    qDebug() << __FUNCTION__;
     if (!buf || size <= 0) {
-        std::cout << "TcpClientNet::sendData() buf is nullptr or size <= 0" << std::endl;
+        qDebug() << "TcpClientNet::sendData() buf is nullptr or size <= 0";
     }
     // 先发包的大小
     if (::send(m_sock, (char*)&size, sizeof(size), 0) == SOCKET_ERROR) {
-        std::cout << "TcpClientNet::sendData() send err: " << WSAGetLastError() << std::endl;
+        qDebug() << "TcpClientNet::sendData() send err: " << WSAGetLastError();
         return false;
     }
     // 再发包的内容
     if (::send(m_sock, buf, size, 0) == SOCKET_ERROR) {
-        std::cout << "TcpClientNet::sendData() send err: " << WSAGetLastError() << std::endl;
+        qDebug() << "TcpClientNet::sendData() send err: " << WSAGetLastError();
         return false;
     }
     return true;
@@ -116,13 +117,13 @@ void TcpClientNet::recvData() {
                     nOffset += nRecvNum;
                     nPackSize -= nRecvNum;
                 } else {
-                    std::cout << "TcpClientNet::recvData() recv error: " << WSAGetLastError() << std::endl;
+                    qDebug() << "TcpClientNet::recvData() recv error: " << WSAGetLastError();
                     return;
                 }
             }
             m_pMediator->dealData(buf, nOffset, static_cast<long>(m_sock));
         } else {
-            std::cout << "TcpClientNet::recvData() recv error: " << WSAGetLastError() << std::endl;
+            qDebug() << "TcpClientNet::recvData() recv error: " << WSAGetLastError();
             return;
         }
     }

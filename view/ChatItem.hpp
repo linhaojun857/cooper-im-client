@@ -32,7 +32,7 @@ public:
 private:
     Ui::ChatItem* ui;
     int m_id = 0;
-    QString m_avatar;
+    QString m_avatarUrl;
     QString m_name;
 };
 

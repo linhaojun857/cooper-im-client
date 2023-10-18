@@ -4,6 +4,7 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QPalette>
+#include <QtConcurrent/QtConcurrent>
 
 #include "store/IMStore.hpp"
 #include "ui_ChatItem.h"
@@ -28,11 +29,14 @@ int ChatItem::getId() const {
 }
 
 void ChatItem::setAvatar(const QString& url) {
-    m_avatar = url;
-    auto manager = new QNetworkAccessManager();
-    QNetworkRequest request(url);
-    QNetworkReply* reply = manager->get(request);
-    connect(reply, &QNetworkReply::finished, this, [=]() {
+    m_avatarUrl = url;
+    std::ignore = QtConcurrent::run([=]() {
+        auto manager = new QNetworkAccessManager();
+        QNetworkRequest request(url);
+        QNetworkReply* reply = manager->get(request);
+        QEventLoop loop;
+        QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+        loop.exec();
         if (reply->error() == QNetworkReply::NoError) {
             QByteArray data = reply->readAll();
             QPixmap pixmap;
@@ -43,12 +47,11 @@ void ChatItem::setAvatar(const QString& url) {
         } else {
             qDebug() << "load failed: " << reply->errorString();
         }
-        reply->deleteLater();
     });
 }
 
 QString ChatItem::getAvatar() {
-    return m_avatar;
+    return m_avatarUrl;
 }
 
 void ChatItem::setName(const QString& name) {

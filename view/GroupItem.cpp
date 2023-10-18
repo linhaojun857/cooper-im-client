@@ -25,7 +25,7 @@ int GroupItem::getId() const {
 
 void GroupItem::setAvatar(const QString& url) {
     m_avatarUrl = url;
-    QtConcurrent::run([=]() {
+    std::ignore = QtConcurrent::run([=]() {
         auto manager = new QNetworkAccessManager();
         QNetworkRequest request(url);
         QNetworkReply* reply = manager->get(request);
