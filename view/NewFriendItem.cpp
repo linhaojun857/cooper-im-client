@@ -3,6 +3,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QtConcurrent/QtConcurrent>
 
 #include "ui_NewFriendItem.h"
 
@@ -16,10 +17,13 @@ NewFriendItem::~NewFriendItem() {
 
 void NewFriendItem::setAvatar(const QString& url) {
     m_avatarUrl = url;
-    auto manager = new QNetworkAccessManager();
-    QNetworkRequest request(url);
-    QNetworkReply* reply = manager->get(request);
-    connect(reply, &QNetworkReply::finished, this, [=]() {
+    QtConcurrent::run([=]() {
+        auto manager = new QNetworkAccessManager();
+        QNetworkRequest request(url);
+        QNetworkReply* reply = manager->get(request);
+        QEventLoop loop;
+        QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+        loop.exec();
         if (reply->error() == QNetworkReply::NoError) {
             QByteArray data = reply->readAll();
             QPixmap pixmap;
@@ -30,7 +34,6 @@ void NewFriendItem::setAvatar(const QString& url) {
         } else {
             qDebug() << "load failed: " << reply->errorString();
         }
-        reply->deleteLater();
     });
 }
 

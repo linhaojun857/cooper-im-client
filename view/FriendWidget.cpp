@@ -1,12 +1,14 @@
 #include "FriendWidget.hpp"
 
 #include "mock/Mock.hpp"
+#include "store/IMStore.hpp"
 #include "ui_FriendWidget.h"
 
 FriendWidget::FriendWidget(QWidget* parent) : QWidget(parent), ui(new Ui::FriendWidget) {
+    ui->setupUi(this);
     // mock
     Mock::friendWidget = this;
-    ui->setupUi(this);
+    IMStore::getInstance()->setFriendWidget(this);
     ui->m_scrollArea->setFrameStyle(QFrame::NoFrame);
     ui->m_scrollArea->setFrameShape(QFrame::NoFrame);
     ui->m_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -26,6 +28,5 @@ FriendWidget::~FriendWidget() {
 
 void FriendWidget::addFriendItem(FriendItem* friendItem) {
     qDebug() << "FriendWidget::addFriendItem";
-    m_friendItems.append(friendItem);
     m_friendItemLayout->insertWidget(m_friendItemLayout->count() - 1, friendItem);
 }

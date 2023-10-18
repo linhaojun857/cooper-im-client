@@ -5,7 +5,9 @@
 #include <QTabBar>
 #include <QTimer>
 
+#include "core/IMKernel.hpp"
 #include "define/IMDefine.hpp"
+#include "store/IMStore.hpp"
 #include "ui_LRWidget.h"
 #include "util/HttpUtil.hpp"
 
@@ -134,11 +136,11 @@ void LRWidget::getVFCode(int type) {
 
 void LRWidget::userLogin() {
     // dev use
-    {
-        hide();
-        m_mainWidget->show();
-        return;
-    }
+    // {
+    //     hide();
+    //     m_mainWidget->show();
+    //     return;
+    // }
     QString username = ui->m_phoneLineEdit->text();
     QString usernameTemp = username;
     if (username.isEmpty() || usernameTemp.remove(" ").isEmpty()) {
@@ -175,7 +177,8 @@ void LRWidget::userLogin() {
         QMessageBox::information(this, "提示", "登录成功");
         resetLoginWidget();
         hide();
-        m_mainWidget->show();
+        IMStore::getInstance()->getIMKernel()->createMainWidget();
+        IMStore::getInstance()->addFriends(ret);
     } else {
         QMessageBox::warning(this, "提示", ret["msg"].toString());
     }

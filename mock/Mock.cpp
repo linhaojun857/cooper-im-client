@@ -1,5 +1,8 @@
 #include "Mock.hpp"
 
+#include <QThread>
+#include <QTimer>
+
 #include "view/FriendWidget.hpp"
 #include "view/GroupWidget.hpp"
 #include "view/NotifyWidget.hpp"

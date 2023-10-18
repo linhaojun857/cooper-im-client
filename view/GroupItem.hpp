@@ -19,7 +19,7 @@ public:
 
     void setId(int id);
 
-    int getId();
+    int getId() const;
 
     void setAvatar(const QString& url);
 

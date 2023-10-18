@@ -3,6 +3,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QtConcurrent/QtConcurrent>
 
 #include "store/IMStore.hpp"
 #include "ui_FriendItem.h"
@@ -32,10 +33,13 @@ void FriendItem::setId(int id) {
 
 void FriendItem::setAvatar(const QString& url) {
     m_avatarUrl = url;
-    auto manager = new QNetworkAccessManager();
-    QNetworkRequest request(url);
-    QNetworkReply* reply = manager->get(request);
-    connect(reply, &QNetworkReply::finished, this, [=]() {
+    QtConcurrent::run([=]() {
+        auto manager = new QNetworkAccessManager();
+        QNetworkRequest request(url);
+        QNetworkReply* reply = manager->get(request);
+        QEventLoop loop;
+        QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+        loop.exec();
         if (reply->error() == QNetworkReply::NoError) {
             QByteArray data = reply->readAll();
             QPixmap pixmap;
@@ -46,7 +50,6 @@ void FriendItem::setAvatar(const QString& url) {
         } else {
             qDebug() << "load failed: " << reply->errorString();
         }
-        reply->deleteLater();
     });
 }
 
@@ -58,15 +61,15 @@ void FriendItem::setNickName(const QString& nickname) {
 }
 
 void FriendItem::setStatus(const QString& status) {
-    m_status = status;
-    if (status.size() == 5) {
+    m_status = QString("[%1]").arg(status);
+    if (m_status.size() == 5) {
         ui->m_statusLabel->setGeometry(60, 30, 46, 20);
         ui->m_feelingLabel->setGeometry(108, 30, 150, 20);
-    } else if (status.size() == 6) {
+    } else if (m_status.size() == 6) {
         ui->m_statusLabel->setGeometry(60, 30, 56, 20);
         ui->m_feelingLabel->setGeometry(120, 30, 150, 20);
     }
-    ui->m_statusLabel->setText(status);
+    ui->m_statusLabel->setText(m_status);
 }
 
 void FriendItem::setFeeling(const QString& feeling) {

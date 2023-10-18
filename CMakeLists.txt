@@ -32,6 +32,8 @@ add_executable(cooper_im_client
         mediator/INetMediator.hpp
         mediator/TcpClientMediator.hpp
         mediator/TcpClientMediator.cpp
+        # entity
+        entity/Entity.hpp
         # view
         view/LRWidget.hpp
         view/LRWidget.cpp

@@ -1,7 +1,5 @@
 #include "GroupWidget.hpp"
 
-#include <QPushButton>
-
 #include "mock/Mock.hpp"
 #include "ui_GroupWidget.h"
 

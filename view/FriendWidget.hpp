@@ -25,7 +25,6 @@ public:
 
 private:
     Ui::FriendWidget* ui;
-    QList<FriendItem*> m_friendItems;
     QVBoxLayout* m_friendItemLayout = nullptr;
 };
 

@@ -3,6 +3,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QtConcurrent/QtConcurrent>
 
 #include "ui_GroupItem.h"
 
@@ -18,16 +19,19 @@ void GroupItem::setId(int id) {
     m_id = id;
 }
 
-int GroupItem::getId() {
+int GroupItem::getId() const {
     return m_id;
 }
 
 void GroupItem::setAvatar(const QString& url) {
     m_avatarUrl = url;
-    auto manager = new QNetworkAccessManager();
-    QNetworkRequest request(url);
-    QNetworkReply* reply = manager->get(request);
-    connect(reply, &QNetworkReply::finished, this, [=]() {
+    QtConcurrent::run([=]() {
+        auto manager = new QNetworkAccessManager();
+        QNetworkRequest request(url);
+        QNetworkReply* reply = manager->get(request);
+        QEventLoop loop;
+        QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+        loop.exec();
         if (reply->error() == QNetworkReply::NoError) {
             QByteArray data = reply->readAll();
             QPixmap pixmap;
@@ -38,7 +42,6 @@ void GroupItem::setAvatar(const QString& url) {
         } else {
             qDebug() << "load failed: " << reply->errorString();
         }
-        reply->deleteLater();
     });
 }
 

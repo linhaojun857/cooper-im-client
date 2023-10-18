@@ -3,7 +3,10 @@
 
 #include <QWebEngineView>
 
+#include "entity/Entity.hpp"
 #include "view/ChatDialog.hpp"
+#include "view/FriendItem.hpp"
+#include "view/FriendWidget.hpp"
 
 class IMKernel;
 
@@ -15,6 +18,8 @@ public:
 
     void setIMKernel(IMKernel* imKernel);
 
+    IMKernel* getIMKernel();
+
     ChatDialog* getChatDialog();
 
     void openChatPage(int id);
@@ -23,10 +28,17 @@ public:
 
     bool isOpenChatPage(int id);
 
+    void setFriendWidget(FriendWidget* friendWidget);
+
+    void addFriends(const QJsonObject& json);
+
 private:
     IMKernel* m_imKernel = nullptr;
     ChatDialog* m_chatDialog = nullptr;
     QSet<int> m_openChatPageIds;
+    FriendWidget* m_friendWidget = nullptr;
+    QMap<int, Friend*> m_friends;
+    QMap<int, FriendItem*> m_friendItems;
 };
 
 #endif

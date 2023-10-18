@@ -13,6 +13,10 @@ public:
 
     ~IMKernel() override;
 
+    void createLRWidget();
+
+    void createMainWidget();
+
 private:
     LRWidget* m_lRWidget = nullptr;
     MainWidget* m_mainWidget = nullptr;
