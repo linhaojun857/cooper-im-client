@@ -52,62 +52,6 @@ border-top: 1px solid #000000;</string>
     <string>发送</string>
    </property>
   </widget>
-  <widget class="QLabel" name="m_nameLabel">
-   <property name="geometry">
-    <rect>
-     <x>375</x>
-     <y>5</y>
-     <width>150</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>12</pointsize>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true"/>
-   </property>
-   <property name="text">
-    <string>花未眠</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="m_closePushButton">
-   <property name="geometry">
-    <rect>
-     <x>694</x>
-     <y>0</y>
-     <width>36</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: #ffffff;</string>
-   </property>
-   <property name="text">
-    <string>关闭</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="m_minimizePushButton">
-   <property name="geometry">
-    <rect>
-     <x>650</x>
-     <y>0</y>
-     <width>40</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: #ffffff;</string>
-   </property>
-   <property name="text">
-    <string>最小化</string>
-   </property>
-  </widget>
   <widget class="QWidget" name="widget" native="true">
    <property name="geometry">
     <rect>
@@ -170,6 +114,63 @@ border-top: 1px solid #000000;</string>
       <width>170</width>
       <height>500</height>
      </rect>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QWidget" name="m_headerWidget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>0</y>
+     <width>560</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <widget class="QLabel" name="m_nameLabel">
+    <property name="geometry">
+     <rect>
+      <x>205</x>
+      <y>5</y>
+      <width>150</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>花未眠</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="m_minimizePushButton">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>0</y>
+      <width>40</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>最小化</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="m_closePushButton">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>0</y>
+      <width>40</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>关闭</string>
     </property>
    </widget>
   </widget>

@@ -1,20 +1,28 @@
 #include "MainWidget.hpp"
 
+#include <FramelessHelper/Widgets/framelesswidgetshelper.h>
+
 #include <QLayout>
 #include <QTabBar>
 
 #include "ui_MainWidget.h"
 
+FRAMELESSHELPER_USE_NAMESPACE
+
 MainWidget::MainWidget(QWidget* parent) : QWidget(parent), ui(new Ui::MainWidget) {
     ui->setupUi(this);
     setWindowTitle("Cooper");
     setWindowIcon(QIcon(":/img/logo.ico"));
+    FramelessWidgetsHelper::get(this)->extendsContentIntoTitleBar();
+    FramelessWidgetsHelper::get(this)->setTitleBarWidget(ui->m_headerWidget);
+    //    FramelessWidgetsHelper::get(this)->setHitTestVisible(ui->m_closePushButton);
+    //    FramelessWidgetsHelper::get(this)->setHitTestVisible(ui->m_minimizePushButton);
     m_cotPWidget = new CotPWidget(ui->m_tabWidget->widget(1));
-    m_cotPWidget->setGeometry(0, 0, 300, 494);
+    m_cotPWidget->setGeometry(0, 0, 300, 503);
     setMinimumWidth(300);
     setMaximumWidth(300);
-    setMinimumHeight(600);
-    setMaximumHeight(600);
+    setMinimumHeight(635);
+    setMaximumHeight(635);
     ui->m_tabWidget->tabBar()->hide();
     m_tabBtnMap[0] = ui->m_msgPushButton;
     m_tabBtnMap[1] = ui->m_cotPPushButton;

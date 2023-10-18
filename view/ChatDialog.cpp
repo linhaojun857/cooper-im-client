@@ -16,10 +16,6 @@ FRAMELESSHELPER_USE_NAMESPACE
 
 ChatDialog::ChatDialog(QWidget* parent) : QDialog(parent), ui(new Ui::ChatDialog) {
     ui->setupUi(this);
-    m_headerWidget = new QWidget(this);
-    m_headerWidget->setGeometry(170, 0, 480, 30);
-    ui->m_nameLabel->setParent(m_headerWidget);
-    ui->m_nameLabel->setGeometry(205, 5, 150, 20);
     connect(ui->m_closePushButton, &QPushButton::clicked, [this]() {
         runJavaScript("clearAllElement();");
         m_friendChatView->repaint();
@@ -34,7 +30,7 @@ ChatDialog::ChatDialog(QWidget* parent) : QDialog(parent), ui(new Ui::ChatDialog
     connect(ui->m_minimizePushButton, SIGNAL(clicked(bool)), this, SLOT(showMinimized()));
 
     FramelessWidgetsHelper::get(this)->extendsContentIntoTitleBar();
-    FramelessWidgetsHelper::get(this)->setTitleBarWidget(m_headerWidget);
+    FramelessWidgetsHelper::get(this)->setTitleBarWidget(ui->m_headerWidget);
     FramelessWidgetsHelper::get(this)->setHitTestVisible(ui->m_closePushButton);
     FramelessWidgetsHelper::get(this)->setHitTestVisible(ui->m_minimizePushButton);
 

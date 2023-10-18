@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>300</width>
-    <height>600</height>
+    <height>635</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>0</y>
+     <y>26</y>
      <width>300</width>
      <height>80</height>
     </rect>
@@ -29,7 +29,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>15</y>
+      <y>13</y>
       <width>50</width>
       <height>50</height>
      </rect>
@@ -60,7 +60,7 @@
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>15</y>
+      <y>13</y>
       <width>150</width>
       <height>25</height>
      </rect>
@@ -78,7 +78,7 @@
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>45</y>
+      <y>43</y>
       <width>150</width>
       <height>20</height>
      </rect>
@@ -92,7 +92,7 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>80</y>
+     <y>106</y>
      <width>300</width>
      <height>26</height>
     </rect>
@@ -164,9 +164,9 @@ background-color: #d9d9d9;</string>
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>106</y>
+     <y>132</y>
      <width>300</width>
-     <height>494</height>
+     <height>503</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -231,6 +231,65 @@ background-color: #d9d9d9;</string>
       <string>这是朋友圈页面</string>
      </property>
     </widget>
+   </widget>
+  </widget>
+  <widget class="QWidget" name="m_headerWidget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>300</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 0px;
+background-color: #ffffff;</string>
+   </property>
+   <widget class="QLabel" name="m_iconLabel">
+    <property name="geometry">
+     <rect>
+      <x>4</x>
+      <y>4</y>
+      <width>18</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap resource="../res/res.qrc">:/img/logo.ico</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="m_closePushButton">
+    <property name="geometry">
+     <rect>
+      <x>265</x>
+      <y>0</y>
+      <width>30</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>关闭</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="m_minimizePushButton">
+    <property name="geometry">
+     <rect>
+      <x>225</x>
+      <y>0</y>
+      <width>40</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>最小化</string>
+    </property>
    </widget>
   </widget>
  </widget>

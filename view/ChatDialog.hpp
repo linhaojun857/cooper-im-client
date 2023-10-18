@@ -31,7 +31,6 @@ private:
 
 private:
     Ui::ChatDialog* ui;
-    QWidget* m_headerWidget = nullptr;
     QWebEngineView* m_friendChatView = nullptr;
     QMap<int, ChatItem*> m_chatItemMap;
     QVBoxLayout* m_chatItemLayout = nullptr;
