@@ -55,8 +55,7 @@ void IMStore::addFriends(const QJsonObject& json) {
         friendItem->setId(id);
         friendItem->setNickName(nickname);
         friendItem->setAvatar(avatar);
-        friendItem->setStatus(status);
-        friendItem->setFeeling(feeling);
+        friendItem->setStatusAndFeeling(status, feeling);
         auto fri = new Friend(id, username, nickname, avatar, status, feeling);
         m_friends[id] = fri;
         m_friendItems[id] = friendItem;

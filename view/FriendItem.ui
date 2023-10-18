@@ -47,30 +47,17 @@ background-color: #ffffff;</string>
     <string>花未眠</string>
    </property>
   </widget>
-  <widget class="QLabel" name="m_statusLabel">
+  <widget class="QLabel" name="m_statusAndFeelingLabel">
    <property name="geometry">
     <rect>
      <x>60</x>
      <y>30</y>
-     <width>36</width>
+     <width>220</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>[忙碌]</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="m_feelingLabel">
-   <property name="geometry">
-    <rect>
-     <x>96</x>
-     <y>30</y>
-     <width>150</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>这是测试个性签名！！！</string>
+    <string>[忙碌] 这是测试签名</string>
    </property>
   </widget>
   <widget class="QPushButton" name="m_avatarPushButton">

@@ -79,8 +79,8 @@ void Mock::addMockFriendItems() {
         item->setId(i);
         item->setAvatar(Mock::urls[i % Mock::urls.size()]);
         item->setNickName(Mock::nicknames[i % Mock::nicknames.size()]);
-        item->setStatus(QString("[%1]").arg(Mock::statuses[i % Mock::statuses.size()]));
-        item->setFeeling(Mock::feelings[i % Mock::feelings.size()]);
+        item->setStatusAndFeeling(QString("[%1]").arg(Mock::statuses[i % Mock::statuses.size()]),
+                                  Mock::feelings[i % Mock::feelings.size()]);
         friendWidget->addFriendItem(item);
     }
 }

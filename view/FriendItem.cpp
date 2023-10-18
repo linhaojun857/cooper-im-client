@@ -5,6 +5,7 @@
 #include <QNetworkRequest>
 #include <QtConcurrent/QtConcurrent>
 
+#include "define/IMDefine.hpp"
 #include "store/IMStore.hpp"
 #include "ui_FriendItem.h"
 #include "view/ChatItem.hpp"
@@ -60,23 +61,17 @@ void FriendItem::setNickName(const QString& nickname) {
     ui->m_nicknameLabel->setText(elideText);
 }
 
-void FriendItem::setStatus(const QString& status) {
-    m_status = QString("[%1]").arg(status);
-    if (m_status.size() == 5) {
-        ui->m_statusLabel->setGeometry(60, 30, 46, 20);
-        ui->m_feelingLabel->setGeometry(108, 30, 150, 20);
-    } else if (m_status.size() == 6) {
-        ui->m_statusLabel->setGeometry(60, 30, 56, 20);
-        ui->m_feelingLabel->setGeometry(120, 30, 150, 20);
+void FriendItem::setStatusAndFeeling(const QString& status, const QString& feeling) {
+    if (!status.isEmpty()) {
+        m_status = status;
+    } else {
+        m_status = DEFAULT_USER_STATUS_ONLINE;
     }
-    ui->m_statusLabel->setText(m_status);
-}
-
-void FriendItem::setFeeling(const QString& feeling) {
     m_feeling = feeling;
-    QFontMetrics fontMetrics(ui->m_feelingLabel->font());
-    QString elideText = fontMetrics.elidedText(feeling, Qt::ElideRight, ui->m_feelingLabel->width());
-    ui->m_feelingLabel->setText(elideText);
+    QFontMetrics fontMetrics(ui->m_statusAndFeelingLabel->font());
+    QString elideText = fontMetrics.elidedText(QString("[%1] %2").arg(m_status, m_feeling), Qt::ElideRight,
+                                               ui->m_statusAndFeelingLabel->width());
+    ui->m_statusAndFeelingLabel->setText(elideText);
 }
 
 FriendItem::~FriendItem() {

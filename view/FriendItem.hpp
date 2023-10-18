@@ -23,9 +23,7 @@ public:
 
     void setNickName(const QString& nickname);
 
-    void setStatus(const QString& status);
-
-    void setFeeling(const QString& feeling);
+    void setStatusAndFeeling(const QString& status, const QString& feeling);
 
 private:
     Ui::FriendItem* ui;
