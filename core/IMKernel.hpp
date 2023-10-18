@@ -10,6 +10,8 @@
 class IMKernel : public QObject {
     Q_OBJECT
 public:
+    using ProtocolType = int;
+    using Handler = std::function<void(ProtocolType, const QJsonObject& json)>;
     explicit IMKernel(QObject* parent = nullptr);
 
     ~IMKernel() override;
@@ -19,9 +21,13 @@ public:
     void createMainWidget();
 
 private:
+    void initHandlers();
+
+private:
     TcpClientMediator* m_mediator = nullptr;
     LRWidget* m_lRWidget = nullptr;
     MainWidget* m_mainWidget = nullptr;
+    QMap<ProtocolType, Handler> m_handlers;
 };
 
 #endif

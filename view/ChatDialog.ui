@@ -52,7 +52,7 @@ border-top: 1px solid #000000;</string>
     <string>发送</string>
    </property>
   </widget>
-  <widget class="QLabel" name="m_peerNicknameLabel">
+  <widget class="QLabel" name="m_nameLabel">
    <property name="geometry">
     <rect>
      <x>375</x>

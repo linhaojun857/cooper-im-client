@@ -18,15 +18,16 @@ ChatDialog::ChatDialog(QWidget* parent) : QDialog(parent), ui(new Ui::ChatDialog
     ui->setupUi(this);
     m_headerWidget = new QWidget(this);
     m_headerWidget->setGeometry(170, 0, 480, 30);
-    ui->m_peerNicknameLabel->setParent(m_headerWidget);
-    ui->m_peerNicknameLabel->setGeometry(205, 5, 150, 20);
+    ui->m_nameLabel->setParent(m_headerWidget);
+    ui->m_nameLabel->setGeometry(205, 5, 150, 20);
     connect(ui->m_closePushButton, &QPushButton::clicked, [this]() {
         runJavaScript("clearAllElement();");
+        m_friendChatView->repaint();
         hide();
         qDebug() << "ui->m_closePushButton, &QPushButton::clicked";
-        for (const auto& item : m_chatItemMap.keys()) {
-            IMStore::getInstance()->closeChatPage(item);
-            delete m_chatItemMap[item];
+        for (const auto& item : m_chatItemMap) {
+            IMStore::getInstance()->closeChatPage(item->getId());
+            delete item;
         }
         m_chatItemMap.clear();
     });
@@ -77,7 +78,8 @@ void ChatDialog::changeChatHistory(int userId) {
     qDebug() << "ChatDialog::changeChatHistory";
     runJavaScript("clearAllElement();");
     runJavaScript("openLoading();");
-    int mockId = userId % Mock::chatHistory.size();
+    ui->m_nameLabel->setText(m_chatItemMap[userId]->getName());
+    int mockId = userId % (int)Mock::chatHistory.size();
     auto chatHistory = Mock::chatHistory[mockId];
     for (const auto& history : chatHistory) {
         runJavaScript(

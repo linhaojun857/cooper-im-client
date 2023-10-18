@@ -20,7 +20,7 @@ public:
 
     virtual bool send(std::string str) = 0;
 
-    virtual bool sendData(char* buf, int size, long peerSock) = 0;
+    virtual bool sendData(char* buf, int size) = 0;
 
 protected:
     virtual void recvData() = 0;

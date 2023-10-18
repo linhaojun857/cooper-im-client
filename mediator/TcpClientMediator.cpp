@@ -2,6 +2,7 @@
 
 #include <QJsonDocument>
 
+#include "define/IMDefine.hpp"
 #include "net/TcpClientNet.hpp"
 
 TcpClientMediator::TcpClientMediator() {
@@ -27,24 +28,24 @@ bool TcpClientMediator::send(std::string str) {
     return m_pNet->send(str);
 }
 
-bool TcpClientMediator::sendData(char* buf, int size, long peerSock) {
-    return m_pNet->sendData(buf, size, peerSock);
+bool TcpClientMediator::sendData(char* buf, int size) {
+    return m_pNet->sendData(buf, size);
 }
 
-bool TcpClientMediator::sendData(QJsonObject jsonObject, long peerSock) {
+bool TcpClientMediator::sendData(QJsonObject jsonObject) {
     QJsonDocument jsonDocument(jsonObject);
     QByteArray byteArray = jsonDocument.toJson(QJsonDocument::Compact);
-    return m_pNet->sendData(byteArray.data(), (int)byteArray.size(), 0);
+    return m_pNet->sendData(byteArray.data(), (int)byteArray.size());
 }
 
-void TcpClientMediator::dealData(char* buf, int size, long peerSock) {
+void TcpClientMediator::dealData(char* buf, int size, int peerSock) {
     qDebug() << __FUNCTION__;
     QByteArray byteArray(buf, size);
     QJsonDocument jsonDocument = QJsonDocument::fromJson(byteArray);
     QJsonObject jsonObject = jsonDocument.object();
     if (jsonObject["type"].toInt() == PING_TYPE) {
         jsonObject["type"] = PONG_TYPE;
-        sendData(jsonObject, peerSock);
+        sendData(jsonObject);
         return;
     }
     emit SIG_readyData(jsonObject, peerSock);

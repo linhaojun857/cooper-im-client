@@ -3,11 +3,6 @@
 
 #include "INet.hpp"
 
-#define SERVER_IP "127.0.0.1"
-#define SERVER_PORT 8888
-#define PING_TYPE 100
-#define PONG_TYPE 200
-
 class TcpClientNet : public INet {
 public:
     explicit TcpClientNet(INetMediator* pMediator);
@@ -20,7 +15,7 @@ public:
 
     bool send(std::string str) override;
 
-    bool sendData(char* buf, int size, long peerSock) override;
+    bool sendData(char* buf, int size) override;
 
 protected:
     void recvData() override;

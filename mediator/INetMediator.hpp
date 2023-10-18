@@ -19,11 +19,11 @@ public:
 
     virtual bool send(std::string str) = 0;
 
-    virtual bool sendData(char* buf, int size, long peerSock) = 0;
+    virtual bool sendData(char* buf, int size) = 0;
 
-    virtual bool sendData(QJsonObject jsonObject, long peerSock) = 0;
+    virtual bool sendData(QJsonObject jsonObject) = 0;
 
-    virtual void dealData(char* buf, int size, long peerSock) = 0;
+    virtual void dealData(char* buf, int size, int peerSock) = 0;
 
 protected:
     INet* m_pNet{};

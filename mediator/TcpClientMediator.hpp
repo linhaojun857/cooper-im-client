@@ -18,14 +18,14 @@ public:
 
     bool send(std::string str) override;
 
-    bool sendData(char* buf, int size, long peerSock) override;
+    bool sendData(char* buf, int size) override;
 
-    bool sendData(QJsonObject jsonObject, long peerSock) override;
+    bool sendData(QJsonObject jsonObject) override;
 
-    void dealData(char* buf, int size, long peerSock) override;
+    void dealData(char* buf, int size, int peerSock) override;
 
 signals:
-    void SIG_readyData(QJsonObject jsonObject, long lFrom);
+    void SIG_readyData(QJsonObject jsonObject, int lFrom);
 };
 
 #endif

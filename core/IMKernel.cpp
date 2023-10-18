@@ -7,11 +7,11 @@
 #include "store/IMStore.hpp"
 
 IMKernel::IMKernel(QObject* parent) {
-    //    m_mediator = new TcpClientMediator();
-    //    if (!m_mediator->openNet()) {
-    //        QMessageBox::warning(nullptr, "提示", "打开网路失败");
-    //        exit(0);
-    //    }
+    m_mediator = new TcpClientMediator();
+    if (!m_mediator->openNet()) {
+        QMessageBox::warning(nullptr, "提示", "打开网路失败");
+        exit(0);
+    }
     IMStore::getInstance()->setIMKernel(this);
     createLRWidget();
 }
@@ -31,4 +31,8 @@ void IMKernel::createMainWidget() {
     m_mainWidget->show();
     Mock::addMockGroupItems();
     Mock::addMockNewFriendItems();
+}
+
+void IMKernel::initHandlers() {
+
 }

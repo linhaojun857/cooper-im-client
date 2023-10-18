@@ -1,8 +1,11 @@
 #include "TcpClientNet.hpp"
 
+#include <WS2tcpip.h>
+
 #include <QDebug>
 #include <thread>
 
+#include "define/IMDefine.hpp"
 #include "mediator/INetMediator.hpp"
 
 TcpClientNet::TcpClientNet(INetMediator* pMediator) : m_sock(INVALID_SOCKET), m_bStop(false), m_handle(nullptr) {
@@ -37,8 +40,8 @@ bool TcpClientNet::openNet() {
     // 连接服务器
     sockaddr_in serverAddr{};
     serverAddr.sin_family = AF_INET;
-    serverAddr.sin_addr.S_un.S_addr = inet_addr(SERVER_IP);
-    serverAddr.sin_port = htons(SERVER_PORT);
+    inet_pton(AF_INET, APP_TCP_SERVER_IP, &serverAddr.sin_addr);
+    serverAddr.sin_port = htons(APP_TCP_SERVER_PORT);
     int ret = connect(m_sock, (sockaddr*)&serverAddr, sizeof(serverAddr));
     if (SOCKET_ERROR == ret) {
         qDebug() << "Connect error: " << WSAGetLastError();
@@ -81,8 +84,7 @@ bool TcpClientNet::send(std::string str) {
     return true;
 }
 
-bool TcpClientNet::sendData(char* buf, int size, long peerSock) {
-    (void)peerSock;
+bool TcpClientNet::sendData(char* buf, int size) {
     qDebug() << __FUNCTION__;
     if (!buf || size <= 0) {
         qDebug() << "TcpClientNet::sendData() buf is nullptr or size <= 0";
