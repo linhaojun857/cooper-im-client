@@ -1,7 +1,11 @@
 #ifndef view_FGSWidget_hpp
 #define view_FGSWidget_hpp
 
+#include <QGridLayout>
+#include <QPushButton>
 #include <QWidget>
+
+#include "view/FSRItem.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -17,8 +21,16 @@ public:
 
     ~FGSWidget() override;
 
+    void addFSRItem(FSRItem* fsrItem, int row, int column);
+
 private:
     Ui::FGSWidget* ui;
+    int m_tabCurrentIndex = 0;
+    QMap<int, QPushButton*> m_tabBtnMap;
+    // 0: friend 1: group
+    int m_searchMode = 0;
+    QList<FSRItem*> m_fsrItems;
+    QGridLayout* m_fsrItemsLayout = nullptr;
 };
 
 #endif

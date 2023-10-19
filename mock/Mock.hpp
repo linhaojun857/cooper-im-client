@@ -6,6 +6,7 @@
 class FriendWidget;
 class GroupWidget;
 class NotifyWidget;
+class FGSWidget;
 
 class Mock {
 public:
@@ -39,6 +40,10 @@ public:
     static NotifyWidget* notifyWidget;
 
     static void addMockNewFriendItems();
+
+    static FGSWidget* fgsWidget;
+
+    static void addMockFGSItems();
 };
 
 #endif

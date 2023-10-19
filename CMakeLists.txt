@@ -22,8 +22,7 @@ find_package(Qt6 COMPONENTS
         WebEngineWidgets
         REQUIRED)
 
-add_executable(cooper_im_client
-        main.cpp
+add_library(cooper_im_lib
         # net
         net/INet.hpp
         net/TcpClientNet.hpp
@@ -77,9 +76,9 @@ add_executable(cooper_im_client
         view/FGSWidget.cpp
         view/FGSWidget.hpp
         view/FGSWidget.ui
-        view/FSRWidget.cpp
-        view/FSRWidget.hpp
-        view/FSRWidget.ui
+        view/FSRItem.cpp
+        view/FSRItem.hpp
+        view/FSRItem.ui
         # core
         core/IMKernel.hpp
         core/IMKernel.cpp
@@ -93,13 +92,10 @@ add_executable(cooper_im_client
         mock/Mock.cpp
         # store
         store/IMStore.hpp
-        store/IMStore.cpp
-        # qrc
-        res/res.qrc)
+        store/IMStore.cpp)
 
-target_include_directories(cooper_im_client PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
-
-target_link_libraries(cooper_im_client
+target_include_directories(cooper_im_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(cooper_im_lib PUBLIC
         Qt::Core
         Qt::Gui
         Qt::Widgets
@@ -110,6 +106,18 @@ target_link_libraries(cooper_im_client
         FramelessHelper::Core
         FramelessHelper::Widgets
 )
+
+add_executable(cooper_im_client
+        main.cpp
+        # qrc
+        res/res.qrc)
+target_link_libraries(cooper_im_client PRIVATE cooper_im_lib)
+
+add_executable(FGSWidget_test
+        test/FGSWidgetTest.cpp
+        # qrc
+        res/res.qrc)
+target_link_libraries(FGSWidget_test PRIVATE cooper_im_lib)
 
 if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
     set(DEBUG_SUFFIX)

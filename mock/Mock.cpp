@@ -3,6 +3,7 @@
 #include <QThread>
 #include <QTimer>
 
+#include "view/FGSWidget.hpp"
 #include "view/FriendWidget.hpp"
 #include "view/GroupWidget.hpp"
 #include "view/NotifyWidget.hpp"
@@ -106,5 +107,20 @@ void Mock::addMockNewFriendItems() {
         item->setNickname(Mock::nicknames[i % Mock::nicknames.size()]);
         item->setReason(Mock::addFriendReasons[i % Mock::addFriendReasons.size()]);
         notifyWidget->addNewFriendItem(item);
+    }
+}
+
+FGSWidget* Mock::fgsWidget = nullptr;
+
+void Mock::addMockFGSItems() {
+    int row;
+    int column;
+    for (int i = 0; i < 24; ++i) {
+        row = i / 3;
+        column = i % 3;
+        auto fsrItem = new FSRItem();
+        fsrItem->setAvatar(Mock::urls[i % Mock::urls.size()]);
+        fsrItem->setNickname(Mock::nicknames[i % Mock::nicknames.size()]);
+        fgsWidget->addFSRItem(fsrItem, row, column);
     }
 }
