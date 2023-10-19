@@ -22,11 +22,20 @@ public:
 
     ~MainWidget() override;
 
-private slots:
-    void handleAddFriendAndGroupAction();
+    void setId(int id);
+
+    void setAvatar(const QString& url);
+
+    void setNickname(const QString& nickname);
+
+    void setStatusAndFeeling(const QString& status, const QString& feeling);
 
 private:
     Ui::MainWidget* ui;
+    QString m_avatarUrl;
+    QString m_nickname;
+    QString m_status;
+    QString m_feeling;
     int m_tabCurrentIndex = 0;
     QMap<int, QPushButton*> m_tabBtnMap;
     CotPWidget* m_cotPWidget = nullptr;

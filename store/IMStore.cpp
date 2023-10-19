@@ -11,6 +11,7 @@ IMStore* IMStore::getInstance() {
 
 IMStore::IMStore() {
     m_chatDialog = new ChatDialog();
+    m_fgsWidget = new FGSWidget();
 }
 
 void IMStore::setIMKernel(IMKernel* imKernel) {
@@ -19,6 +20,14 @@ void IMStore::setIMKernel(IMKernel* imKernel) {
 
 IMKernel* IMStore::getIMKernel() {
     return m_imKernel;
+}
+
+void IMStore::setMainWidget(MainWidget* mainWidget) {
+    m_mainWidget = mainWidget;
+}
+
+MainWidget* IMStore::getMainWidget() {
+    return m_mainWidget;
 }
 
 ChatDialog* IMStore::getChatDialog() {
@@ -41,24 +50,31 @@ void IMStore::setFriendWidget(FriendWidget* friendWidget) {
     m_friendWidget = friendWidget;
 }
 
+void IMStore::setSelf(const QJsonObject& json) {
+    qDebug() << "IMStore::setSelf";
+    m_self = Self::fromJson(json["user"].toObject());
+    m_mainWidget->setAvatar(m_self->avatar);
+    m_mainWidget->setNickname(m_self->nickname);
+    m_mainWidget->setStatusAndFeeling(m_self->status, m_self->feeling);
+}
+
 void IMStore::addFriends(const QJsonObject& json) {
+    qDebug() << "IMStore::addFriends";
     QJsonArray friends = json["friends"].toArray();
     for (const auto& f : friends) {
         auto obj = f.toObject();
-        int id = obj["id"].toInt();
-        auto username = obj["username"].toString();
-        auto nickname = obj["nickname"].toString();
-        auto avatar = obj["avatar"].toString();
-        auto status = obj["status"].toString();
-        auto feeling = obj["feeling"].toString();
+        auto fri = Friend::fromJson(obj);
         auto friendItem = new FriendItem();
-        friendItem->setId(id);
-        friendItem->setNickName(nickname);
-        friendItem->setAvatar(avatar);
-        friendItem->setStatusAndFeeling(status, feeling);
-        auto fri = new Friend(id, username, nickname, avatar, status, feeling);
-        m_friends[id] = fri;
-        m_friendItems[id] = friendItem;
+        friendItem->setId(fri->id);
+        friendItem->setNickName(fri->nickname);
+        friendItem->setAvatar(fri->avatar);
+        friendItem->setStatusAndFeeling(fri->status, fri->feeling);
+        m_friends[fri->id] = fri;
+        m_friendItems[fri->id] = friendItem;
         m_friendWidget->addFriendItem(friendItem);
     }
+}
+
+FGSWidget* IMStore::getFGSWidget() {
+    return m_fgsWidget;
 }

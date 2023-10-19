@@ -49,9 +49,6 @@
     <property name="text">
      <string/>
     </property>
-    <property name="pixmap">
-     <pixmap resource="../res/res.qrc">:/img/avatar.jpg</pixmap>
-    </property>
     <property name="scaledContents">
      <bool>true</bool>
     </property>
@@ -74,17 +71,17 @@
      <string>花未眠</string>
     </property>
    </widget>
-   <widget class="QLabel" name="m_feelingLabel">
+   <widget class="QLabel" name="m_statusAndFeelingLabel">
     <property name="geometry">
      <rect>
       <x>90</x>
       <y>43</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>这是一个测试个性签名</string>
+     <string>[在线] 这是一个测试个性签名</string>
     </property>
    </widget>
   </widget>

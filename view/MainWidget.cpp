@@ -4,14 +4,22 @@
 
 #include <QLayout>
 #include <QMenu>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 #include <QTabBar>
+#include <QtConcurrent/QtConcurrent>
 
+#include "define/IMDefine.hpp"
+#include "mock/Mock.hpp"
+#include "store/IMStore.hpp"
 #include "ui_MainWidget.h"
 
 FRAMELESSHELPER_USE_NAMESPACE
 
 MainWidget::MainWidget(QWidget* parent) : QWidget(parent), ui(new Ui::MainWidget) {
     ui->setupUi(this);
+    IMStore::getInstance()->setMainWidget(this);
     setWindowTitle("Cooper");
     setWindowIcon(QIcon(":/img/logo.ico"));
     connect(ui->m_minimizePushButton, SIGNAL(clicked(bool)), this, SLOT(showMinimized()));
@@ -30,7 +38,10 @@ MainWidget::MainWidget(QWidget* parent) : QWidget(parent), ui(new Ui::MainWidget
             "    background-color: #ffffff;"
             "}");
         auto addFriendAndGroupAction = menu.addAction("加好友/群");
-        connect(addFriendAndGroupAction, SIGNAL(triggered(bool)), this, SLOT(handleAddFriendAndGroupAction()));
+        connect(addFriendAndGroupAction, &QAction::triggered, []() {
+            IMStore::getInstance()->getFGSWidget()->show();
+            Mock::addMockFGSItems();
+        });
         menu.addAction("设置");
         menu.exec(QCursor::pos());
     });
@@ -79,5 +90,42 @@ MainWidget::~MainWidget() {
     delete ui;
 }
 
-void MainWidget::handleAddFriendAndGroupAction() {
+void MainWidget::setAvatar(const QString& url) {
+    m_avatarUrl = url;
+    std::ignore = QtConcurrent::run([=]() {
+        auto manager = new QNetworkAccessManager();
+        QNetworkRequest request(url);
+        QNetworkReply* reply = manager->get(request);
+        QEventLoop loop;
+        QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+        loop.exec();
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray data = reply->readAll();
+            QPixmap pixmap;
+            pixmap.loadFromData(data);
+            ui->m_avatarLabel->setPixmap(pixmap);
+        } else {
+            qDebug() << "load failed: " << reply->errorString();
+        }
+    });
+}
+
+void MainWidget::setNickname(const QString& nickname) {
+    m_nickname = nickname;
+    QFontMetrics fontMetrics(ui->m_nicknameLabel->font());
+    QString elideText = fontMetrics.elidedText(nickname, Qt::ElideRight, ui->m_nicknameLabel->width());
+    ui->m_nicknameLabel->setText(elideText);
+}
+
+void MainWidget::setStatusAndFeeling(const QString& status, const QString& feeling) {
+    if (!status.isEmpty()) {
+        m_status = status;
+    } else {
+        m_status = DEFAULT_USER_STATUS_ONLINE;
+    }
+    m_feeling = feeling;
+    QFontMetrics fontMetrics(ui->m_statusAndFeelingLabel->font());
+    QString elideText = fontMetrics.elidedText(QString("[%1] %2").arg(m_status, m_feeling), Qt::ElideRight,
+                                               ui->m_statusAndFeelingLabel->width());
+    ui->m_statusAndFeelingLabel->setText(elideText);
 }

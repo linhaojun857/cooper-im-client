@@ -178,6 +178,7 @@ void LRWidget::userLogin() {
         resetLoginWidget();
         hide();
         IMStore::getInstance()->getIMKernel()->createMainWidget();
+        IMStore::getInstance()->setSelf(ret);
         IMStore::getInstance()->addFriends(ret);
     } else {
         QMessageBox::warning(this, "提示", ret["msg"].toString());
