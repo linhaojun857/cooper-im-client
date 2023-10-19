@@ -113,11 +113,11 @@ add_executable(cooper_im_client
         res/res.qrc)
 target_link_libraries(cooper_im_client PRIVATE cooper_im_lib)
 
-add_executable(FGSWidget_test
+add_executable(FGSWidgetTest
         test/FGSWidgetTest.cpp
         # qrc
         res/res.qrc)
-target_link_libraries(FGSWidget_test PRIVATE cooper_im_lib)
+target_link_libraries(FGSWidgetTest PRIVATE cooper_im_lib)
 
 if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
     set(DEBUG_SUFFIX)
