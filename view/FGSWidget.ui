@@ -59,7 +59,7 @@ background-color: #d9d9d9;</string>
     <string>找群</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="m_SLineEdit">
+  <widget class="QLineEdit" name="m_sLineEdit">
    <property name="geometry">
     <rect>
      <x>97</x>
@@ -72,7 +72,7 @@ background-color: #d9d9d9;</string>
     <string notr="true">border: 1px solid #000000;</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="m_SPushButton">
+  <widget class="QPushButton" name="m_sPushButton">
    <property name="geometry">
     <rect>
      <x>303</x>

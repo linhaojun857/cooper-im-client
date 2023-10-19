@@ -1,23 +1,21 @@
-#ifndef view_FSRWidget_hpp
-#define view_FSRWidget_hpp
+#ifndef view_AFDialog_hpp
+#define view_AFDialog_hpp
 
 #include <QWidget>
 
-#include "view/AFDialog.hpp"
-
 QT_BEGIN_NAMESPACE
 namespace Ui {
-class FSRItem;
+class AFDialog;
 }
 QT_END_NAMESPACE
 
-class FSRItem : public QWidget {
+class AFDialog : public QWidget {
     Q_OBJECT
 
 public:
-    explicit FSRItem(QWidget* parent = nullptr);
+    explicit AFDialog(QWidget* parent = nullptr);
 
-    ~FSRItem() override;
+    ~AFDialog() override;
 
     void setAvatar(const QString& url);
 
@@ -28,10 +26,9 @@ public:
     QString getNickname();
 
 private:
-    Ui::FSRItem* ui;
+    Ui::AFDialog* ui;
     QString m_avatarUrl;
     QString m_nickname;
-    AFDialog* m_dialog = nullptr;
 };
 
 #endif

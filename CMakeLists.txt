@@ -73,12 +73,15 @@ add_library(cooper_im_lib
         view/GroupItem.hpp
         view/GroupItem.cpp
         view/GroupItem.ui
-        view/FGSWidget.cpp
         view/FGSWidget.hpp
+        view/FGSWidget.cpp
         view/FGSWidget.ui
-        view/FSRItem.cpp
         view/FSRItem.hpp
+        view/FSRItem.cpp
         view/FSRItem.ui
+        view/AFDialog.hpp
+        view/AFDialog.cpp
+        view/AFDialog.ui
         # core
         core/IMKernel.hpp
         core/IMKernel.cpp

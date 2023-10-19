@@ -9,10 +9,17 @@
 
 FSRItem::FSRItem(QWidget* parent) : QWidget(parent), ui(new Ui::FSRItem) {
     ui->setupUi(this);
+    m_dialog = new AFDialog();
+    connect(ui->m_addPushButton, &QPushButton::clicked, [this]() {
+        m_dialog->setAvatar(m_avatarUrl);
+        m_dialog->setNickname(m_nickname);
+        m_dialog->show();
+    });
 }
 
 FSRItem::~FSRItem() {
     delete ui;
+    delete m_dialog;
 }
 
 void FSRItem::setAvatar(const QString& url) {
