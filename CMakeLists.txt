@@ -116,11 +116,16 @@ add_executable(cooper_im_client
         res/res.qrc)
 target_link_libraries(cooper_im_client PRIVATE cooper_im_lib)
 
-add_executable(FGSWidgetTest
-        test/FGSWidgetTest.cpp
-        # qrc
-        res/res.qrc)
-target_link_libraries(FGSWidgetTest PRIVATE cooper_im_lib)
+function(auto_generate_test_executable)
+    file(GLOB_RECURSE TEST_SOURCES "test/*.cpp")
+    foreach (TEST_SOURCE ${TEST_SOURCES})
+        get_filename_component(TEST_NAME ${TEST_SOURCE} NAME_WE)
+        add_executable(${TEST_NAME} ${TEST_SOURCE} res/res.qrc)
+        target_link_libraries(${TEST_NAME} PRIVATE cooper_im_lib)
+    endforeach ()
+endfunction()
+
+auto_generate_test_executable()
 
 if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
     set(DEBUG_SUFFIX)
