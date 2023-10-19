@@ -21,13 +21,17 @@ public:
 
     ~FGSWidget() override;
 
+    void clearAllFSRItems();
+
     void addFSRItem(FSRItem* fsrItem, int row, int column);
+
+private:
+    void handleUserClickSearchPushButton();
 
 private:
     Ui::FGSWidget* ui;
     int m_tabCurrentIndex = 0;
     QMap<int, QPushButton*> m_tabBtnMap;
-    // 0: friend 1: group
     int m_searchMode = 0;
     QList<FSRItem*> m_fsrItems;
     QGridLayout* m_fsrItemsLayout = nullptr;

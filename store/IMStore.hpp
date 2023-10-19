@@ -38,12 +38,19 @@ public:
 
     void setSelf(const QJsonObject& json);
 
+    void setToken(const QJsonObject& json);
+
+    QString getToken();
+
     void addFriends(const QJsonObject& json);
 
-    FGSWidget* getFGSWidget();
+    FGSWidget* getFGSWidget() const;
+
+    void addFSRs(const QJsonObject& json);
 
 private:
-    Self* m_self;
+    Self* m_self = nullptr;
+    QString m_token;
     IMKernel* m_imKernel = nullptr;
     MainWidget* m_mainWidget = nullptr;
     ChatDialog* m_chatDialog = nullptr;

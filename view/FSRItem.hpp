@@ -19,6 +19,10 @@ public:
 
     ~FSRItem() override;
 
+    void setId(int id);
+
+    int getId() const;
+
     void setAvatar(const QString& url);
 
     QString getAvatar();
@@ -29,6 +33,7 @@ public:
 
 private:
     Ui::FSRItem* ui;
+    int m_id;
     QString m_avatarUrl;
     QString m_nickname;
     AFDialog* m_dialog = nullptr;

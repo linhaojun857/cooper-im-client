@@ -22,6 +22,14 @@ FSRItem::~FSRItem() {
     delete m_dialog;
 }
 
+void FSRItem::setId(int id) {
+    m_id = id;
+}
+
+int FSRItem::getId() const {
+    return m_id;
+}
+
 void FSRItem::setAvatar(const QString& url) {
     m_avatarUrl = url;
     std::ignore = QtConcurrent::run([=]() {

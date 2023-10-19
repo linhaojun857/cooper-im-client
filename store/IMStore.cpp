@@ -58,6 +58,15 @@ void IMStore::setSelf(const QJsonObject& json) {
     m_mainWidget->setStatusAndFeeling(m_self->status, m_self->feeling);
 }
 
+void IMStore::setToken(const QJsonObject& json) {
+    qDebug() << "IMStore::setToken";
+    m_token = json["token"].toString();
+}
+
+QString IMStore::getToken() {
+    return m_token;
+}
+
 void IMStore::addFriends(const QJsonObject& json) {
     qDebug() << "IMStore::addFriends";
     QJsonArray friends = json["friends"].toArray();
@@ -75,6 +84,23 @@ void IMStore::addFriends(const QJsonObject& json) {
     }
 }
 
-FGSWidget* IMStore::getFGSWidget() {
+FGSWidget* IMStore::getFGSWidget() const {
     return m_fgsWidget;
+}
+
+void IMStore::addFSRs(const QJsonObject& json) {
+    qDebug() << "IMStore::addFSRs";
+    QJsonArray fsrs = json["fsrs"].toArray();
+    int row;
+    int column;
+    for (int i = 0; i < fsrs.size(); ++i) {
+        row = i / 3;
+        column = i % 3;
+        auto fsrItem = new FSRItem();
+        auto obj = fsrs[i].toObject();
+        fsrItem->setId(obj["id"].toInt());
+        fsrItem->setAvatar(obj["avatar"].toString());
+        fsrItem->setNickname(obj["nickname"].toString());
+        m_fgsWidget->addFSRItem(fsrItem, row, column);
+    }
 }

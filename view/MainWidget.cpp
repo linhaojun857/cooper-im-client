@@ -40,7 +40,6 @@ MainWidget::MainWidget(QWidget* parent) : QWidget(parent), ui(new Ui::MainWidget
         auto addFriendAndGroupAction = menu.addAction("加好友/群");
         connect(addFriendAndGroupAction, &QAction::triggered, []() {
             IMStore::getInstance()->getFGSWidget()->show();
-            Mock::addMockFGSItems();
         });
         menu.addAction("设置");
         menu.exec(QCursor::pos());
