@@ -22,10 +22,10 @@ public:
 
     bool sendData(QJsonObject jsonObject) override;
 
-    void dealData(char* buf, int size, int peerSock) override;
+    void dealData(char* buf, int size) override;
 
 signals:
-    void SIG_readyData(QJsonObject jsonObject, int lFrom);
+    void SIG_readyData(const QJsonObject& jsonObject);
 };
 
 #endif

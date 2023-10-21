@@ -50,12 +50,24 @@ void IMStore::setFriendWidget(FriendWidget* friendWidget) {
     m_friendWidget = friendWidget;
 }
 
+void IMStore::setNotifyWidget(NotifyWidget* notifyWidget) {
+    m_notifyWidget = notifyWidget;
+}
+
+NotifyWidget* IMStore::getNotifyWidget() {
+    return m_notifyWidget;
+}
+
 void IMStore::setSelf(const QJsonObject& json) {
     qDebug() << "IMStore::setSelf";
     m_self = Self::fromJson(json["user"].toObject());
     m_mainWidget->setAvatar(m_self->avatar);
     m_mainWidget->setNickname(m_self->nickname);
     m_mainWidget->setStatusAndFeeling(m_self->status, m_self->feeling);
+}
+
+Self* IMStore::getSelf() {
+    return m_self;
 }
 
 void IMStore::setToken(const QJsonObject& json) {
@@ -103,4 +115,8 @@ void IMStore::addFSRs(const QJsonObject& json) {
         fsrItem->setNickname(obj["nickname"].toString());
         m_fgsWidget->addFSRItem(fsrItem, row, column);
     }
+}
+
+void IMStore::addFriendApplyI(FriendApply* friendApply) {
+    m_friendApplyIs.append(friendApply);
 }

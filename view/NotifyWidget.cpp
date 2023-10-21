@@ -3,11 +3,13 @@
 #include <QPushButton>
 
 #include "mock/Mock.hpp"
+#include "store/IMStore.hpp"
 #include "ui_NotifyWidget.h"
 
 NotifyWidget::NotifyWidget(QWidget* parent) : QWidget(parent), ui(new Ui::NotifyWidget) {
     // mock
     Mock::notifyWidget = this;
+    IMStore::getInstance()->setNotifyWidget(this);
     ui->setupUi(this);
     ui->m_scrollArea->setFrameStyle(QFrame::NoFrame);
     ui->m_scrollArea->setFrameShape(QFrame::NoFrame);
@@ -26,7 +28,7 @@ NotifyWidget::~NotifyWidget() {
     delete ui;
 }
 
-void NotifyWidget::addNewFriendItem(NewFriendItem* item) {
+void NotifyWidget::addFANItem(FANItem* item) {
     qDebug() << "NotifyWidget::addNewFriItem";
     m_newFriendItems.append(item);
     m_layout->insertWidget(0, item);

@@ -47,7 +47,7 @@ background-color: #ffffff;</string>
     <string>请输入验证信息：</string>
    </property>
   </widget>
-  <widget class="QTextEdit" name="m_viTextEdit">
+  <widget class="QTextEdit" name="m_reasonTextEdit">
    <property name="geometry">
     <rect>
      <x>10</x>

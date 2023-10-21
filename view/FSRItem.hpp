@@ -33,7 +33,7 @@ public:
 
 private:
     Ui::FSRItem* ui;
-    int m_id;
+    int m_id{};
     QString m_avatarUrl;
     QString m_nickname;
     AFDialog* m_dialog = nullptr;

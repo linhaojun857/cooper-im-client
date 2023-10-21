@@ -1,21 +1,31 @@
-#include "NewFriendItem.hpp"
+#include "FANItem.hpp"
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QtConcurrent/QtConcurrent>
 
-#include "ui_NewFriendItem.h"
+#include "ui_FANItem.h"
 
-NewFriendItem::NewFriendItem(QWidget* parent) : QWidget(parent), ui(new Ui::NewFriendItem) {
+FANItem::FANItem(QWidget* parent) : QWidget(parent), ui(new Ui::FANItem) {
     ui->setupUi(this);
 }
 
-NewFriendItem::~NewFriendItem() {
+FANItem::~FANItem() {
     delete ui;
 }
 
-void NewFriendItem::setAvatar(const QString& url) {
+void FANItem::setMode(int mode) {
+    m_mode = mode;
+    if (mode == 0) {
+        ui->m_agreePushButton->hide();
+        ui->m_rejectPushButton->hide();
+    } else {
+        ui->m_statusLabel->hide();
+    }
+}
+
+void FANItem::setAvatar(const QString& url) {
     m_avatarUrl = url;
     std::ignore = QtConcurrent::run([=]() {
         auto manager = new QNetworkAccessManager();
@@ -37,12 +47,12 @@ void NewFriendItem::setAvatar(const QString& url) {
     });
 }
 
-void NewFriendItem::setNickname(const QString& nickname) {
+void FANItem::setNickname(const QString& nickname) {
     m_nickname = nickname;
     ui->m_nicknameLabel->setText(nickname);
 }
 
-void NewFriendItem::setReason(const QString& reason) {
+void FANItem::setReason(const QString& reason) {
     m_reason = reason;
     QFontMetrics fontMetrics(ui->m_reasonLabel->font());
     QString elideText = fontMetrics.elidedText(reason, Qt::ElideRight, ui->m_reasonLabel->width());

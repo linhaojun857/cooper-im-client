@@ -1,21 +1,24 @@
-#ifndef COOPER_IM_CLIENT_VIEW_NEWFRIENDITEM_HPP_
-#define COOPER_IM_CLIENT_VIEW_NEWFRIENDITEM_HPP_
+#ifndef view_FANIItem_hpp
+#define view_FANIItem_hpp
 
 #include <QWidget>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
-class NewFriendItem;
+class FANItem;
 }
 QT_END_NAMESPACE
 
-class NewFriendItem : public QWidget {
+// FANI: Friend Apply Notify Initiative
+class FANItem : public QWidget {
     Q_OBJECT
 
 public:
-    explicit NewFriendItem(QWidget* parent = nullptr);
+    explicit FANItem(QWidget* parent = nullptr);
 
-    ~NewFriendItem() override;
+    ~FANItem() override;
+
+    void setMode(int mode);
 
     void setAvatar(const QString& url);
 
@@ -24,7 +27,9 @@ public:
     void setReason(const QString& reason);
 
 private:
-    Ui::NewFriendItem* ui;
+    Ui::FANItem* ui;
+    // 0: initiative 1: passive
+    int m_mode = 0;
     QString m_avatarUrl;
     QString m_nickname;
     QString m_reason;

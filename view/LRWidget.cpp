@@ -181,6 +181,7 @@ void LRWidget::userLogin() {
         IMStore::getInstance()->setSelf(ret);
         IMStore::getInstance()->setToken(ret);
         IMStore::getInstance()->addFriends(ret);
+        IMStore::getInstance()->getIMKernel()->sendAuthMsg();
     } else {
         QMessageBox::warning(this, "提示", ret["msg"].toString());
     }

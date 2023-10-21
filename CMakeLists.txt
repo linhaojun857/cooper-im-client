@@ -64,9 +64,9 @@ add_library(cooper_im_lib
         view/ChatItem.hpp
         view/ChatItem.cpp
         view/ChatItem.ui
-        view/NewFriendItem.hpp
-        view/NewFriendItem.cpp
-        view/NewFriendItem.ui
+        view/FANItem.hpp
+        view/FANItem.cpp
+        view/FANItem.ui
         view/NotifyWidget.hpp
         view/NotifyWidget.cpp
         view/NotifyWidget.ui

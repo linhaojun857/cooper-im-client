@@ -123,7 +123,7 @@ void TcpClientNet::recvData() {
                     return;
                 }
             }
-            m_pMediator->dealData(buf, nOffset, static_cast<long>(m_sock));
+            m_pMediator->dealData(buf, nOffset);
         } else {
             qDebug() << "TcpClientNet::recvData() recv error: " << WSAGetLastError();
             return;

@@ -38,7 +38,7 @@ bool TcpClientMediator::sendData(QJsonObject jsonObject) {
     return m_pNet->sendData(byteArray.data(), (int)byteArray.size());
 }
 
-void TcpClientMediator::dealData(char* buf, int size, int peerSock) {
+void TcpClientMediator::dealData(char* buf, int size) {
     qDebug() << __FUNCTION__;
     QByteArray byteArray(buf, size);
     QJsonDocument jsonDocument = QJsonDocument::fromJson(byteArray);
@@ -48,5 +48,5 @@ void TcpClientMediator::dealData(char* buf, int size, int peerSock) {
         sendData(jsonObject);
         return;
     }
-    emit SIG_readyData(jsonObject, peerSock);
+    emit SIG_readyData(jsonObject);
 }

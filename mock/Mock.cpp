@@ -102,11 +102,11 @@ NotifyWidget* Mock::notifyWidget = nullptr;
 
 void Mock::addMockNewFriendItems() {
     for (int i = 0; i < 20; ++i) {
-        auto item = new NewFriendItem();
+        auto item = new FANItem();
         item->setAvatar(Mock::urls[i % Mock::urls.size()]);
         item->setNickname(Mock::nicknames[i % Mock::nicknames.size()]);
         item->setReason(Mock::addFriendReasons[i % Mock::addFriendReasons.size()]);
-        notifyWidget->addNewFriendItem(item);
+        notifyWidget->addFANItem(item);
     }
 }
 

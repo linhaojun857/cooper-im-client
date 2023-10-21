@@ -17,6 +17,10 @@ public:
 
     ~AFDialog() override;
 
+    void setId(int id);
+
+    int getId() const;
+
     void setAvatar(const QString& url);
 
     QString getAvatar();
@@ -25,8 +29,12 @@ public:
 
     QString getNickname();
 
+private slots:
+    void addFriend();
+
 private:
     Ui::AFDialog* ui;
+    int m_id{};
     QString m_avatarUrl;
     QString m_nickname;
 };

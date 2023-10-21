@@ -5,7 +5,7 @@
 
 int main(int argc, char* argv[]) {
     QApplication a(argc, argv);
-    IMKernel kernel;
     Mock::InitMockData();
+    IMKernel kernel;
     return QApplication::exec();
 }

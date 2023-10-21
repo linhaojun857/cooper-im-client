@@ -9,6 +9,7 @@
 #include "view/FriendItem.hpp"
 #include "view/FriendWidget.hpp"
 #include "view/MainWidget.hpp"
+#include "view/NotifyWidget.hpp"
 
 class IMKernel;
 
@@ -36,7 +37,13 @@ public:
 
     void setFriendWidget(FriendWidget* friendWidget);
 
+    void setNotifyWidget(NotifyWidget* notifyWidget);
+
+    NotifyWidget* getNotifyWidget();
+
     void setSelf(const QJsonObject& json);
+
+    Self* getSelf();
 
     void setToken(const QJsonObject& json);
 
@@ -47,6 +54,8 @@ public:
     FGSWidget* getFGSWidget() const;
 
     void addFSRs(const QJsonObject& json);
+
+    void addFriendApplyI(FriendApply* friendApply);
 
 private:
     Self* m_self = nullptr;
@@ -59,6 +68,8 @@ private:
     QMap<int, Friend*> m_friends;
     QMap<int, FriendItem*> m_friendItems;
     FGSWidget* m_fgsWidget = nullptr;
+    QVector<FriendApply*> m_friendApplyIs;
+    NotifyWidget* m_notifyWidget = nullptr;
 };
 
 #endif

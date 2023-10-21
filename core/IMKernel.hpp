@@ -3,6 +3,7 @@
 
 #include <QObject>
 
+#include "define/IMDefine.hpp"
 #include "mediator/TcpClientMediator.hpp"
 #include "view/LRWidget.hpp"
 #include "view/MainWidget.hpp"
@@ -11,7 +12,7 @@ class IMKernel : public QObject {
     Q_OBJECT
 public:
     using ProtocolType = int;
-    using Handler = std::function<void(ProtocolType, const QJsonObject& json)>;
+    using Handler = std::function<void(const QJsonObject& json)>;
     explicit IMKernel(QObject* parent = nullptr);
 
     ~IMKernel() override;
@@ -20,8 +21,19 @@ public:
 
     void createMainWidget();
 
+    void sendAuthMsg();
+
+public slots:
+    void dealData(const QJsonObject& jsonObject);
+
 private:
     void initHandlers();
+
+    void handleErrorMsg(const QJsonObject& json);
+
+    void handleFriendAppleNotifyI(const QJsonObject& json);
+
+    void handleFriendAppleNotifyP(const QJsonObject& json);
 
 private:
     TcpClientMediator* m_mediator = nullptr;
