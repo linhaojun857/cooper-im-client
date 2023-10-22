@@ -49,6 +49,8 @@ public:
 
     QString getToken();
 
+    void addFriend(const QJsonObject& json);
+
     void addFriends(const QJsonObject& json);
 
     FGSWidget* getFGSWidget() const;
@@ -56,6 +58,20 @@ public:
     void addFSRs(const QJsonObject& json);
 
     void addFriendApplyI(FriendApply* friendApply);
+
+    void addFANItemI(int id, FANItem* fanItem);
+
+    bool haveFANItemI(int id);
+
+    FANItem* getFANItemI(int id);
+
+    void addFriendApplyP(FriendApply* friendApply);
+
+    void addFANItemP(int id, FANItem* fanItem);
+
+    bool haveFANItemP(int id);
+
+    FANItem* getFANItemP(int id);
 
 private:
     Self* m_self = nullptr;
@@ -69,6 +85,9 @@ private:
     QMap<int, FriendItem*> m_friendItems;
     FGSWidget* m_fgsWidget = nullptr;
     QVector<FriendApply*> m_friendApplyIs;
+    QMap<int, FANItem*> m_fanItemIs;
+    QVector<FriendApply*> m_friendApplyPs;
+    QMap<int, FANItem*> m_fanItemPs;
     NotifyWidget* m_notifyWidget = nullptr;
 };
 

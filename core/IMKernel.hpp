@@ -35,6 +35,8 @@ private:
 
     void handleFriendAppleNotifyP(const QJsonObject& json);
 
+    void handleFriendEntity(const QJsonObject& json);
+
 private:
     TcpClientMediator* m_mediator = nullptr;
     LRWidget* m_lRWidget = nullptr;

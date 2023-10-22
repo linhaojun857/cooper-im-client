@@ -79,6 +79,19 @@ QString IMStore::getToken() {
     return m_token;
 }
 
+void IMStore::addFriend(const QJsonObject& json) {
+    qDebug() << "IMStore::addFriend";
+    auto fri = Friend::fromJson(json);
+    auto friendItem = new FriendItem();
+    friendItem->setId(fri->id);
+    friendItem->setNickName(fri->nickname);
+    friendItem->setAvatar(fri->avatar);
+    friendItem->setStatusAndFeeling(fri->status, fri->feeling);
+    m_friends[fri->id] = fri;
+    m_friendItems[fri->id] = friendItem;
+    m_friendWidget->addFriendItem(friendItem);
+}
+
 void IMStore::addFriends(const QJsonObject& json) {
     qDebug() << "IMStore::addFriends";
     QJsonArray friends = json["friends"].toArray();
@@ -119,4 +132,32 @@ void IMStore::addFSRs(const QJsonObject& json) {
 
 void IMStore::addFriendApplyI(FriendApply* friendApply) {
     m_friendApplyIs.append(friendApply);
+}
+
+void IMStore::addFANItemI(int id, FANItem* fanItem) {
+    m_fanItemIs[id] = fanItem;
+}
+
+bool IMStore::haveFANItemI(int id) {
+    return m_fanItemIs.contains(id);
+}
+
+FANItem* IMStore::getFANItemI(int id) {
+    return m_fanItemIs[id];
+}
+
+void IMStore::addFriendApplyP(FriendApply* friendApply) {
+    m_friendApplyPs.append(friendApply);
+}
+
+void IMStore::addFANItemP(int id, FANItem* fanItem) {
+    m_fanItemPs[id] = fanItem;
+}
+
+bool IMStore::haveFANItemP(int id) {
+    return m_fanItemPs.contains(id);
+}
+
+FANItem* IMStore::getFANItemP(int id) {
+    return m_fanItemPs[id];
 }

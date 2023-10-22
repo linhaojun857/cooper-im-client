@@ -75,7 +75,7 @@ background-color: #ffffff;</string>
     <rect>
      <x>60</x>
      <y>30</y>
-     <width>160</width>
+     <width>150</width>
      <height>20</height>
     </rect>
    </property>
@@ -117,9 +117,9 @@ background-color: #ffffff;</string>
   <widget class="QLabel" name="m_statusLabel">
    <property name="geometry">
     <rect>
-     <x>230</x>
+     <x>220</x>
      <y>20</y>
-     <width>50</width>
+     <width>70</width>
      <height>20</height>
     </rect>
    </property>

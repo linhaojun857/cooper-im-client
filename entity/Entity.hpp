@@ -60,29 +60,34 @@ struct FriendApply {
     int id{};
     int from_id{};
     int to_id{};
-    QString avatar;
-    QString nickname;
+    QString from_avatar;
+    QString from_nickname;
+    QString to_avatar;
+    QString to_nickname;
     QString reason;
     // 0: 待处理 1: 通过申请 2: 拒绝申请
     int agree{};
 
     FriendApply() = default;
 
-    FriendApply(int id, int from_id, int to_id, const QString& avatar, const QString& nickname, const QString& reason,
-                int agree) {
+    FriendApply(int id, int from_id, int to_id, const QString& from_avatar, const QString& from_nickname,
+                const QString& to_avatar, const QString& to_nickname, const QString& reason, int agree) {
         this->id = id;
         this->from_id = from_id;
         this->to_id = to_id;
-        this->avatar = avatar;
-        this->nickname = nickname;
+        this->from_avatar = from_avatar;
+        this->from_nickname = from_nickname;
+        this->to_avatar = to_avatar;
+        this->to_nickname = to_nickname;
         this->reason = reason;
         this->agree = agree;
     }
 
     static FriendApply* fromJson(const QJsonObject& json) {
         auto fa = new FriendApply(json["id"].toInt(), json["from_id"].toInt(), json["to_id"].toInt(),
-                                  json["avatar"].toString(), json["nickname"].toString(), json["reason"].toString(),
-                                  json["agree"].toInt());
+                                  json["from_avatar"].toString(), json["from_nickname"].toString(),
+                                  json["to_avatar"].toString(), json["to_nickname"].toString(),
+                                  json["reason"].toString(), json["agree"].toInt());
         return fa;
     }
 };

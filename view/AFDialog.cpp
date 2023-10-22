@@ -53,6 +53,7 @@ QString AFDialog::getAvatar() {
 }
 
 void AFDialog::setNickname(const QString& nickname) {
+    m_nickname = nickname;
     setWindowTitle(nickname);
 }
 
@@ -74,6 +75,19 @@ void AFDialog::addFriend() {
     if (ret["code"] == HTTP_SUCCESS_CODE) {
         QMessageBox::information(this, "提示", "发送成功");
         close();
+        if (!IMStore::getInstance()->haveFANItemI(m_id)) {
+            auto fanItem = new FANItem();
+            fanItem->setMode(0);
+            fanItem->setAvatar(m_avatarUrl);
+            fanItem->setNickname(m_nickname);
+            fanItem->setReason("请求添加对方为好友");
+            fanItem->setStatus("等待验证");
+            IMStore::getInstance()->getNotifyWidget()->addFANItem(fanItem);
+            IMStore::getInstance()->addFANItemI(m_id, fanItem);
+        } else {
+            auto fanItem = IMStore::getInstance()->getFANItemI(m_id);
+            fanItem->setStatus("等待验证");
+        }
     } else {
         QMessageBox::warning(this, "提示", ret["msg"].toString());
     }
