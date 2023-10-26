@@ -1,6 +1,9 @@
 #ifndef store_IMStore_hpp
 #define store_IMStore_hpp
 
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlQuery>
 #include <QWebEngineView>
 
 #include "entity/Entity.hpp"
@@ -16,6 +19,8 @@ class IMKernel;
 class IMStore {
 public:
     static IMStore* getInstance();
+
+    QSqlDatabase* getDatabase();
 
     IMStore();
 
@@ -51,9 +56,9 @@ public:
 
     void addFriend(const QJsonObject& json);
 
-    void addFriends(const QJsonObject& json);
+    //    void addFriends(const QJsonObject& json);
 
-    FGSWidget* getFGSWidget() const;
+    [[nodiscard]] FGSWidget* getFGSWidget() const;
 
     void addFSRs(const QJsonObject& json);
 
@@ -73,7 +78,14 @@ public:
 
     FANItem* getFANItemP(int id);
 
+    Friend* getFriend(int id);
+
+    void flushWidget();
+
+    void flushFriendWidget();
+
 private:
+    QSqlDatabase m_database;
     Self* m_self = nullptr;
     QString m_token;
     IMKernel* m_imKernel = nullptr;

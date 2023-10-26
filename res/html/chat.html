@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>chat</title>
+    <script type="text/javascript" src="../js/qwebchannel.js"></script>
+    <script type="text/javascript" src="qrc:///qtwebchannel/qwebchannel.js"></script>
     <style>
         body {
             background-color: #f5f5f5;
@@ -253,9 +255,10 @@
         <div class="chat-container-send">
             <div class="show-right">
                 <div class="chat-bubble-send chat-bubble-image-send">
-                    <div class="chat-bubble-triangle-send"></div><img
-                        src="https://static.linhaojun.top/aurora/articles/3ec095cd9b7bd3f766166a4db14160c6.jpg">
-                </div><img class="avatar-send"
+                    <div class="chat-bubble-triangle-send"></div>
+                    <img src="https://static.linhaojun.top/aurora/articles/3ec095cd9b7bd3f766166a4db14160c6.jpg">
+                </div>
+                <img class="avatar-send"
                     src="https://static.linhaojun.top/aurora/config/6e4f47f4bb66d2d30722d20e789b220e.jpg">
             </div>
         </div>
@@ -292,15 +295,14 @@
         document.getElementById("loading-overlay").style.display = "none";
     }
 
-    // openLoading();
+    let webController;
 
-    // 下载文件的方法
+    new QWebChannel(qt.webChannelTransport, function (channel) {
+        webController = channel.objects.webController;
+    });
+
     function download(url) {
-        let a = document.createElement("a");
-        a.href = url;
-        let arr = url.split("/");
-        a.download = arr[arr.length - 1];
-        a.click();
+        webController.download(url);
     }
 
     // 添加对方文字消息的方法
@@ -336,6 +338,9 @@
         chatBubbleTriangle.className = "chat-bubble-triangle";
         let image = document.createElement("img");
         image.src = imageUrl;
+        image.onclick = function () {
+            webController.previewImg(imageUrl);
+        };
         chatBubble.appendChild(chatBubbleTriangle);
         chatBubble.appendChild(image);
         chatContainer.appendChild(avatar);
@@ -438,6 +443,9 @@
         chatBubbleTriangle.className = "chat-bubble-triangle-send";
         let image = document.createElement("img");
         image.src = imageUrl;
+        image.onclick = function () {
+            webController.previewImg(imageUrl);
+        };
         chatBubble.appendChild(chatBubbleTriangle);
         chatBubble.appendChild(image);
         let avatar = document.createElement("img");
@@ -534,13 +542,13 @@
 
     addPeerTextMessage(peerAvatarUrl, "这是测试聊天记录");
     addPeerImageMessage(peerAvatarUrl, "https://static.linhaojun.top/aurora/articles/3ec095cd9b7bd3f766166a4db14160c6.jpg");
-    addPeerVideoMessage(peerAvatarUrl, "https://www.w3schools.com/html/mov_bbb.mp4");
-    addPeerFileMessage(peerAvatarUrl, "Effective STL.pdf", "9.6MB", "http://localhost:9999/static/img/pdf.png");
+    addPeerVideoMessage(peerAvatarUrl, "http://localhost:9999/static/video/test.mp4");
+    addPeerFileMessage(peerAvatarUrl, "Effective STL.pdf", "9.6MB", "http://localhost:9999/static/file/EffectiveSTL.pdf");
     addTimeline("12:10");
     addSelfTextMessage(selfAvatarUrl, "This is a text message");
-    addSelfImageMessage(selfAvatarUrl, "https://static.linhaojun.top/aurora/articles/3ec095cd9b7bd3f766166a4db14160c6.jpg");
-    addSelfVideoMessage(selfAvatarUrl, "https://www.w3schools.com/html/mov_bbb.mp4");
-    addSelfFileMessage(selfAvatarUrl, "Effective STL.pdf", "9.6MB", "http://localhost:9999/static/img/pdf.png");
+    addSelfImageMessage(selfAvatarUrl, "https://static.linhaojun.top/aurora/articles/8a45d4b7cd1d1aa937b38465805429cf.jpg");
+    addSelfVideoMessage(selfAvatarUrl, "http://localhost:9999/static/video/test.mp4");
+    addSelfFileMessage(selfAvatarUrl, "Effective STL.pdf", "9.6MB", "http://localhost:9999/static/file/EffectiveSTL.pdf");
 
     window.scrollTo(0, document.body.scrollHeight);
 </script>

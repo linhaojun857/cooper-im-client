@@ -6,6 +6,7 @@
 #include <QTimer>
 
 #include "core/IMKernel.hpp"
+#include "data/DataSync.hpp"
 #include "define/IMDefine.hpp"
 #include "store/IMStore.hpp"
 #include "ui_LRWidget.h"
@@ -173,14 +174,15 @@ void LRWidget::userLogin() {
     json["password"] = password;
     json["vfCode"] = vfCode;
     auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/login", json);
-    if (ret["code"].toInt() == 20000) {
+    if (ret["code"].toInt() == HTTP_SUCCESS_CODE) {
         QMessageBox::information(this, "提示", "登录成功");
         resetLoginWidget();
         hide();
+        IMStore::getInstance()->setToken(ret);
+        DataSync::syncAll();
         IMStore::getInstance()->getIMKernel()->createMainWidget();
         IMStore::getInstance()->setSelf(ret);
-        IMStore::getInstance()->setToken(ret);
-        IMStore::getInstance()->addFriends(ret);
+        IMStore::getInstance()->flushWidget();
         IMStore::getInstance()->getIMKernel()->sendAuthMsg();
     } else {
         QMessageBox::warning(this, "提示", ret["msg"].toString());

@@ -9,9 +9,34 @@ IMStore* IMStore::getInstance() {
     return &store;
 }
 
+QSqlDatabase* IMStore::getDatabase() {
+    return &m_database;
+}
+
 IMStore::IMStore() {
     m_chatDialog = new ChatDialog();
     m_fgsWidget = new FGSWidget();
+    if (QSqlDatabase::contains("qt_sql_default_connection")) {
+        m_database = QSqlDatabase::database("qt_sql_default_connection");
+    } else {
+        m_database = QSqlDatabase::addDatabase("QSQLITE");
+        m_database.setDatabaseName("im.db");
+    }
+    if (!m_database.open()) {
+        qDebug() << "Error: Failed to connect database." << m_database.lastError();
+        exit(-1);
+    } else {
+        qDebug() << "Succeed to connect database.";
+    }
+    m_database.transaction();
+    QSqlQuery query;
+    if (!query.exec(Self::createTableSql) || !query.exec(Friend::createTableSql) ||
+        !query.exec(SyncRecord::createTableSql)) {
+        qDebug() << "local data table create failed";
+        m_database.rollback();
+        exit(-1);
+    }
+    m_database.commit();
 }
 
 void IMStore::setIMKernel(IMKernel* imKernel) {
@@ -92,22 +117,22 @@ void IMStore::addFriend(const QJsonObject& json) {
     m_friendWidget->addFriendItem(friendItem);
 }
 
-void IMStore::addFriends(const QJsonObject& json) {
-    qDebug() << "IMStore::addFriends";
-    QJsonArray friends = json["friends"].toArray();
-    for (const auto& f : friends) {
-        auto obj = f.toObject();
-        auto fri = Friend::fromJson(obj);
-        auto friendItem = new FriendItem();
-        friendItem->setId(fri->id);
-        friendItem->setNickName(fri->nickname);
-        friendItem->setAvatar(fri->avatar);
-        friendItem->setStatusAndFeeling(fri->status, fri->feeling);
-        m_friends[fri->id] = fri;
-        m_friendItems[fri->id] = friendItem;
-        m_friendWidget->addFriendItem(friendItem);
-    }
-}
+// void IMStore::addFriends(const QJsonObject& json) {
+//     qDebug() << "IMStore::addFriends";
+//     QJsonArray friends = json["friends"].toArray();
+//     for (const auto& f : friends) {
+//         auto obj = f.toObject();
+//         auto fri = Friend::fromJson(obj);
+//         auto friendItem = new FriendItem();
+//         friendItem->setId(fri->id);
+//         friendItem->setNickName(fri->nickname);
+//         friendItem->setAvatar(fri->avatar);
+//         friendItem->setStatusAndFeeling(fri->status, fri->feeling);
+//         m_friends[fri->id] = fri;
+//         m_friendItems[fri->id] = friendItem;
+//         m_friendWidget->addFriendItem(friendItem);
+//     }
+// }
 
 FGSWidget* IMStore::getFGSWidget() const {
     return m_fgsWidget;
@@ -160,4 +185,29 @@ bool IMStore::haveFANItemP(int id) {
 
 FANItem* IMStore::getFANItemP(int id) {
     return m_fanItemPs[id];
+}
+
+Friend* IMStore::getFriend(int id) {
+    return m_friends[id];
+}
+
+void IMStore::flushWidget() {
+    flushFriendWidget();
+}
+
+void IMStore::flushFriendWidget() {
+    QSqlQuery query(m_database);
+    query.exec("select friend_id, username, nickname, avatar, status, feeling from friend");
+    while (query.next()) {
+        Friend fri(query.value(0).toInt(), query.value(1).toString(), query.value(2).toString(),
+                   query.value(3).toString(), query.value(4).toString(), query.value(5).toString());
+        m_friends[fri.id] = new Friend(fri);
+        auto friendItem = new FriendItem();
+        friendItem->setId(fri.id);
+        friendItem->setNickName(fri.nickname);
+        friendItem->setAvatar(fri.avatar);
+        friendItem->setStatusAndFeeling(fri.status, fri.feeling);
+        m_friendItems[fri.id] = friendItem;
+        m_friendWidget->addFriendItem(friendItem);
+    }
 }

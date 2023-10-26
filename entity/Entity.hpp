@@ -1,8 +1,41 @@
 #ifndef entity_Entity_hpp
 #define entity_Entity_hpp
 
+#include <QJsonArray>
 #include <QJsonObject>
 #include <QString>
+
+class SyncState {
+public:
+    int server_state{};
+    int friend_sync_state{};
+    QVector<int> updated_friends;
+
+    SyncState() = default;
+
+    explicit SyncState(int friend_sync_state, const QVector<int>& updated_friends) {
+        this->friend_sync_state = friend_sync_state;
+        this->updated_friends = updated_friends;
+    }
+
+    static SyncState fromJson(const QJsonObject& json) {
+        int server_state = json["server_state"].toInt();
+        auto updated_friends = json["updated_friends"].toArray();
+        QVector<int> updated_friends_vec;
+        for (const auto& f : updated_friends) {
+            updated_friends_vec.push_back(f.toInt());
+        }
+        return SyncState(server_state, updated_friends_vec);
+    }
+};
+
+class SyncRecord {
+public:
+    int id;
+    long timestamp;
+
+    static const QString createTableSql;
+};
 
 class Self {
 public:
@@ -12,6 +45,8 @@ public:
     QString avatar;
     QString status;
     QString feeling;
+
+    static const QString createTableSql;
 
     Self(int id, const QString& username, const QString& nickname, const QString& avatar, const QString& status,
          const QString& feeling) {
@@ -39,9 +74,21 @@ public:
     QString status;
     QString feeling;
 
+    static const QString createTableSql;
+
     Friend(int id, const QString& username, const QString& nickname, const QString& avatar, const QString& status,
            const QString& feeling) {
         this->id = id;
+        this->username = username;
+        this->nickname = nickname;
+        this->avatar = avatar;
+        this->status = status;
+        this->feeling = feeling;
+    }
+
+    Friend(const QString& username, const QString& nickname, const QString& avatar, const QString& status,
+           const QString& feeling) {
+        this->id = 0;
         this->username = username;
         this->nickname = nickname;
         this->avatar = avatar;

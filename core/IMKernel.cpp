@@ -3,6 +3,7 @@
 #include <QMessageBox>
 #include <QThread>
 
+#include "data/DataSync.hpp"
 #include "mock/Mock.hpp"
 #include "store/IMStore.hpp"
 #include "view/FANItem.hpp"
@@ -107,4 +108,5 @@ void IMKernel::handleFriendAppleNotifyP(const QJsonObject& json) {
 void IMKernel::handleFriendEntity(const QJsonObject& json) {
     void(this);
     IMStore::getInstance()->addFriend(json);
+    DataSync::syncFriendsByServerPush(json);
 }

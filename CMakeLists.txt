@@ -20,6 +20,8 @@ find_package(Qt6 COMPONENTS
         Concurrent
         Core5Compat
         WebEngineWidgets
+        WebChannel
+        Sql
         REQUIRED)
 
 add_library(cooper_im_lib
@@ -33,6 +35,7 @@ add_library(cooper_im_lib
         mediator/TcpClientMediator.cpp
         # entity
         entity/Entity.hpp
+        entity/Entity.cpp
         # view
         view/LRWidget.hpp
         view/LRWidget.cpp
@@ -82,9 +85,15 @@ add_library(cooper_im_lib
         view/AFDialog.hpp
         view/AFDialog.cpp
         view/AFDialog.ui
+        view/ImageViewWidget.cpp
+        view/ImageViewWidget.hpp
+        view/ImageViewWidget.ui
         # core
         core/IMKernel.hpp
         core/IMKernel.cpp
+        # data
+        data/DataSync.hpp
+        data/DataSync.cpp
         # util
         util/HttpUtil.cpp
         util/HttpUtil.hpp
@@ -106,6 +115,8 @@ target_link_libraries(cooper_im_lib PUBLIC
         Qt::Concurrent
         Qt::Core5Compat
         Qt::WebEngineWidgets
+        Qt::WebChannel
+        Qt::Sql
         FramelessHelper::Core
         FramelessHelper::Widgets
 )
