@@ -45,6 +45,21 @@ void IMKernel::sendAuthMsg() {
     m_mediator->sendData(json);
 }
 
+void IMKernel::sendSyncCompleteMsg() {
+    QJsonObject json;
+    json["type"] = PROTOCOL_TYPE_SYNC_COMPLETE_MESSAGE;
+    json["token"] = IMStore::getInstance()->getToken();
+    m_mediator->sendData(json);
+}
+
+void IMKernel::sendPersonMsg(const PersonMessage* personMessage) {
+    QJsonObject json;
+    json["type"] = PROTOCOL_TYPE_PERSON_MESSAGE;
+    json["token"] = IMStore::getInstance()->getToken();
+    json["personMessage"] = personMessage->toJson();
+    m_mediator->sendData(json);
+}
+
 void IMKernel::dealData(const QJsonObject& jsonObject) {
     auto type = jsonObject["type"].toInt();
     auto it = m_handlers.find(type);

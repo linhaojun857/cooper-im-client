@@ -30,8 +30,7 @@ IMStore::IMStore() {
     }
     m_database.transaction();
     QSqlQuery query;
-    if (!query.exec(Self::createTableSql) || !query.exec(Friend::createTableSql) ||
-        !query.exec(SyncRecord::createTableSql)) {
+    if (!query.exec(Friend::createTableSql) || !query.exec(SyncRecord::createTableSql)) {
         qDebug() << "local data table create failed";
         m_database.rollback();
         exit(-1);

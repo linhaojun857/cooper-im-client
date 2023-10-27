@@ -5,40 +5,39 @@
 #include <QJsonObject>
 #include <QString>
 
-class SyncState {
-public:
-    int server_state{};
+struct SyncState {
+    int server_state_err{};
     int friend_sync_state{};
-    QVector<int> updated_friends;
+    QVector<QPair<int, int>> updated_friendIds;
 
     SyncState() = default;
 
-    explicit SyncState(int friend_sync_state, const QVector<int>& updated_friends) {
+    explicit SyncState(int friend_sync_state, const QVector<QPair<int, int>>& updated_friends) {
         this->friend_sync_state = friend_sync_state;
-        this->updated_friends = updated_friends;
+        this->updated_friendIds = updated_friends;
     }
 
     static SyncState fromJson(const QJsonObject& json) {
-        int server_state = json["server_state"].toInt();
-        auto updated_friends = json["updated_friends"].toArray();
-        QVector<int> updated_friends_vec;
-        for (const auto& f : updated_friends) {
-            updated_friends_vec.push_back(f.toInt());
+        int friend_sync_state = json["friend_sync_state"].toInt();
+        QVector<QPair<int, int>> updated_friendIds_temp;
+        QJsonArray updated_friendIds_json = json["updated_friendIds"].toArray();
+        for (const auto& f : updated_friendIds_json) {
+            auto arr = f.toArray();
+            updated_friendIds_temp.push_back(QPair<int, int>(arr[0].toInt(), arr[1].toInt()));
         }
-        return SyncState(server_state, updated_friends_vec);
+        SyncState state(friend_sync_state, updated_friendIds_temp);
+        return state;
     }
 };
 
-class SyncRecord {
-public:
+struct SyncRecord {
     int id;
     long timestamp;
 
     static const QString createTableSql;
 };
 
-class Self {
-public:
+struct Self {
     int id;
     QString username;
     QString nickname;
@@ -65,9 +64,8 @@ public:
     }
 };
 
-class Friend {
-public:
-    int id;
+struct Friend {
+    int id{};
     QString username;
     QString nickname;
     QString avatar;
@@ -75,6 +73,8 @@ public:
     QString feeling;
 
     static const QString createTableSql;
+
+    Friend() = default;
 
     Friend(int id, const QString& username, const QString& nickname, const QString& avatar, const QString& status,
            const QString& feeling) {
@@ -96,12 +96,45 @@ public:
         this->feeling = feeling;
     }
 
+    Friend(const Friend& fri) {
+        this->id = fri.id;
+        this->username = fri.username;
+        this->nickname = fri.nickname;
+        this->avatar = fri.avatar;
+        this->status = fri.status;
+        this->feeling = fri.feeling;
+    }
+
     static Friend* fromJson(const QJsonObject& json) {
         auto f = new Friend(json["id"].toInt(), json["username"].toString(), json["nickname"].toString(),
                             json["avatar"].toString(), json["status"].toString(), json["feeling"].toString());
         return f;
     }
+
+    static Friend fromJsonCommon(const QJsonObject& json) {
+        Friend fri(json["id"].toInt(), json["username"].toString(), json["nickname"].toString(),
+                   json["avatar"].toString(), json["status"].toString(), json["feeling"].toString());
+        return fri;
+    }
 };
+
+// struct Notify {
+//     int id;
+//     // 推送给谁
+//     int to_id;
+//     // 0: 好友申请...
+//     int notify_type;
+//     int fa_id;
+//
+//     Notify() = default;
+//
+//     Notify(int id, int to_id, int type, int fa_id) {
+//         this->id = id;
+//         this->to_id = to_id;
+//         this->notify_type = type;
+//         this->fa_id = fa_id;
+//     }
+// };
 
 struct FriendApply {
     int id{};
@@ -114,6 +147,8 @@ struct FriendApply {
     QString reason;
     // 0: 待处理 1: 通过申请 2: 拒绝申请
     int agree{};
+
+    //    static const QString createTableSql;
 
     FriendApply() = default;
 
@@ -136,6 +171,41 @@ struct FriendApply {
                                   json["to_avatar"].toString(), json["to_nickname"].toString(),
                                   json["reason"].toString(), json["agree"].toInt());
         return fa;
+    }
+};
+
+struct PersonMessage {
+    int id{};
+    int from_id{};
+    int to_id{};
+    int message_type{};
+    QString message;
+    QString file_url;
+    time_t timestamp{};
+
+    PersonMessage() = default;
+
+    PersonMessage(int from_id, int to_id, int message_type, const QString& message, const QString& file_url,
+                  time_t timestamp) {
+        this->id = 0;
+        this->from_id = from_id;
+        this->to_id = to_id;
+        this->message_type = message_type;
+        this->message = message;
+        this->file_url = file_url;
+        this->timestamp = timestamp;
+    }
+
+    [[nodiscard]] QJsonObject toJson() const {
+        QJsonObject json;
+        json["id"] = id;
+        json["from_id"] = from_id;
+        json["to_id"] = to_id;
+        json["message_type"] = message_type;
+        json["message"] = message;
+        json["file_url"] = file_url;
+        json["timestamp"] = timestamp;
+        return json;
     }
 };
 

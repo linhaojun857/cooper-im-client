@@ -11,7 +11,7 @@ public:
 
     static void syncAll();
 
-    static void syncFriends(bool isFirstSync,const SyncState& syncState);
+    static void syncFriends(bool isFirstSync, SyncState* syncState);
 
     static void syncFriendsByServerPush(const QJsonObject& json);
 };

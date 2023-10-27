@@ -65,8 +65,11 @@ public:
 private:
     void runJavaScript(const QString& script);
 
+    void handleClickSendPushButton();
+
 private:
     Ui::ChatDialog* ui;
+    int m_currentPeerId = 0;
     QWebEngineView* m_friendChatView = nullptr;
     QWebChannel* m_webChannel = nullptr;
     QMap<int, ChatItem*> m_chatItemMap;

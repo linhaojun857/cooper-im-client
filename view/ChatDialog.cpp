@@ -127,6 +127,7 @@ ChatDialog::ChatDialog(QWidget* parent) : QDialog(parent), ui(new Ui::ChatDialog
         m_chatItemMap.clear();
     });
     connect(ui->m_minimizePushButton, SIGNAL(clicked(bool)), this, SLOT(showMinimized()));
+    connect(ui->m_sendPushButton, &QPushButton::clicked, this, &ChatDialog::handleClickSendPushButton);
 
     FramelessWidgetsHelper::get(this)->extendsContentIntoTitleBar();
     FramelessWidgetsHelper::get(this)->setTitleBarWidget(ui->m_headerWidget);
@@ -155,12 +156,6 @@ ChatDialog::ChatDialog(QWidget* parent) : QDialog(parent), ui(new Ui::ChatDialog
     m_chatItemLayout->setSpacing(0);
     widget->setLayout(m_chatItemLayout);
     m_chatItemLayout->addStretch();
-
-    connect(ui->m_sendPushButton, &QPushButton::clicked, [this]() {
-        QString selfAvatarUrl = "\"https://static.linhaojun.top/aurora/config/6e4f47f4bb66d2d30722d20e789b220e.jpg\"";
-        runJavaScript(QString("addSelfTextMessage(%1, %2);").arg(selfAvatarUrl, "\"this is test message\""));
-        runJavaScript("window.scrollTo(0, document.body.scrollHeight);");
-    });
 }
 
 ChatDialog::~ChatDialog() {
@@ -176,6 +171,7 @@ void ChatDialog::addChatItem(ChatItem* chatItem) {
 
 void ChatDialog::changeChatHistory(int userId) {
     qDebug() << "ChatDialog::changeChatHistory";
+    m_currentPeerId = userId;
     runJavaScript("clearAllElement();");
     runJavaScript("openLoading();");
     ui->m_nameLabel->setText(m_chatItemMap[userId]->getName());
@@ -191,4 +187,7 @@ void ChatDialog::changeChatHistory(int userId) {
 
 void ChatDialog::runJavaScript(const QString& script) {
     m_friendChatView->page()->runJavaScript(script);
+}
+
+void ChatDialog::handleClickSendPushButton() {
 }

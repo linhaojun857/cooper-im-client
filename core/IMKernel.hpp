@@ -4,6 +4,7 @@
 #include <QObject>
 
 #include "define/IMDefine.hpp"
+#include "entity/Entity.hpp"
 #include "mediator/TcpClientMediator.hpp"
 #include "view/LRWidget.hpp"
 #include "view/MainWidget.hpp"
@@ -22,6 +23,10 @@ public:
     void createMainWidget();
 
     void sendAuthMsg();
+
+    void sendSyncCompleteMsg();
+
+    void sendPersonMsg(const PersonMessage* personMessage);
 
 public slots:
     void dealData(const QJsonObject& jsonObject);
