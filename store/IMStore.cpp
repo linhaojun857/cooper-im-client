@@ -30,7 +30,8 @@ IMStore::IMStore() {
     }
     m_database.transaction();
     QSqlQuery query;
-    if (!query.exec(Friend::createTableSql) || !query.exec(SyncRecord::createTableSql)) {
+    if (!query.exec(Self::createTableSql) || !query.exec(Friend::createTableSql) ||
+        !query.exec(SyncRecord::createTableSql)) {
         qDebug() << "local data table create failed";
         m_database.rollback();
         exit(-1);
@@ -85,13 +86,33 @@ NotifyWidget* IMStore::getNotifyWidget() {
 void IMStore::setSelf(const QJsonObject& json) {
     qDebug() << "IMStore::setSelf";
     m_self = Self::fromJson(json["user"].toObject());
-    m_mainWidget->setAvatar(m_self->avatar);
-    m_mainWidget->setNickname(m_self->nickname);
-    m_mainWidget->setStatusAndFeeling(m_self->status, m_self->feeling);
+    QSqlQuery query(m_database);
+    query.exec("select * from self");
+    if (!query.next() || query.value(1).toInt() != m_self->id) {
+        query.exec("delete from sync_record");
+    }
+    query.exec("delete from self");
+    QString sql = QString(
+                      "insert into self (self_id, username, nickname, avatar, status, feeling) "
+                      "values (%1, '%2', '%3', '%4', '%5', '%6')")
+                      .arg(m_self->id)
+                      .arg(m_self->username, m_self->nickname, m_self->avatar, m_self->status, m_self->feeling);
+    qDebug() << sql;
+    if (!query.exec(sql)) {
+        qDebug() << query.lastError();
+    } else {
+        qDebug() << "inserted";
+    }
 }
 
 Self* IMStore::getSelf() {
     return m_self;
+}
+
+void IMStore::setMainWidgetInfo() {
+    m_mainWidget->setAvatar(m_self->avatar);
+    m_mainWidget->setNickname(m_self->nickname);
+    m_mainWidget->setStatusAndFeeling(m_self->status, m_self->feeling);
 }
 
 void IMStore::setToken(const QJsonObject& json) {

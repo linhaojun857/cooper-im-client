@@ -8,19 +8,19 @@
 struct SyncState {
     int server_state_err{};
     int friend_sync_state{};
-    QVector<QPair<int, int>> updated_friendIds;
+    QVector<QPair<int, int>> friendIds;
 
     SyncState() = default;
 
     explicit SyncState(int friend_sync_state, const QVector<QPair<int, int>>& updated_friends) {
         this->friend_sync_state = friend_sync_state;
-        this->updated_friendIds = updated_friends;
+        this->friendIds = updated_friends;
     }
 
     static SyncState fromJson(const QJsonObject& json) {
         int friend_sync_state = json["friend_sync_state"].toInt();
         QVector<QPair<int, int>> updated_friendIds_temp;
-        QJsonArray updated_friendIds_json = json["updated_friendIds"].toArray();
+        QJsonArray updated_friendIds_json = json["friendIds"].toArray();
         for (const auto& f : updated_friendIds_json) {
             auto arr = f.toArray();
             updated_friendIds_temp.push_back(QPair<int, int>(arr[0].toInt(), arr[1].toInt()));

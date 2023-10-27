@@ -66,7 +66,7 @@ void DataSync::syncFriends(bool isFirstSync, SyncState* syncState) {
             }
             QJsonObject json;
             json["token"] = IMStore::getInstance()->getToken();
-            auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/getFriends", json);
+            auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/getAllFriends", json);
             if (ret["code"].toInt() != HTTP_SUCCESS_CODE) {
                 qDebug() << "sync friends failed! error: " << ret["msg"].toString();
             }
@@ -91,23 +91,22 @@ void DataSync::syncFriends(bool isFirstSync, SyncState* syncState) {
             QJsonObject json;
             json["token"] = IMStore::getInstance()->getToken();
             QJsonArray friendIdsJson;
-            for (const auto& item : syncState->updated_friendIds) {
+            for (const auto& item : syncState->friendIds) {
                 friendIdsJson.push_back(item.first);
             }
-            json["friends"] = friendIdsJson;
+            json["friendIds"] = friendIdsJson;
             auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/getFriendsByIds", json);
             if (ret["code"].toInt() != HTTP_SUCCESS_CODE) {
                 qDebug() << "sync friends failed! error: " << ret["msg"].toString();
             }
             QJsonArray friends = ret["friends"].toArray();
-            query.exec("select friend_id from friend");
             QMap<int, Friend> friendMap;
             for (const auto& f : friends) {
                 auto obj = f.toObject();
-                auto fri = Friend::fromJsonCommon(json);
+                auto fri = Friend::fromJsonCommon(obj);
                 friendMap[fri.id] = fri;
             }
-            for (const auto& updateId : syncState->updated_friendIds) {
+            for (const auto& updateId : syncState->friendIds) {
                 if (updateId.second == SYNC_DATA_FRIEND_ENTITY_INSERT) {
                     auto fri = friendMap[updateId.first];
                     QString sql = QString(

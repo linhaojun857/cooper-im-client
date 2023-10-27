@@ -127,6 +127,12 @@ add_executable(cooper_im_client
         res/res.qrc)
 target_link_libraries(cooper_im_client PRIVATE cooper_im_lib)
 
+add_executable(cooper_im_client_1
+        main.cpp
+        # qrc
+        res/res.qrc)
+target_link_libraries(cooper_im_client_1 PRIVATE cooper_im_lib)
+
 file(GLOB_RECURSE TEST_SOURCES "test/*.cpp")
 foreach (TEST_SOURCE ${TEST_SOURCES})
     get_filename_component(TEST_NAME ${TEST_SOURCE} NAME_WE)

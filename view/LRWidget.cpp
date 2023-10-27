@@ -179,9 +179,10 @@ void LRWidget::userLogin() {
         resetLoginWidget();
         hide();
         IMStore::getInstance()->setToken(ret);
+        IMStore::getInstance()->setSelf(ret);
         DataSync::syncAll();
         IMStore::getInstance()->getIMKernel()->createMainWidget();
-        IMStore::getInstance()->setSelf(ret);
+        IMStore::getInstance()->setMainWidgetInfo();
         IMStore::getInstance()->flushWidget();
         IMStore::getInstance()->getIMKernel()->sendAuthMsg();
     } else {

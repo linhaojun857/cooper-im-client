@@ -50,6 +50,8 @@ public:
 
     Self* getSelf();
 
+    void setMainWidgetInfo();
+
     void setToken(const QJsonObject& json);
 
     QString getToken();
