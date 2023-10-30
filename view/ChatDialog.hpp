@@ -62,6 +62,8 @@ public:
 
     void changeChatHistory(int userId);
 
+    [[nodiscard]] int getCurrentPeerId() const;
+
 private:
     void runJavaScript(const QString& script);
 

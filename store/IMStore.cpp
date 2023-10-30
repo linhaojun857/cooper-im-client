@@ -16,27 +16,6 @@ QSqlDatabase* IMStore::getDatabase() {
 IMStore::IMStore() {
     m_chatDialog = new ChatDialog();
     m_fgsWidget = new FGSWidget();
-    if (QSqlDatabase::contains("qt_sql_default_connection")) {
-        m_database = QSqlDatabase::database("qt_sql_default_connection");
-    } else {
-        m_database = QSqlDatabase::addDatabase("QSQLITE");
-        m_database.setDatabaseName("im.db");
-    }
-    if (!m_database.open()) {
-        qDebug() << "Error: Failed to connect database." << m_database.lastError();
-        exit(-1);
-    } else {
-        qDebug() << "Succeed to connect database.";
-    }
-    m_database.transaction();
-    QSqlQuery query;
-    if (!query.exec(Self::createTableSql) || !query.exec(Friend::createTableSql) ||
-        !query.exec(SyncRecord::createTableSql)) {
-        qDebug() << "local data table create failed";
-        m_database.rollback();
-        exit(-1);
-    }
-    m_database.commit();
 }
 
 void IMStore::setIMKernel(IMKernel* imKernel) {
@@ -86,7 +65,27 @@ NotifyWidget* IMStore::getNotifyWidget() {
 void IMStore::setSelf(const QJsonObject& json) {
     qDebug() << "IMStore::setSelf";
     m_self = Self::fromJson(json["user"].toObject());
+    if (QSqlDatabase::contains("qt_sql_default_connection")) {
+        m_database = QSqlDatabase::database("qt_sql_default_connection");
+    } else {
+        m_database = QSqlDatabase::addDatabase("QSQLITE");
+        m_database.setDatabaseName(QString("%1.db").arg(m_self->username));
+    }
+    if (!m_database.open()) {
+        qDebug() << "Error: Failed to connect database." << m_database.lastError();
+        exit(-1);
+    } else {
+        qDebug() << "Succeed to connect database.";
+    }
+    m_database.transaction();
     QSqlQuery query(m_database);
+    if (!query.exec(Self::createTableSql) || !query.exec(Friend::createTableSql) ||
+        !query.exec(SyncRecord::createTableSql) || !query.exec(PersonMessage::createTableSql)) {
+        qDebug() << "local data table create failed";
+        m_database.rollback();
+        exit(-1);
+    }
+    m_database.commit();
     query.exec("select * from self");
     if (!query.next() || query.value(1).toInt() != m_self->id) {
         query.exec("delete from sync_record");
@@ -136,23 +135,6 @@ void IMStore::addFriend(const QJsonObject& json) {
     m_friendItems[fri->id] = friendItem;
     m_friendWidget->addFriendItem(friendItem);
 }
-
-// void IMStore::addFriends(const QJsonObject& json) {
-//     qDebug() << "IMStore::addFriends";
-//     QJsonArray friends = json["friends"].toArray();
-//     for (const auto& f : friends) {
-//         auto obj = f.toObject();
-//         auto fri = Friend::fromJson(obj);
-//         auto friendItem = new FriendItem();
-//         friendItem->setId(fri->id);
-//         friendItem->setNickName(fri->nickname);
-//         friendItem->setAvatar(fri->avatar);
-//         friendItem->setStatusAndFeeling(fri->status, fri->feeling);
-//         m_friends[fri->id] = fri;
-//         m_friendItems[fri->id] = friendItem;
-//         m_friendWidget->addFriendItem(friendItem);
-//     }
-// }
 
 FGSWidget* IMStore::getFGSWidget() const {
     return m_fgsWidget;

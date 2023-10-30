@@ -14,6 +14,10 @@ public:
     static void syncFriends(bool isFirstSync, SyncState* syncState);
 
     static void syncFriendsByServerPush(const QJsonObject& json);
+
+    static void syncPersonMessages(bool isFirstSync, SyncState* syncState);
+
+    static void syncPersonMessagesBuServerPush(const QJsonObject& json);
 };
 
 #endif

@@ -34,13 +34,15 @@ public slots:
 private:
     void initHandlers();
 
-    void handleErrorMsg(const QJsonObject& json);
+    static void handleErrorMsg(const QJsonObject& json);
 
-    void handleFriendAppleNotifyI(const QJsonObject& json);
+    static void handleFriendAppleNotifyI(const QJsonObject& json);
 
-    void handleFriendAppleNotifyP(const QJsonObject& json);
+    static void handleFriendAppleNotifyP(const QJsonObject& json);
 
-    void handleFriendEntity(const QJsonObject& json);
+    static void handleFriendEntity(const QJsonObject& json);
+
+    static void handlePersonMessageRecv(const QJsonObject& json);
 
 private:
     TcpClientMediator* m_mediator = nullptr;

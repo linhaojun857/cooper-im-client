@@ -54,7 +54,7 @@ void IMKernel::sendSyncCompleteMsg() {
 
 void IMKernel::sendPersonMsg(const PersonMessage& personMessage) {
     QJsonObject json;
-    json["type"] = PROTOCOL_TYPE_PERSON_MESSAGE;
+    json["type"] = PROTOCOL_TYPE_PERSON_MESSAGE_SEND;
     json["token"] = IMStore::getInstance()->getToken();
     json["personMessage"] = personMessage.toJson();
     m_mediator->sendData(json);
@@ -69,19 +69,18 @@ void IMKernel::dealData(const QJsonObject& jsonObject) {
 }
 
 void IMKernel::initHandlers() {
-    m_handlers[PROTOCOL_TYPE_ERROR_MSG] = std::bind(&IMKernel::handleErrorMsg, this, _1);
-    m_handlers[PROTOCOL_TYPE_FRIEND_APPLY_NOTIFY_I] = std::bind(&IMKernel::handleFriendAppleNotifyI, this, _1);
-    m_handlers[PROTOCOL_TYPE_FRIEND_APPLY_NOTIFY_P] = std::bind(&IMKernel::handleFriendAppleNotifyP, this, _1);
-    m_handlers[PROTOCOL_TYPE_FRIEND_ENTITY] = std::bind(&IMKernel::handleFriendEntity, this, _1);
+    m_handlers[PROTOCOL_TYPE_ERROR_MSG] = std::bind(&IMKernel::handleErrorMsg, _1);
+    m_handlers[PROTOCOL_TYPE_FRIEND_APPLY_NOTIFY_I] = std::bind(&IMKernel::handleFriendAppleNotifyI, _1);
+    m_handlers[PROTOCOL_TYPE_FRIEND_APPLY_NOTIFY_P] = std::bind(&IMKernel::handleFriendAppleNotifyP, _1);
+    m_handlers[PROTOCOL_TYPE_FRIEND_ENTITY] = std::bind(&IMKernel::handleFriendEntity, _1);
+    m_handlers[PROTOCOL_TYPE_PERSON_MESSAGE_RECV] = std::bind(&IMKernel::handlePersonMessageRecv, _1);
 }
 
 void IMKernel::handleErrorMsg(const QJsonObject& json) {
-    void(this);
     QMessageBox::warning(nullptr, "提示", json["msg"].toString());
 }
 
 void IMKernel::handleFriendAppleNotifyI(const QJsonObject& json) {
-    void(this);
     auto fa = FriendApply::fromJson(json);
     auto fanItem = IMStore::getInstance()->getFANItemI(fa->to_id);
     if (fanItem == nullptr) {
@@ -101,7 +100,6 @@ void IMKernel::handleFriendAppleNotifyI(const QJsonObject& json) {
 }
 
 void IMKernel::handleFriendAppleNotifyP(const QJsonObject& json) {
-    void(this);
     auto fa = FriendApply::fromJson(json);
     IMStore::getInstance()->addFriendApplyP(fa);
     if (!IMStore::getInstance()->haveFANItemP(fa->from_id)) {
@@ -121,7 +119,14 @@ void IMKernel::handleFriendAppleNotifyP(const QJsonObject& json) {
 }
 
 void IMKernel::handleFriendEntity(const QJsonObject& json) {
-    void(this);
     IMStore::getInstance()->addFriend(json);
     DataSync::syncFriendsByServerPush(json);
+}
+
+void IMKernel::handlePersonMessageRecv(const QJsonObject& json) {
+    auto pm = PersonMessage::fromJson(json);
+    DataSync::syncPersonMessagesBuServerPush(json);
+    if (pm.from_id == IMStore::getInstance()->getChatDialog()->getCurrentPeerId()) {
+        MsgHelper::addPeerTextMsg(pm.from_id, pm.message);
+    }
 }

@@ -28,15 +28,14 @@ const QString Friend::createTableSql =
     "    feeling varchar(100) not null\n"
     ");";
 
-// const QString FriendApply::createTableSql =
-//     "create table if not exists friend_apply (\n"
-//     "    id integer primary key autoincrement,\n"
-//     "    from_id integer not null,\n"
-//     "    to_id integer not null,\n"
-//     "    from_avatar varchar(45) not null,\n"
-//     "    from_nickname varchar(45) not null,\n"
-//     "    to_avatar varchar(45) not null,\n"
-//     "    to_nickname varchar(45) not null,\n"
-//     "    reason varchar(100) not null,\n"
-//     "    agree integer not null\n"
-//     ");";
+const QString PersonMessage::createTableSql =
+    "create table if not exists person_message (\n"
+    "    id integer primary key autoincrement,\n"
+    "    msg_id integer unique not null,\n"
+    "    from_id integer not null,\n"
+    "    to_id integer not null,\n"
+    "    content varchar(100) not null,\n"
+    "    type integer not null,\n"
+    "    timestamp integer not null,\n"
+    "    status integer not null\n"
+    ");";

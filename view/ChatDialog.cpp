@@ -186,6 +186,10 @@ void ChatDialog::changeChatHistory(int userId) {
     runJavaScript("closeLoading();");
 }
 
+int ChatDialog::getCurrentPeerId() const {
+    return m_currentPeerId;
+}
+
 void ChatDialog::runJavaScript(const QString& script) {
     m_friendChatView->page()->runJavaScript(script);
 }

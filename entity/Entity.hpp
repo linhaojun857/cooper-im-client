@@ -8,24 +8,36 @@
 struct SyncState {
     int server_state_err{};
     int friend_sync_state{};
+    int person_message_sync_state{};
     QVector<QPair<int, int>> friendIds;
+    QVector<QPair<int, int>> personMessageIds;
 
     SyncState() = default;
 
-    explicit SyncState(int friend_sync_state, const QVector<QPair<int, int>>& updated_friends) {
+    explicit SyncState(int friend_sync_state, int person_sync_person_message, const QVector<QPair<int, int>>& friendIds,
+                       const QVector<QPair<int, int>>& personMessageIds) {
         this->friend_sync_state = friend_sync_state;
-        this->friendIds = updated_friends;
+        this->person_message_sync_state = person_sync_person_message;
+        this->friendIds = friendIds;
+        this->personMessageIds = personMessageIds;
     }
 
     static SyncState fromJson(const QJsonObject& json) {
         int friend_sync_state = json["friend_sync_state"].toInt();
-        QVector<QPair<int, int>> updated_friendIds_temp;
-        QJsonArray updated_friendIds_json = json["friendIds"].toArray();
-        for (const auto& f : updated_friendIds_json) {
+        int person_message_sync_state = json["person_message_sync_state"].toInt();
+        QVector<QPair<int, int>> friendIds_temp;
+        QVector<QPair<int, int>> personMessageIds_temp;
+        QJsonArray friendIds_json = json["friendIds"].toArray();
+        QJsonArray personMessageIds_json = json["personMessageIds"].toArray();
+        for (const auto& f : friendIds_json) {
             auto arr = f.toArray();
-            updated_friendIds_temp.push_back(QPair<int, int>(arr[0].toInt(), arr[1].toInt()));
+            friendIds_temp.push_back(QPair<int, int>(arr[0].toInt(), arr[1].toInt()));
         }
-        SyncState state(friend_sync_state, updated_friendIds_temp);
+        for (const auto& p : personMessageIds_json) {
+            auto arr = p.toArray();
+            personMessageIds_temp.push_back(QPair<int, int>(arr[0].toInt(), arr[1].toInt()));
+        }
+        SyncState state(friend_sync_state, person_message_sync_state, friendIds_temp, personMessageIds_temp);
         return state;
     }
 };
@@ -118,24 +130,6 @@ struct Friend {
     }
 };
 
-// struct Notify {
-//     int id;
-//     // 推送给谁
-//     int to_id;
-//     // 0: 好友申请...
-//     int notify_type;
-//     int fa_id;
-//
-//     Notify() = default;
-//
-//     Notify(int id, int to_id, int type, int fa_id) {
-//         this->id = id;
-//         this->to_id = to_id;
-//         this->notify_type = type;
-//         this->fa_id = fa_id;
-//     }
-// };
-
 struct FriendApply {
     int id{};
     int from_id{};
@@ -147,8 +141,6 @@ struct FriendApply {
     QString reason;
     // 0: 待处理 1: 通过申请 2: 拒绝申请
     int agree{};
-
-    //    static const QString createTableSql;
 
     FriendApply() = default;
 
@@ -183,6 +175,8 @@ struct PersonMessage {
     QString file_url;
     time_t timestamp{};
 
+    static const QString createTableSql;
+
     PersonMessage() = default;
 
     PersonMessage(int from_id, int to_id, int message_type, const QString& message, const QString& file_url,
@@ -206,6 +200,12 @@ struct PersonMessage {
         json["file_url"] = file_url;
         json["timestamp"] = timestamp;
         return json;
+    }
+
+    static PersonMessage fromJson(const QJsonObject& json) {
+        PersonMessage pm(json["from_id"].toInt(), json["to_id"].toInt(), json["message_type"].toInt(),
+                         json["message"].toString(), json["file_url"].toString(), json["timestamp"].toInt());
+        return pm;
     }
 };
 
