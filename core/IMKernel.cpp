@@ -74,6 +74,7 @@ void IMKernel::initHandlers() {
     m_handlers[PROTOCOL_TYPE_FRIEND_APPLY_NOTIFY_P] = std::bind(&IMKernel::handleFriendAppleNotifyP, _1);
     m_handlers[PROTOCOL_TYPE_FRIEND_ENTITY] = std::bind(&IMKernel::handleFriendEntity, _1);
     m_handlers[PROTOCOL_TYPE_PERSON_MESSAGE_RECV] = std::bind(&IMKernel::handlePersonMessageRecv, _1);
+    m_handlers[PROTOCOL_TYPE_PERSON_MESSAGE_SEND] = std::bind(&IMKernel::handlePersonMessageSend, _1);
 }
 
 void IMKernel::handleErrorMsg(const QJsonObject& json) {
@@ -129,4 +130,9 @@ void IMKernel::handlePersonMessageRecv(const QJsonObject& json) {
     if (pm.from_id == IMStore::getInstance()->getChatDialog()->getCurrentPeerId()) {
         WebHelper::addPeerTextMsg(pm.from_id, pm.message);
     }
+}
+
+void IMKernel::handlePersonMessageSend(const QJsonObject& json) {
+    auto pm = PersonMessage::fromJson(json);
+    DataSync::syncPersonMessagesBuServerPush(json);
 }

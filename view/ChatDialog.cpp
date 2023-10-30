@@ -240,5 +240,6 @@ void ChatDialog::handleClickSendPushButton() const {
     pm.message = ui->m_plainTextEdit->toPlainText();
     pm.timestamp = time(nullptr);
     IMStore::getInstance()->getIMKernel()->sendPersonMsg(pm);
-    WebHelper::addSelfTextMsg(pm.message);
+    WebHelper::addSelfMsg(pm);
+    WebHelper::scrollToBottom();
 }

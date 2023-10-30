@@ -44,6 +44,8 @@ private:
 
     static void handlePersonMessageRecv(const QJsonObject& json);
 
+    static void handlePersonMessageSend(const QJsonObject& json);
+
 private:
     TcpClientMediator* m_mediator = nullptr;
     LRWidget* m_lRWidget = nullptr;
