@@ -7,6 +7,7 @@
 #include <QListWidget>
 #include <QMessageBox>
 #include <QNetworkAccessManager>
+#include <QNetworkProxyFactory>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QTimer>
@@ -48,7 +49,7 @@ void WebController::previewImg(const QString& url) {
     imageViewWidget->show();
 }
 
-void MsgHelper::addSelfMsg(PersonMessage pm) {
+void WebHelper::addSelfMsg(const PersonMessage& pm) {
     switch (pm.message_type) {
         case MSG_TYPE_TEXT:
             addSelfTextMsg(pm.message);
@@ -60,12 +61,12 @@ void MsgHelper::addSelfMsg(PersonMessage pm) {
             addSelfVideoMsg(pm.file_url);
             break;
         case MSG_TYPE_FILE:
-            addSelfTextMsg(pm.file_url);
+            addSelfFileMsg(pm.file_url);
             break;
     }
 }
 
-void MsgHelper::addPeerMsg(PersonMessage pm) {
+void WebHelper::addPeerMsg(const PersonMessage& pm) {
     switch (pm.message_type) {
         case MSG_TYPE_TEXT:
             addPeerTextMsg(pm.from_id, pm.message);
@@ -82,67 +83,54 @@ void MsgHelper::addPeerMsg(PersonMessage pm) {
     }
 }
 
-void MsgHelper::addPeerTextMsg(int userId, const QString& text) {
-    auto fri = IMStore::getInstance()->getFriend(userId);
-    auto chatDialog = IMStore::getInstance()->getChatDialog();
-    chatDialog->runJavaScript(
-        QString("addPeerTextMessage(%1, %2);").arg("\"" + fri->avatar + "\"", "\"" + text + "\""));
-    chatDialog->runJavaScript("window.scrollTo(0, document.body.scrollHeight);");
+WebController* WebHelper::webController = nullptr;
+
+void WebHelper::addPeerTextMsg(int userId, const QString& text) {
+    emit webController->SIG_addPeerTextMsg(IMStore::getInstance()->getFriend(userId)->avatar, text);
 }
 
-void MsgHelper::addPeerImageMsg(int userId, const QString& url) {
-    auto fri = IMStore::getInstance()->getFriend(userId);
-    auto chatDialog = IMStore::getInstance()->getChatDialog();
-    chatDialog->runJavaScript(
-        QString("addPeerImageMessage(%1, %2);").arg("\"" + fri->avatar + "\"", "\"" + url + "\""));
-    chatDialog->runJavaScript("window.scrollTo(0, document.body.scrollHeight);");
+void WebHelper::addPeerImageMsg(int userId, const QString& url) {
+    emit webController->SIG_addPeerImageMsg(IMStore::getInstance()->getFriend(userId)->avatar, url);
 }
 
-void MsgHelper::addPeerVideoMsg(int userId, const QString& url) {
-    auto fri = IMStore::getInstance()->getFriend(userId);
-    auto chatDialog = IMStore::getInstance()->getChatDialog();
-    chatDialog->runJavaScript(
-        QString("addPeerVideoMessage(%1, %2);").arg("\"" + fri->avatar + "\"", "\"" + url + "\""));
-    chatDialog->runJavaScript("window.scrollTo(0, document.body.scrollHeight);");
+void WebHelper::addPeerVideoMsg(int userId, const QString& url) {
+    emit webController->SIG_addPeerVideoMsg(IMStore::getInstance()->getFriend(userId)->avatar, url);
 }
 
-void MsgHelper::addPeerFileMsg(int userId, const QString& url) {
-    auto fri = IMStore::getInstance()->getFriend(userId);
-    auto chatDialog = IMStore::getInstance()->getChatDialog();
-    chatDialog->runJavaScript(QString("addPeerFileMessage(%1, %2);").arg("\"" + fri->avatar + "\"", "\"" + url + "\""));
-    chatDialog->runJavaScript("window.scrollTo(0, document.body.scrollHeight);");
+void WebHelper::addPeerFileMsg(int userId, const QString& url) {
+    emit webController->SIG_addPeerFileMsg(IMStore::getInstance()->getFriend(userId)->avatar, url);
 }
 
-void MsgHelper::addSelfTextMsg(const QString& text) {
-    auto self = IMStore::getInstance()->getSelf();
-    auto chatDialog = IMStore::getInstance()->getChatDialog();
-    chatDialog->runJavaScript(
-        QString("addSelfTextMessage(%1, %2);").arg("\"" + self->avatar + "\"", "\"" + text + "\""));
-    chatDialog->runJavaScript("window.scrollTo(0, document.body.scrollHeight);");
+void WebHelper::addSelfTextMsg(const QString& text) {
+    emit webController->SIG_addSelfTextMsg(IMStore::getInstance()->getSelf()->avatar, text);
 }
 
-void MsgHelper::addSelfImageMsg(const QString& url) {
-    auto self = IMStore::getInstance()->getSelf();
-    auto chatDialog = IMStore::getInstance()->getChatDialog();
-    chatDialog->runJavaScript(
-        QString("addSelfImageMessage(%1, %2);").arg("\"" + self->avatar + "\"", "\"" + url + "\""));
-    chatDialog->runJavaScript("window.scrollTo(0, document.body.scrollHeight);");
+void WebHelper::addSelfImageMsg(const QString& url) {
+    emit webController->SIG_addSelfImageMsg(IMStore::getInstance()->getSelf()->avatar, url);
 }
 
-void MsgHelper::addSelfVideoMsg(const QString& url) {
-    auto self = IMStore::getInstance()->getSelf();
-    auto chatDialog = IMStore::getInstance()->getChatDialog();
-    chatDialog->runJavaScript(
-        QString("addSelfVideoMessage(%1, %2);").arg("\"" + self->avatar + "\"", "\"" + url + "\""));
-    chatDialog->runJavaScript("window.scrollTo(0, document.body.scrollHeight);");
+void WebHelper::addSelfVideoMsg(const QString& url) {
+    emit webController->SIG_addSelfVideoMsg(IMStore::getInstance()->getSelf()->avatar, url);
 }
 
-void MsgHelper::addSelfFileMsg(const QString& url) {
-    auto self = IMStore::getInstance()->getSelf();
-    auto chatDialog = IMStore::getInstance()->getChatDialog();
-    chatDialog->runJavaScript(
-        QString("addSelfFileMessage(%1, %2);").arg("\"" + self->avatar + "\"", "\"" + url + "\""));
-    chatDialog->runJavaScript("window.scrollTo(0, document.body.scrollHeight);");
+void WebHelper::addSelfFileMsg(const QString& url) {
+    emit webController->SIG_addSelfFileMsg(IMStore::getInstance()->getSelf()->avatar, url);
+}
+
+void WebHelper::clearAllElement() {
+    emit webController->SIG_clearAllElement();
+}
+
+void WebHelper::openLoading() {
+    emit webController->SIG_openLoading();
+}
+
+void WebHelper::closeLoading() {
+    emit webController->SIG_closeLoading();
+}
+
+void WebHelper::scrollToBottom() {
+    emit webController->SIG_scrollToBottom();
 }
 
 ChatDialog::ChatDialog(QWidget* parent) : QDialog(parent), ui(new Ui::ChatDialog) {
@@ -150,8 +138,7 @@ ChatDialog::ChatDialog(QWidget* parent) : QDialog(parent), ui(new Ui::ChatDialog
     setWindowTitle("Cooper");
     setWindowIcon(QIcon(":/img/logo.ico"));
     connect(ui->m_closePushButton, &QPushButton::clicked, [this]() {
-        runJavaScript("clearAllElement();");
-        m_friendChatView->repaint();
+        WebHelper::clearAllElement();
         hide();
         qDebug() << "ui->m_closePushButton, &QPushButton::clicked";
         for (const auto& item : m_chatItemMap) {
@@ -170,13 +157,15 @@ ChatDialog::ChatDialog(QWidget* parent) : QDialog(parent), ui(new Ui::ChatDialog
 
     QFile file(":/html/chat.html");
     file.open(QIODevice::ReadOnly);
-    m_friendChatView = new QWebEngineView(this);
+    QNetworkProxyFactory::setUseSystemConfiguration(false);
+    m_friendChatView = new CustomWebEngineView(this);
     m_friendChatView->setHtml(file.readAll());
     m_friendChatView->setGeometry(170, 30, 560, 317);
     m_webChannel = new QWebChannel(m_friendChatView->page());
-    auto controller = new WebController();
-    controller->setPage(m_friendChatView->page());
-    m_webChannel->registerObject(QStringLiteral("webController"), controller);
+    m_webController = new WebController();
+    WebHelper::webController = m_webController;
+    m_webController->setPage(m_friendChatView->page());
+    m_webChannel->registerObject(QStringLiteral("webController"), m_webController);
     m_friendChatView->page()->setWebChannel(m_webChannel);
 
     ui->m_scrollArea->setFrameStyle(QFrame::NoFrame);
@@ -205,9 +194,12 @@ void ChatDialog::addChatItem(ChatItem* chatItem) {
 
 void ChatDialog::changeChatHistory(int userId) {
     qDebug() << "ChatDialog::changeChatHistory";
+    if (m_currentPeerId == userId) {
+        return;
+    }
     m_currentPeerId = userId;
-    runJavaScript("clearAllElement();");
-    runJavaScript("openLoading();");
+    WebHelper::clearAllElement();
+    WebHelper::openLoading();
     ui->m_nameLabel->setText(m_chatItemMap[userId]->getName());
     QSqlQuery query(*IMStore::getInstance()->getDatabase());
     QString sql = QString(
@@ -226,21 +218,17 @@ void ChatDialog::changeChatHistory(int userId) {
                          query.value(5).toString(), query.value(6).toString(), query.value(7).toLongLong());
         m_personMessages.push_back(pm);
         if (pm.from_id == IMStore::getInstance()->getSelf()->id) {
-            MsgHelper::addSelfMsg(pm);
+            WebHelper::addSelfMsg(pm);
         } else {
-            MsgHelper::addPeerMsg(pm);
+            WebHelper::addPeerMsg(pm);
         }
     }
-    runJavaScript("window.scrollTo(0, document.body.scrollHeight);");
-    runJavaScript("closeLoading();");
+    WebHelper::scrollToBottom();
+    WebHelper::closeLoading();
 }
 
 int ChatDialog::getCurrentPeerId() const {
     return m_currentPeerId;
-}
-
-void ChatDialog::runJavaScript(const QString& script) {
-    m_friendChatView->page()->runJavaScript(script);
 }
 
 void ChatDialog::handleClickSendPushButton() const {
@@ -252,5 +240,5 @@ void ChatDialog::handleClickSendPushButton() const {
     pm.message = ui->m_plainTextEdit->toPlainText();
     pm.timestamp = time(nullptr);
     IMStore::getInstance()->getIMKernel()->sendPersonMsg(pm);
-    MsgHelper::addSelfTextMsg(pm.message);
+    WebHelper::addSelfTextMsg(pm.message);
 }
