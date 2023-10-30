@@ -13,6 +13,7 @@
 #include <QtConcurrent/QtConcurrent>
 
 #include "core/IMKernel.hpp"
+#include "entity/Entity.hpp"
 #include "mock/Mock.hpp"
 #include "store/IMStore.hpp"
 #include "ui_ChatDialog.h"
@@ -189,5 +190,14 @@ void ChatDialog::runJavaScript(const QString& script) {
     m_friendChatView->page()->runJavaScript(script);
 }
 
-void ChatDialog::handleClickSendPushButton() {
+void ChatDialog::handleClickSendPushButton() const {
+    qDebug() << "ChatDialog::handleClickSendPushButton";
+    PersonMessage pm;
+    pm.from_id = IMStore::getInstance()->getSelf()->id;
+    pm.to_id = m_currentPeerId;
+    pm.message_type = MSG_TYPE_TEXT;
+    pm.message = ui->m_plainTextEdit->toPlainText();
+    pm.timestamp = time(nullptr);
+    IMStore::getInstance()->getIMKernel()->sendPersonMsg(pm);
+    MsgHelper::addSelfTextMsg(pm.message);
 }

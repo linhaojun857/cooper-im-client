@@ -17,7 +17,7 @@
    <string notr="true">border: 0px;
 background-color: #ffffff;</string>
   </property>
-  <widget class="QPlainTextEdit" name="plainTextEdit">
+  <widget class="QPlainTextEdit" name="m_plainTextEdit">
    <property name="geometry">
     <rect>
      <x>170</x>

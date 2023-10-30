@@ -26,7 +26,7 @@ public:
 
     void sendSyncCompleteMsg();
 
-    void sendPersonMsg(const PersonMessage* personMessage);
+    void sendPersonMsg(const PersonMessage& personMessage);
 
 public slots:
     void dealData(const QJsonObject& jsonObject);

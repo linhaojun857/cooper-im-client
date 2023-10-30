@@ -52,11 +52,11 @@ void IMKernel::sendSyncCompleteMsg() {
     m_mediator->sendData(json);
 }
 
-void IMKernel::sendPersonMsg(const PersonMessage* personMessage) {
+void IMKernel::sendPersonMsg(const PersonMessage& personMessage) {
     QJsonObject json;
     json["type"] = PROTOCOL_TYPE_PERSON_MESSAGE;
     json["token"] = IMStore::getInstance()->getToken();
-    json["personMessage"] = personMessage->toJson();
+    json["personMessage"] = personMessage.toJson();
     m_mediator->sendData(json);
 }
 

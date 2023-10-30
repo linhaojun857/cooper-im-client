@@ -65,7 +65,7 @@ public:
 private:
     void runJavaScript(const QString& script);
 
-    void handleClickSendPushButton();
+    void handleClickSendPushButton() const;
 
 private:
     Ui::ChatDialog* ui;

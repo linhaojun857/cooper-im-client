@@ -90,12 +90,7 @@ void DataSync::syncFriends(bool isFirstSync, SyncState* syncState) {
         } else if (syncState->server_state_err == 0 && syncState->friend_sync_state == 1) {
             QJsonObject json;
             json["token"] = IMStore::getInstance()->getToken();
-            QJsonArray friendIdsJson;
-            for (const auto& item : syncState->friendIds) {
-                friendIdsJson.push_back(item.first);
-            }
-            json["friendIds"] = friendIdsJson;
-            auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/getFriendsByIds", json);
+            auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/getSyncFriends", json);
             if (ret["code"].toInt() != HTTP_SUCCESS_CODE) {
                 qDebug() << "sync friends failed! error: " << ret["msg"].toString();
             }
