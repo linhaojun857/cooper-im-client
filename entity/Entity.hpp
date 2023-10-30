@@ -179,9 +179,9 @@ struct PersonMessage {
 
     PersonMessage() = default;
 
-    PersonMessage(int from_id, int to_id, int message_type, const QString& message, const QString& file_url,
+    PersonMessage(int id, int from_id, int to_id, int message_type, const QString& message, const QString& file_url,
                   time_t timestamp) {
-        this->id = 0;
+        this->id = id;
         this->from_id = from_id;
         this->to_id = to_id;
         this->message_type = message_type;
@@ -203,8 +203,9 @@ struct PersonMessage {
     }
 
     static PersonMessage fromJson(const QJsonObject& json) {
-        PersonMessage pm(json["from_id"].toInt(), json["to_id"].toInt(), json["message_type"].toInt(),
-                         json["message"].toString(), json["file_url"].toString(), json["timestamp"].toInt());
+        PersonMessage pm(json["id"].toInt(), json["from_id"].toInt(), json["to_id"].toInt(),
+                         json["message_type"].toInt(), json["message"].toString(), json["file_url"].toString(),
+                         json["timestamp"].toInt());
         return pm;
     }
 };

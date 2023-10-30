@@ -31,6 +31,8 @@
 #define SYNC_DATA_PERSON_MESSAGE_DELETE 2
 
 #define MSG_TYPE_TEXT 0
-#define MSG_TYPE_FILE 1
+#define MSG_TYPE_IMAGE 1
+#define MSG_TYPE_ViDEO 2
+#define MSG_TYPE_FILE 3
 
 #endif

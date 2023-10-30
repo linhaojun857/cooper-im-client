@@ -229,7 +229,7 @@ void DataSync::syncPersonMessages(bool isFirstSync, SyncState* syncState) {
             }
             QJsonObject json;
             json["token"] = IMStore::getInstance()->getToken();
-            auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/getAllPersonMessages", json);
+            auto ret = HttpUtil::post(HTTP_SERVER_URL "/msg/getAllPersonMessages", json);
             if (ret["code"].toInt() != HTTP_SUCCESS_CODE) {
                 qDebug() << "sync friends failed! error: " << ret["msg"].toString();
             }
@@ -242,7 +242,9 @@ void DataSync::syncPersonMessages(bool isFirstSync, SyncState* syncState) {
                                   "timestamp) "
                                   "values (%1, %2, %3, %4, '%5', '%6', %7)")
                                   .arg(personMessage.id)
-                                  .arg(personMessage.from_id, personMessage.to_id, personMessage.message_type)
+                                  .arg(personMessage.from_id)
+                                  .arg(personMessage.to_id)
+                                  .arg(personMessage.message_type)
                                   .arg(personMessage.message, personMessage.file_url)
                                   .arg(personMessage.timestamp);
                 qDebug() << sql;
@@ -256,7 +258,7 @@ void DataSync::syncPersonMessages(bool isFirstSync, SyncState* syncState) {
         } else if (syncState->server_state_err == 0 && syncState->person_message_sync_state == 1) {
             QJsonObject json;
             json["token"] = IMStore::getInstance()->getToken();
-            auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/getSyncPersonMessages", json);
+            auto ret = HttpUtil::post(HTTP_SERVER_URL "/msg/getSyncPersonMessages", json);
             if (ret["code"].toInt() != HTTP_SUCCESS_CODE) {
                 qDebug() << "sync friends failed! error: " << ret["msg"].toString();
             }
@@ -275,7 +277,9 @@ void DataSync::syncPersonMessages(bool isFirstSync, SyncState* syncState) {
                                       "file_url, timestamp) "
                                       "values (%1, %2, %3, %4, '%5', '%6', %7)")
                                       .arg(personMessage.id)
-                                      .arg(personMessage.from_id, personMessage.to_id, personMessage.message_type)
+                                      .arg(personMessage.from_id)
+                                      .arg(personMessage.to_id)
+                                      .arg(personMessage.message_type)
                                       .arg(personMessage.message, personMessage.file_url)
                                       .arg(personMessage.timestamp);
                     qDebug() << sql;
@@ -314,7 +318,9 @@ void DataSync::syncPersonMessagesBuServerPush(const QJsonObject& json) {
                               "timestamp) "
                               "values (%1, %2, %3, %4, '%5', '%6', %7)")
                               .arg(personMessage.id)
-                              .arg(personMessage.from_id, personMessage.to_id, personMessage.message_type)
+                              .arg(personMessage.from_id)
+                              .arg(personMessage.to_id)
+                              .arg(personMessage.message_type)
                               .arg(personMessage.message, personMessage.file_url)
                               .arg(personMessage.timestamp);
             qDebug() << sql;

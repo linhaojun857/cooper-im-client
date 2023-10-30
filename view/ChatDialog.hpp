@@ -7,6 +7,7 @@
 #include <QWebChannel>
 #include <QWebEngineView>
 
+#include "entity/Entity.hpp"
 #include "view/ChatItem.hpp"
 
 QT_BEGIN_NAMESPACE
@@ -31,6 +32,10 @@ private:
 
 class MsgHelper {
 public:
+    static void addSelfMsg(PersonMessage pm);
+
+    static void addPeerMsg(PersonMessage pm);
+
     static void addPeerTextMsg(int userId, const QString& text);
 
     static void addPeerImageMsg(int userId, const QString& url);
@@ -76,6 +81,7 @@ private:
     QWebChannel* m_webChannel = nullptr;
     QMap<int, ChatItem*> m_chatItemMap;
     QVBoxLayout* m_chatItemLayout = nullptr;
+    QVector<PersonMessage> m_personMessages;
 };
 
 #endif

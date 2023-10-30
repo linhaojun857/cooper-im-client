@@ -34,8 +34,8 @@ const QString PersonMessage::createTableSql =
     "    msg_id integer unique not null,\n"
     "    from_id integer not null,\n"
     "    to_id integer not null,\n"
-    "    content varchar(100) not null,\n"
-    "    type integer not null,\n"
-    "    timestamp integer not null,\n"
-    "    status integer not null\n"
+    "    message_type integer not null,\n"
+    "    message varchar(100) not null,\n"
+    "    file_url varchar(100) not null,\n"
+    "    timestamp integer not null\n"
     ");";

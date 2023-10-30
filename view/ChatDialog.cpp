@@ -13,7 +13,6 @@
 #include <QtConcurrent/QtConcurrent>
 
 #include "core/IMKernel.hpp"
-#include "entity/Entity.hpp"
 #include "mock/Mock.hpp"
 #include "store/IMStore.hpp"
 #include "ui_ChatDialog.h"
@@ -49,11 +48,45 @@ void WebController::previewImg(const QString& url) {
     imageViewWidget->show();
 }
 
+void MsgHelper::addSelfMsg(PersonMessage pm) {
+    switch (pm.message_type) {
+        case MSG_TYPE_TEXT:
+            addSelfTextMsg(pm.message);
+            break;
+        case MSG_TYPE_IMAGE:
+            addSelfImageMsg(pm.file_url);
+            break;
+        case MSG_TYPE_ViDEO:
+            addSelfVideoMsg(pm.file_url);
+            break;
+        case MSG_TYPE_FILE:
+            addSelfTextMsg(pm.file_url);
+            break;
+    }
+}
+
+void MsgHelper::addPeerMsg(PersonMessage pm) {
+    switch (pm.message_type) {
+        case MSG_TYPE_TEXT:
+            addPeerTextMsg(pm.from_id, pm.message);
+            break;
+        case MSG_TYPE_IMAGE:
+            addPeerImageMsg(pm.from_id, pm.file_url);
+            break;
+        case MSG_TYPE_ViDEO:
+            addPeerVideoMsg(pm.from_id, pm.file_url);
+            break;
+        case MSG_TYPE_FILE:
+            addPeerFileMsg(pm.from_id, pm.file_url);
+            break;
+    }
+}
+
 void MsgHelper::addPeerTextMsg(int userId, const QString& text) {
     auto fri = IMStore::getInstance()->getFriend(userId);
     auto chatDialog = IMStore::getInstance()->getChatDialog();
     chatDialog->runJavaScript(
-        QString("addPeerImageMessage(%1, %2);").arg("\"" + fri->avatar + "\"", "\"" + text + "\""));
+        QString("addPeerTextMessage(%1, %2);").arg("\"" + fri->avatar + "\"", "\"" + text + "\""));
     chatDialog->runJavaScript("window.scrollTo(0, document.body.scrollHeight);");
 }
 
@@ -176,11 +209,27 @@ void ChatDialog::changeChatHistory(int userId) {
     runJavaScript("clearAllElement();");
     runJavaScript("openLoading();");
     ui->m_nameLabel->setText(m_chatItemMap[userId]->getName());
-    int mockId = userId % (int)Mock::chatHistory.size();
-    auto chatHistory = Mock::chatHistory[mockId];
-    for (const auto& history : chatHistory) {
-        runJavaScript(
-            QString("addPeerTextMessage(%1, %2);").arg("\"" + m_chatItemMap[userId]->getAvatar() + "\"", history));
+    QSqlQuery query(*IMStore::getInstance()->getDatabase());
+    QString sql = QString(
+                      "select * from person_message where (from_id = %1 and to_id = %2) "
+                      "or (from_id = %3 and to_id = %4)")
+                      .arg(IMStore::getInstance()->getSelf()->id)
+                      .arg(userId)
+                      .arg(userId)
+                      .arg(IMStore::getInstance()->getSelf()->id);
+    if (!query.exec(sql)) {
+        qDebug() << query.lastError().text();
+        return;
+    }
+    while (query.next()) {
+        PersonMessage pm(query.value(1).toInt(), query.value(2).toInt(), query.value(3).toInt(), query.value(4).toInt(),
+                         query.value(5).toString(), query.value(6).toString(), query.value(7).toLongLong());
+        m_personMessages.push_back(pm);
+        if (pm.from_id == IMStore::getInstance()->getSelf()->id) {
+            MsgHelper::addSelfMsg(pm);
+        } else {
+            MsgHelper::addPeerMsg(pm);
+        }
     }
     runJavaScript("window.scrollTo(0, document.body.scrollHeight);");
     runJavaScript("closeLoading();");
