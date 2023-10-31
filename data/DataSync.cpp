@@ -75,11 +75,12 @@ void DataSync::syncFriends(bool isFirstSync, SyncState* syncState) {
             for (const auto& f : friends) {
                 auto obj = f.toObject();
                 auto fri = Friend::fromJsonCommon(obj);
-                QString sql = QString(
-                                  "insert into friend (friend_id ,username, nickname, avatar, status, feeling) "
-                                  "values (%1 ,'%2', '%3', '%4', '%5', '%6')")
-                                  .arg(fri.id)
-                                  .arg(fri.username, fri.nickname, fri.avatar, fri.status, fri.feeling);
+                QString sql =
+                    QString(
+                        "insert into friend (friend_id ,username, nickname, avatar, status, feeling, session_id) "
+                        "values (%1 ,'%2', '%3', '%4', '%5', '%6', '%7')")
+                        .arg(fri.id)
+                        .arg(fri.username, fri.nickname, fri.avatar, fri.status, fri.feeling, fri.session_id);
                 qDebug() << sql;
                 if (!query.exec(sql)) {
                     qDebug() << query.lastError();
@@ -105,11 +106,12 @@ void DataSync::syncFriends(bool isFirstSync, SyncState* syncState) {
             for (const auto& updateId : syncState->friendIds) {
                 if (updateId.second == SYNC_DATA_FRIEND_ENTITY_INSERT) {
                     auto fri = friendMap[updateId.first];
-                    QString sql = QString(
-                                      "insert into friend (friend_id ,username, nickname, avatar, status, feeling) "
-                                      "values (%1 ,'%2', '%3', '%4', '%5', '%6')")
-                                      .arg(fri.id)
-                                      .arg(fri.username, fri.nickname, fri.avatar, fri.status, fri.feeling);
+                    QString sql =
+                        QString(
+                            "insert into friend (friend_id ,username, nickname, avatar, status, feeling) "
+                            "values (%1 ,'%2', '%3', '%4', '%5', '%6', '%7')")
+                            .arg(fri.id)
+                            .arg(fri.username, fri.nickname, fri.avatar, fri.status, fri.feeling, fri.session_id);
                     qDebug() << sql;
                     if (!query.exec(sql)) {
                         qDebug() << query.lastError();
@@ -122,9 +124,9 @@ void DataSync::syncFriends(bool isFirstSync, SyncState* syncState) {
                     QString sql =
                         QString(
                             "update friend set username = '%1', nickname = '%2', avatar = '%3', status = '%4', "
-                            "feeling = '%5' "
-                            "where friend_id = %6")
-                            .arg(fri.username, fri.nickname, fri.avatar, fri.status, fri.feeling)
+                            "feeling = '%5', session_id = '%6' "
+                            "where friend_id = %7")
+                            .arg(fri.username, fri.nickname, fri.avatar, fri.status, fri.feeling, fri.session_id)
                             .arg(fri.id);
                     qDebug() << sql;
                     if (!query.exec(sql)) {
@@ -159,9 +161,9 @@ void DataSync::syncFriendsByServerPush(const QJsonObject& json) {
             auto fri = Friend::fromJsonCommon(json);
             QString sql = QString(
                               "insert into friend (friend_id ,username, nickname, avatar, status, feeling) "
-                              "values (%1 ,'%2', '%3', '%4', '%5', '%6')")
+                              "values (%1 ,'%2', '%3', '%4', '%5', '%6', '%7')")
                               .arg(fri.id)
-                              .arg(fri.username, fri.nickname, fri.avatar, fri.status, fri.feeling);
+                              .arg(fri.username, fri.nickname, fri.avatar, fri.status, fri.feeling, fri.session_id);
             qDebug() << sql;
             if (!query.exec(sql)) {
                 qDebug() << query.lastError();
@@ -171,13 +173,12 @@ void DataSync::syncFriendsByServerPush(const QJsonObject& json) {
             }
         } else if (json["status"].toInt() == SYNC_DATA_FRIEND_ENTITY_UPDATE) {
             auto fri = Friend::fromJsonCommon(json);
-            QString sql =
-                QString(
-                    "update friend set username = '%1', nickname = '%2', avatar = '%3', status = '%4', feeling = "
-                    "'%5' "
-                    "where friend_id = %6")
-                    .arg(fri.username, fri.nickname, fri.avatar, fri.status, fri.feeling)
-                    .arg(fri.id);
+            QString sql = QString(
+                              "update friend set username = '%1', nickname = '%2', avatar = '%3', status = '%4', "
+                              "feeling = '%5', session_id = '%6'"
+                              "where friend_id = %6")
+                              .arg(fri.username, fri.nickname, fri.avatar, fri.status, fri.feeling, fri.session_id)
+                              .arg(fri.id);
             qDebug() << sql;
             if (!query.exec(sql)) {
                 qDebug() << query.lastError();
@@ -238,12 +239,13 @@ void DataSync::syncPersonMessages(bool isFirstSync, SyncState* syncState) {
                 auto obj = pm.toObject();
                 auto personMessage = PersonMessage::fromJson(obj);
                 QString sql = QString(
-                                  "insert into person_message (msg_id, from_id, to_id, message_type, message, file_url,"
-                                  "timestamp) "
-                                  "values (%1, %2, %3, %4, '%5', '%6', %7)")
+                                  "insert into person_message (msg_id, from_id, to_id, session_id, message_type, "
+                                  "message, file_url, timestamp) "
+                                  "values (%1, %2, %3, '%4', %5, '%6', '%7', %8)")
                                   .arg(personMessage.id)
                                   .arg(personMessage.from_id)
                                   .arg(personMessage.to_id)
+                                  .arg(personMessage.session_id)
                                   .arg(personMessage.message_type)
                                   .arg(personMessage.message, personMessage.file_url)
                                   .arg(personMessage.timestamp);
@@ -273,12 +275,13 @@ void DataSync::syncPersonMessages(bool isFirstSync, SyncState* syncState) {
                 if (updateId.second == SYNC_DATA_PERSON_MESSAGE_INSERT) {
                     auto personMessage = personMessageMap[updateId.first];
                     QString sql = QString(
-                                      "insert into person_message (msg_id, from_id, to_id, message_type, message, "
-                                      "file_url, timestamp) "
-                                      "values (%1, %2, %3, %4, '%5', '%6', %7)")
+                                      "insert into person_message (msg_id, from_id, to_id, session_id, message_type, "
+                                      "message, file_url, timestamp) "
+                                      "values (%1, %2, %3, '%4', %5, '%6', '%7', %8)")
                                       .arg(personMessage.id)
                                       .arg(personMessage.from_id)
                                       .arg(personMessage.to_id)
+                                      .arg(personMessage.session_id)
                                       .arg(personMessage.message_type)
                                       .arg(personMessage.message, personMessage.file_url)
                                       .arg(personMessage.timestamp);
@@ -314,12 +317,13 @@ void DataSync::syncPersonMessagesBuServerPush(const QJsonObject& json) {
         if (json["status"].toInt() == SYNC_DATA_PERSON_MESSAGE_INSERT) {
             auto personMessage = PersonMessage::fromJson(json);
             QString sql = QString(
-                              "insert into person_message (msg_id, from_id, to_id, message_type, message, file_url,"
-                              "timestamp) "
-                              "values (%1, %2, %3, %4, '%5', '%6', %7)")
+                              "insert into person_message (msg_id, from_id, to_id, session_id, message_type, "
+                              "message, file_url, timestamp) "
+                              "values (%1, %2, %3, '%4', %5, '%6', '%7', %8)")
                               .arg(personMessage.id)
                               .arg(personMessage.from_id)
                               .arg(personMessage.to_id)
+                              .arg(personMessage.session_id)
                               .arg(personMessage.message_type)
                               .arg(personMessage.message, personMessage.file_url)
                               .arg(personMessage.timestamp);

@@ -54,6 +54,10 @@ void IMStore::setFriendWidget(FriendWidget* friendWidget) {
     m_friendWidget = friendWidget;
 }
 
+void IMStore::setMessageWidget(MessageWidget* messageWidget) {
+    m_messageWidget = messageWidget;
+}
+
 void IMStore::setNotifyWidget(NotifyWidget* notifyWidget) {
     m_notifyWidget = notifyWidget;
 }
@@ -195,16 +199,17 @@ Friend* IMStore::getFriend(int id) {
     return m_friends[id];
 }
 
-void IMStore::flushWidget() {
-    flushFriendWidget();
+void IMStore::loadWidget() {
+    loadFriendWidget();
 }
 
-void IMStore::flushFriendWidget() {
+void IMStore::loadFriendWidget() {
     QSqlQuery query(m_database);
-    query.exec("select friend_id, username, nickname, avatar, status, feeling from friend");
+    query.exec("select friend_id, username, nickname, avatar, status, feeling, session_id from friend");
     while (query.next()) {
         Friend fri(query.value(0).toInt(), query.value(1).toString(), query.value(2).toString(),
-                   query.value(3).toString(), query.value(4).toString(), query.value(5).toString());
+                   query.value(3).toString(), query.value(4).toString(), query.value(5).toString(),
+                   query.value(6).toString());
         m_friends[fri.id] = new Friend(fri);
         auto friendItem = new FriendItem();
         friendItem->setId(fri.id);
@@ -216,21 +221,28 @@ void IMStore::flushFriendWidget() {
     }
 }
 
+void IMStore::loadMessageWidget() {
+}
+
 QString IMStore::getLatestPersonMessageByUserId(int userId) {
     QSqlQuery query(m_database);
-    QString sql = QString(
-                      "select * from person_message where (from_id = %1 and to_id = %2) "
-                      "or (from_id = %3 and to_id = %4) order by id desc limit 1")
-                      .arg(m_self->id)
-                      .arg(userId)
-                      .arg(userId)
-                      .arg(m_self->id);
-    if (!query.exec(sql)) {
+    QString sql1 = QString("select session_id from friend where friend_id = %1").arg(userId);
+    if (!query.exec(sql1)) {
+        qDebug() << query.lastError().text();
+        return "";
+    }
+    if (!query.next()) {
+        return "";
+    }
+    QString sessionId = query.value(0).toString();
+    QString sql2 =
+        QString("select message from person_message where session_id = '%1' order by id desc limit 1").arg(sessionId);
+    if (!query.exec(sql2)) {
         qDebug() << query.lastError().text();
         return "";
     }
     if (query.next()) {
-        return query.value(5).toString();
+        return query.value(0).toString();
     }
     return "";
 }

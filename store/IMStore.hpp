@@ -12,6 +12,7 @@
 #include "view/FriendItem.hpp"
 #include "view/FriendWidget.hpp"
 #include "view/MainWidget.hpp"
+#include "view/MessageWidget.hpp"
 #include "view/NotifyWidget.hpp"
 
 class IMKernel;
@@ -41,6 +42,8 @@ public:
     bool isOpenChatPage(int id);
 
     void setFriendWidget(FriendWidget* friendWidget);
+
+    void setMessageWidget(MessageWidget* messageWidget);
 
     void setNotifyWidget(NotifyWidget* notifyWidget);
 
@@ -80,9 +83,11 @@ public:
 
     Friend* getFriend(int id);
 
-    void flushWidget();
+    void loadWidget();
 
-    void flushFriendWidget();
+    void loadFriendWidget();
+
+    void loadMessageWidget();
 
     QString getLatestPersonMessageByUserId(int userId);
 
@@ -95,6 +100,7 @@ private:
     ChatDialog* m_chatDialog = nullptr;
     QSet<int> m_openChatPageIds;
     FriendWidget* m_friendWidget = nullptr;
+    MessageWidget* m_messageWidget = nullptr;
     QMap<int, Friend*> m_friends;
     QMap<int, FriendItem*> m_friendItems;
     FGSWidget* m_fgsWidget = nullptr;

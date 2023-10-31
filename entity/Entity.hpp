@@ -83,19 +83,21 @@ struct Friend {
     QString avatar;
     QString status;
     QString feeling;
+    QString session_id;
 
     static const QString createTableSql;
 
     Friend() = default;
 
     Friend(int id, const QString& username, const QString& nickname, const QString& avatar, const QString& status,
-           const QString& feeling) {
+           const QString& feeling, const QString& session_id) {
         this->id = id;
         this->username = username;
         this->nickname = nickname;
         this->avatar = avatar;
         this->status = status;
         this->feeling = feeling;
+        this->session_id = session_id;
     }
 
     Friend(const QString& username, const QString& nickname, const QString& avatar, const QString& status,
@@ -119,13 +121,15 @@ struct Friend {
 
     static Friend* fromJson(const QJsonObject& json) {
         auto f = new Friend(json["id"].toInt(), json["username"].toString(), json["nickname"].toString(),
-                            json["avatar"].toString(), json["status"].toString(), json["feeling"].toString());
+                            json["avatar"].toString(), json["status"].toString(), json["feeling"].toString(),
+                            json["session_id"].toString());
         return f;
     }
 
     static Friend fromJsonCommon(const QJsonObject& json) {
         Friend fri(json["id"].toInt(), json["username"].toString(), json["nickname"].toString(),
-                   json["avatar"].toString(), json["status"].toString(), json["feeling"].toString());
+                   json["avatar"].toString(), json["status"].toString(), json["feeling"].toString(),
+                   json["session_id"].toString());
         return fri;
     }
 };
@@ -170,6 +174,7 @@ struct PersonMessage {
     int id{};
     int from_id{};
     int to_id{};
+    QString session_id;
     int message_type{};
     QString message;
     QString file_url;
@@ -179,11 +184,12 @@ struct PersonMessage {
 
     PersonMessage() = default;
 
-    PersonMessage(int id, int from_id, int to_id, int message_type, const QString& message, const QString& file_url,
-                  time_t timestamp) {
+    PersonMessage(int id, int from_id, int to_id, const QString& session_id, int message_type, const QString& message,
+                  const QString& file_url, time_t timestamp) {
         this->id = id;
         this->from_id = from_id;
         this->to_id = to_id;
+        this->session_id = session_id;
         this->message_type = message_type;
         this->message = message;
         this->file_url = file_url;
@@ -195,6 +201,7 @@ struct PersonMessage {
         json["id"] = id;
         json["from_id"] = from_id;
         json["to_id"] = to_id;
+        json["session_id"] = session_id;
         json["message_type"] = message_type;
         json["message"] = message;
         json["file_url"] = file_url;
@@ -204,8 +211,8 @@ struct PersonMessage {
 
     static PersonMessage fromJson(const QJsonObject& json) {
         PersonMessage pm(json["id"].toInt(), json["from_id"].toInt(), json["to_id"].toInt(),
-                         json["message_type"].toInt(), json["message"].toString(), json["file_url"].toString(),
-                         json["timestamp"].toInt());
+                         json["session_id"].toString(), json["message_type"].toInt(), json["message"].toString(),
+                         json["file_url"].toString(), json["timestamp"].toInt());
         return pm;
     }
 };

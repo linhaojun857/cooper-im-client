@@ -1,34 +1,25 @@
-#include "ChatItem.hpp"
+#include "MessageItem.hpp"
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
-#include <QPalette>
 #include <QtConcurrent/QtConcurrent>
 
-#include "store/IMStore.hpp"
-#include "ui_ChatItem.h"
+#include "ui_MessageItem.h"
 
-ChatItem::ChatItem(QWidget* parent) : QWidget(parent), ui(new Ui::ChatItem) {
+MessageItem::MessageItem(QWidget* parent) : QWidget(parent), ui(new Ui::MessageItem) {
     ui->setupUi(this);
-    connect(ui->m_avatarPushButton, &QPushButton::clicked, [this]() {
-        IMStore::getInstance()->getChatDialog()->changeChatHistory(m_id);
-    });
 }
 
-ChatItem::~ChatItem() {
+MessageItem::~MessageItem() {
     delete ui;
 }
 
-void ChatItem::setId(int id) {
+void MessageItem::setId(int id) {
     m_id = id;
 }
 
-int ChatItem::getId() const {
-    return m_id;
-}
-
-void ChatItem::setAvatar(const QString& url) {
+void MessageItem::setAvatar(const QString& url) {
     m_avatarUrl = url;
     std::ignore = QtConcurrent::run([=]() {
         auto manager = new QNetworkAccessManager();
@@ -50,23 +41,32 @@ void ChatItem::setAvatar(const QString& url) {
     });
 }
 
-QString ChatItem::getAvatar() {
-    return m_avatarUrl;
-}
-
-void ChatItem::setName(const QString& name) {
+void MessageItem::setName(const QString& name) {
     m_name = name;
-    ui->m_nameLabel->setText(name);
 }
 
-QString ChatItem::getName() {
-    return m_name;
-}
-
-void ChatItem::setRecentMsg(const QString& recentMsg) {
+void MessageItem::setRecentMsg(const QString& recentMsg) {
     auto temp = recentMsg;
     m_recentMsg = temp.remove('\n');
     QFontMetrics fontMetrics(ui->m_recentMsgLabel->font());
     QString elideText = fontMetrics.elidedText(m_recentMsg, Qt::ElideRight, ui->m_recentMsgLabel->width());
     ui->m_recentMsgLabel->setText(elideText);
+}
+
+void MessageItem::setTime(long long timestamp) {
+    QDateTime currentTime = QDateTime::currentDateTime();
+    QDateTime messageTime = QDateTime::fromSecsSinceEpoch(timestamp);
+
+    if (currentTime.date() == messageTime.date()) {
+        m_time = messageTime.toString("hh:mm");
+    } else {
+        QDateTime yesterday = currentTime.addDays(-1);
+        if (yesterday.date() == messageTime.date()) {
+            m_time = "昨天 " + messageTime.toString("hh:mm");
+        } else if (currentTime.date().year() == messageTime.date().year()) {
+            m_time = messageTime.toString("MM-dd");
+        } else {
+            m_time = messageTime.toString("yy-MM-dd");
+        }
+    }
 }

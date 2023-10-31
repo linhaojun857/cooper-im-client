@@ -1,42 +1,39 @@
-#ifndef view_ChatItem_hpp
-#define view_ChatItem_hpp
+#ifndef view_MessageItem_hpp
+#define view_MessageItem_hpp
 
 #include <QWidget>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
-class ChatItem;
+class MessageItem;
 }
 QT_END_NAMESPACE
 
-class ChatItem : public QWidget {
+class MessageItem : public QWidget {
     Q_OBJECT
 
 public:
-    explicit ChatItem(QWidget* parent = nullptr);
+    explicit MessageItem(QWidget* parent = nullptr);
 
-    ~ChatItem() override;
+    ~MessageItem() override;
 
     void setId(int id);
 
-    [[nodiscard]] int getId() const;
-
     void setAvatar(const QString& url);
-
-    QString getAvatar();
 
     void setName(const QString& name);
 
-    QString getName();
-
     void setRecentMsg(const QString& recentMsg);
 
+    void setTime(long long timestamp);
+
 private:
-    Ui::ChatItem* ui;
+    Ui::MessageItem* ui;
     int m_id = 0;
     QString m_avatarUrl;
     QString m_name;
     QString m_recentMsg;
+    QString m_time;
 };
 
 #endif

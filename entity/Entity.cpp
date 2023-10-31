@@ -25,7 +25,8 @@ const QString Friend::createTableSql =
     "    nickname varchar(45) not null,\n"
     "    avatar varchar(45) not null,\n"
     "    status varchar(45) not null,\n"
-    "    feeling varchar(100) not null\n"
+    "    feeling varchar(100) not null,\n"
+    "    session_id varchar(45) not null\n"
     ");";
 
 const QString PersonMessage::createTableSql =
@@ -34,6 +35,7 @@ const QString PersonMessage::createTableSql =
     "    msg_id integer unique not null,\n"
     "    from_id integer not null,\n"
     "    to_id integer not null,\n"
+    "    session_id varchar(45) not null,\n"
     "    message_type integer not null,\n"
     "    message varchar(100) not null,\n"
     "    file_url varchar(100) not null,\n"

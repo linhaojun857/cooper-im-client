@@ -85,9 +85,15 @@ add_library(cooper_im_lib
         view/AFDialog.hpp
         view/AFDialog.cpp
         view/AFDialog.ui
-        view/ImageViewWidget.cpp
         view/ImageViewWidget.hpp
+        view/ImageViewWidget.cpp
         view/ImageViewWidget.ui
+        view/MessageWidget.hpp
+        view/MessageWidget.cpp
+        view/MessageWidget.ui
+        view/MessageItem.hpp
+        view/MessageItem.cpp
+        view/MessageItem.ui
         # core
         core/IMKernel.hpp
         core/IMKernel.cpp

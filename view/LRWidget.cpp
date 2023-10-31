@@ -183,7 +183,7 @@ void LRWidget::userLogin() {
         DataSync::syncAll();
         IMStore::getInstance()->getIMKernel()->createMainWidget();
         IMStore::getInstance()->setMainWidgetInfo();
-        IMStore::getInstance()->flushWidget();
+        IMStore::getInstance()->loadWidget();
         IMStore::getInstance()->getIMKernel()->sendAuthMsg();
     } else {
         QMessageBox::warning(this, "提示", ret["msg"].toString());

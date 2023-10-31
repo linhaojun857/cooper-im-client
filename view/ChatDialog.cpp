@@ -235,8 +235,9 @@ void ChatDialog::changeChatHistory(int userId) {
         return;
     }
     while (query.next()) {
-        PersonMessage pm(query.value(1).toInt(), query.value(2).toInt(), query.value(3).toInt(), query.value(4).toInt(),
-                         query.value(5).toString(), query.value(6).toString(), query.value(7).toLongLong());
+        PersonMessage pm(query.value(1).toInt(), query.value(2).toInt(), query.value(3).toInt(),
+                         query.value(4).toString(), query.value(5).toInt(), query.value(6).toString(),
+                         query.value(7).toString(), query.value(8).toLongLong());
         m_personMessages.push_back(pm);
         if (pm.from_id == IMStore::getInstance()->getSelf()->id) {
             WebHelper::addSelfMsg(pm);
