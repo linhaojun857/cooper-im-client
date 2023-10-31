@@ -201,6 +201,7 @@ Friend* IMStore::getFriend(int id) {
 
 void IMStore::loadWidget() {
     loadFriendWidget();
+    loadMessageWidget();
 }
 
 void IMStore::loadFriendWidget() {
