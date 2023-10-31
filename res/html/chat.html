@@ -334,7 +334,9 @@
         chatBubble.className = "chat-bubble";
         let chatBubbleTriangle = document.createElement("div");
         chatBubbleTriangle.className = "chat-bubble-triangle";
-        let chatBubbleText = document.createTextNode(message);
+        message = message.replace(/\n/g, "<br>");
+        let chatBubbleText = document.createElement("span");
+        chatBubbleText.innerHTML = message;
         chatBubble.appendChild(chatBubbleTriangle);
         chatBubble.appendChild(chatBubbleText);
         chatContainer.appendChild(avatar);
@@ -436,7 +438,9 @@
         chatBubble.className = "chat-bubble-send";
         let chatBubbleTriangle = document.createElement("div");
         chatBubbleTriangle.className = "chat-bubble-triangle-send";
-        let chatBubbleText = document.createTextNode(message);
+        message = message.replace(/\n/g, "<br>");
+        let chatBubbleText = document.createElement("span");
+        chatBubbleText.innerHTML = message;
         chatBubble.appendChild(chatBubbleTriangle);
         chatBubble.appendChild(chatBubbleText);
         let avatar = document.createElement("img");
@@ -563,7 +567,7 @@
     // addPeerVideoMessage(peerAvatarUrl, "http://localhost:9999/static/video/test.mp4");
     // addPeerFileMessage(peerAvatarUrl, "Effective STL.pdf", "9.6MB", "http://localhost:9999/static/file/EffectiveSTL.pdf");
     // addTimeline("12:10");
-    // addSelfTextMessage(selfAvatarUrl, "This is a text message");
+    addSelfTextMessage(selfAvatarUrl, "This is a text message\nThis is a text message");
     // addSelfImageMessage(selfAvatarUrl, "https://static.linhaojun.top/aurora/articles/8a45d4b7cd1d1aa937b38465805429cf.jpg");
     // addSelfVideoMessage(selfAvatarUrl, "http://localhost:9999/static/video/test.mp4");
     // addSelfFileMessage(selfAvatarUrl, "Effective STL.pdf", "9.6MB", "http://localhost:9999/static/file/EffectiveSTL.pdf");

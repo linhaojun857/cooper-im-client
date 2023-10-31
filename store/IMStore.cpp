@@ -153,7 +153,9 @@ void IMStore::addFSRs(const QJsonObject& json) {
         fsrItem->setId(obj["id"].toInt());
         fsrItem->setAvatar(obj["avatar"].toString());
         fsrItem->setNickname(obj["nickname"].toString());
-        m_fgsWidget->addFSRItem(fsrItem, row, column);
+        if (m_fgsWidget) {
+            m_fgsWidget->addFSRItem(fsrItem, row, column);
+        }
     }
 }
 
@@ -212,4 +214,23 @@ void IMStore::flushFriendWidget() {
         m_friendItems[fri.id] = friendItem;
         m_friendWidget->addFriendItem(friendItem);
     }
+}
+
+QString IMStore::getLatestPersonMessageByUserId(int userId) {
+    QSqlQuery query(m_database);
+    QString sql = QString(
+                      "select * from person_message where (from_id = %1 and to_id = %2) "
+                      "or (from_id = %3 and to_id = %4) order by id desc limit 1")
+                      .arg(m_self->id)
+                      .arg(userId)
+                      .arg(userId)
+                      .arg(m_self->id);
+    if (!query.exec(sql)) {
+        qDebug() << query.lastError().text();
+        return "";
+    }
+    if (query.next()) {
+        return query.value(5).toString();
+    }
+    return "";
 }

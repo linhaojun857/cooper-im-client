@@ -62,3 +62,10 @@ void ChatItem::setName(const QString& name) {
 QString ChatItem::getName() {
     return m_name;
 }
+
+void ChatItem::setRecentMsg(QString recentMsg) {
+    m_recentMsg = recentMsg.remove('\n');
+    QFontMetrics fontMetrics(ui->m_recentMsgLabel->font());
+    QString elideText = fontMetrics.elidedText(m_recentMsg, Qt::ElideRight, ui->m_recentMsgLabel->width());
+    ui->m_recentMsgLabel->setText(elideText);
+}

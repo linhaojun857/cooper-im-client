@@ -19,7 +19,7 @@ public:
 
     void setId(int id);
 
-    int getId() const;
+    [[nodiscard]] int getId() const;
 
     void setAvatar(const QString& url);
 
@@ -29,11 +29,14 @@ public:
 
     QString getName();
 
+    void setRecentMsg(QString recentMsg);
+
 private:
     Ui::ChatItem* ui;
     int m_id = 0;
     QString m_avatarUrl;
     QString m_name;
+    QString m_recentMsg;
 };
 
 #endif

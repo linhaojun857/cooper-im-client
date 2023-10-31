@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>170</width>
+    <width>200</width>
     <height>60</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>170</width>
+    <width>200</width>
     <height>60</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>170</width>
+    <width>200</width>
     <height>60</height>
    </size>
   </property>
@@ -46,17 +46,17 @@
     <string>测试</string>
    </property>
   </widget>
-  <widget class="QLabel" name="m_recentLabel">
+  <widget class="QLabel" name="m_recentMsgLabel">
    <property name="geometry">
     <rect>
      <x>60</x>
      <y>30</y>
-     <width>100</width>
+     <width>130</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>花未眠：testtest...</string>
+    <string>testAtestBtestCDEFG</string>
    </property>
   </widget>
   <widget class="QPushButton" name="m_avatarPushButton">

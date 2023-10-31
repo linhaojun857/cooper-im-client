@@ -58,8 +58,6 @@ public:
 
     void addFriend(const QJsonObject& json);
 
-    //    void addFriends(const QJsonObject& json);
-
     [[nodiscard]] FGSWidget* getFGSWidget() const;
 
     void addFSRs(const QJsonObject& json);
@@ -85,6 +83,8 @@ public:
     void flushWidget();
 
     void flushFriendWidget();
+
+    QString getLatestPersonMessageByUserId(int userId);
 
 private:
     QSqlDatabase m_database;

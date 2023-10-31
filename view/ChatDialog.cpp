@@ -159,7 +159,7 @@ ChatDialog::ChatDialog(QWidget* parent) : QDialog(parent), ui(new Ui::ChatDialog
     QNetworkProxyFactory::setUseSystemConfiguration(false);
     m_friendChatView = new CustomWebEngineView(this);
     m_friendChatView->setHtml(file.readAll());
-    m_friendChatView->setGeometry(170, 30, 560, 317);
+    m_friendChatView->setGeometry(200, 30, 560, 317);
     m_webChannel = new QWebChannel(m_friendChatView->page());
     m_webController = new WebController();
     WebHelper::webController = m_webController;
@@ -209,6 +209,7 @@ void ChatDialog::addChatItem(int id) {
     chatItem->setId(id);
     chatItem->setAvatar(IMStore::getInstance()->getFriend(id)->avatar);
     chatItem->setName(IMStore::getInstance()->getFriend(id)->nickname);
+    chatItem->setRecentMsg(IMStore::getInstance()->getLatestPersonMessageByUserId(id));
     m_chatItemMap.insert(id, chatItem);
     m_chatItemLayout->insertWidget(m_chatItemLayout->count() - 1, chatItem);
 }
