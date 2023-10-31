@@ -8,22 +8,18 @@
 #include "define/IMDefine.hpp"
 #include "store/IMStore.hpp"
 #include "ui_FriendItem.h"
-#include "view/ChatItem.hpp"
 
 FriendItem::FriendItem(QWidget* parent) : QWidget(parent), ui(new Ui::FriendItem) {
     ui->setupUi(this);
     connect(ui->m_avatarPushButton, &QPushButton::clicked, [this]() {
         if (!IMStore::getInstance()->getChatDialog()->isVisible()) {
-            IMStore::getInstance()->getChatDialog()->show();
+            IMStore::getInstance()->getChatDialog()->showDialog();
         }
         if (!IMStore::getInstance()->isOpenChatPage(m_id)) {
             qDebug() << "open chat page";
             IMStore::getInstance()->openChatPage(m_id);
-            auto chatItem = new ChatItem();
-            chatItem->setId(m_id);
-            chatItem->setAvatar(m_avatarUrl);
-            chatItem->setName(m_nickName);
-            IMStore::getInstance()->getChatDialog()->addChatItem(chatItem);
+            IMStore::getInstance()->getChatDialog()->addChatItem(m_id);
+            IMStore::getInstance()->getChatDialog()->changeChatHistory(m_id);
         }
     });
 }

@@ -138,14 +138,13 @@ ChatDialog::ChatDialog(QWidget* parent) : QDialog(parent), ui(new Ui::ChatDialog
     setWindowTitle("Cooper");
     setWindowIcon(QIcon(":/img/logo.ico"));
     connect(ui->m_closePushButton, &QPushButton::clicked, [this]() {
-        WebHelper::clearAllElement();
-        hide();
         qDebug() << "ui->m_closePushButton, &QPushButton::clicked";
+        m_currentPeerId = -1;
         for (const auto& item : m_chatItemMap) {
             IMStore::getInstance()->closeChatPage(item->getId());
-            delete item;
+            item->hide();
         }
-        m_chatItemMap.clear();
+        hideDialog();
     });
     connect(ui->m_minimizePushButton, SIGNAL(clicked(bool)), this, SLOT(showMinimized()));
     connect(ui->m_sendPushButton, &QPushButton::clicked, this, &ChatDialog::handleClickSendPushButton);
@@ -183,12 +182,34 @@ ChatDialog::ChatDialog(QWidget* parent) : QDialog(parent), ui(new Ui::ChatDialog
 
 ChatDialog::~ChatDialog() {
     delete ui;
+    delete m_friendChatView;
 }
 
-void ChatDialog::addChatItem(ChatItem* chatItem) {
+void ChatDialog::hideDialog() {
+    WebHelper::clearAllElement();
+    m_friendChatView->hide();
+    this->repaint();
+    QTimer::singleShot(20, [this]() {
+        hide();
+    });
+}
+
+void ChatDialog::showDialog() {
+    m_friendChatView->show();
+    this->show();
+}
+
+void ChatDialog::addChatItem(int id) {
     qDebug() << "ChatDialog::addChatItem";
-    m_chatItemMap.insert(chatItem->getId(), chatItem);
-    changeChatHistory(chatItem->getId());
+    if (m_chatItemMap.contains(id)) {
+        m_chatItemMap[id]->show();
+        return;
+    }
+    auto chatItem = new ChatItem();
+    chatItem->setId(id);
+    chatItem->setAvatar(IMStore::getInstance()->getFriend(id)->avatar);
+    chatItem->setName(IMStore::getInstance()->getFriend(id)->nickname);
+    m_chatItemMap.insert(id, chatItem);
     m_chatItemLayout->insertWidget(m_chatItemLayout->count() - 1, chatItem);
 }
 
@@ -199,7 +220,6 @@ void ChatDialog::changeChatHistory(int userId) {
     }
     m_currentPeerId = userId;
     WebHelper::clearAllElement();
-    WebHelper::openLoading();
     ui->m_nameLabel->setText(m_chatItemMap[userId]->getName());
     QSqlQuery query(*IMStore::getInstance()->getDatabase());
     QString sql = QString(
@@ -222,9 +242,8 @@ void ChatDialog::changeChatHistory(int userId) {
         } else {
             WebHelper::addPeerMsg(pm);
         }
+        WebHelper::scrollToBottom();
     }
-    WebHelper::scrollToBottom();
-    WebHelper::closeLoading();
 }
 
 int ChatDialog::getCurrentPeerId() const {

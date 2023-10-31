@@ -81,11 +81,11 @@ public:
 
 class CustomWebEngineView : public QWebEngineView {
 public:
-    CustomWebEngineView(QWidget* parent = nullptr) : QWebEngineView(parent) {
+    explicit CustomWebEngineView(QWidget* parent = nullptr) : QWebEngineView(parent) {
     }
-    bool event(QEvent* event) {
+    bool event(QEvent* event) override {
         if (event->type() == QEvent::ChildPolished) {
-            QChildEvent* ce = static_cast<QChildEvent*>(event);
+            auto* ce = dynamic_cast<QChildEvent*>(event);
             child = ce->child();
             if (child) {
                 child->installEventFilter(this);
@@ -94,7 +94,7 @@ public:
         return QWebEngineView::event(event);
     }
 
-    bool eventFilter(QObject* obj, QEvent* event) {
+    bool eventFilter(QObject* obj, QEvent* event) override {
         if (event->type() == QEvent::Wheel) {
             if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
                 return true;
@@ -104,7 +104,7 @@ public:
     }
 
 private:
-    QObject* child;
+    QObject* child = nullptr;
 };
 
 class ChatDialog : public QDialog {
@@ -117,7 +117,11 @@ public:
 
     ~ChatDialog() override;
 
-    void addChatItem(ChatItem* chatItem);
+    void hideDialog();
+
+    void showDialog();
+
+    void addChatItem(int id);
 
     void changeChatHistory(int userId);
 
