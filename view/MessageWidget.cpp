@@ -27,3 +27,9 @@ void MessageWidget::addMessageItem(MessageItem* messageItem) {
     qDebug() << "MessageWidget::addMessageItem";
     m_messageItemLayout->insertWidget(m_messageItemLayout->count() - 1, messageItem);
 }
+
+void MessageWidget::moveMessageItemToTop(MessageItem* messageItem) {
+    qDebug() << "MessageWidget::moveMessageItemToTop";
+    m_messageItemLayout->removeWidget(messageItem);
+    m_messageItemLayout->insertWidget(0, messageItem);
+}

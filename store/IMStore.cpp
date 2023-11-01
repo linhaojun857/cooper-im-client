@@ -214,6 +214,7 @@ void IMStore::loadFriendWidget() {
         m_friends[fri.id] = new Friend(fri);
         auto friendItem = new FriendItem();
         friendItem->setId(fri.id);
+        friendItem->setSessionId(fri.session_id);
         friendItem->setNickName(fri.nickname);
         friendItem->setAvatar(fri.avatar);
         friendItem->setStatusAndFeeling(fri.status, fri.feeling);
@@ -223,6 +224,45 @@ void IMStore::loadFriendWidget() {
 }
 
 void IMStore::loadMessageWidget() {
+    QSqlQuery query(m_database);
+    QString sql(
+        "select friend.friend_id,\n"
+        "       friend.nickname,\n"
+        "       friend.avatar,\n"
+        "       person_message.message,\n"
+        "       person_message.timestamp\n"
+        "from friend\n"
+        "         inner join person_message\n"
+        "                    on friend.session_id = person_message.session_id\n"
+        "where person_message.msg_id in (select max(msg_id)\n"
+        "                                from person_message\n"
+        "                                group by person_message.session_id)\n"
+        "order by person_message.msg_id desc;");
+    if (!query.exec(sql)) {
+        qDebug() << query.lastError().text();
+    }
+    while (query.next()) {
+        auto messageItem = new MessageItem();
+        messageItem->setId(query.value(0).toInt());
+        messageItem->setName(query.value(1).toString());
+        messageItem->setAvatar(query.value(2).toString());
+        messageItem->setRecentMsg(query.value(3).toString());
+        messageItem->setTime(query.value(4).toLongLong());
+        m_messageWidget->addMessageItem(messageItem);
+        m_messageItems[messageItem->getId()] = messageItem;
+    }
+}
+
+void IMStore::updatePersonMessageItem(const PersonMessage& pm) {
+    auto messageItem = m_messageItems[pm.from_id];
+    messageItem->setRecentMsg(pm.message);
+    messageItem->setTime(pm.timestamp);
+    movePersonMessageItemToTop(pm.from_id);
+}
+
+void IMStore::movePersonMessageItemToTop(int id) {
+    auto messageItem = m_messageItems[id];
+    m_messageWidget->moveMessageItemToTop(messageItem);
 }
 
 QString IMStore::getLatestPersonMessageByUserId(int userId) {

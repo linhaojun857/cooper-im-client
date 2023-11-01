@@ -5,6 +5,7 @@
 #include <QWidget>
 
 #include "view/CotPWidget.hpp"
+#include "view/MessageWidget.hpp"
 
 class IMKernel;
 
@@ -22,8 +23,6 @@ public:
 
     ~MainWidget() override;
 
-    void setId(int id);
-
     void setAvatar(const QString& url);
 
     void setNickname(const QString& nickname);
@@ -38,6 +37,7 @@ private:
     QString m_feeling;
     int m_tabCurrentIndex = 0;
     QMap<int, QPushButton*> m_tabBtnMap;
+    MessageWidget* m_messageWidget = nullptr;
     CotPWidget* m_cotPWidget = nullptr;
 };
 

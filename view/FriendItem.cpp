@@ -28,6 +28,10 @@ void FriendItem::setId(int id) {
     m_id = id;
 }
 
+void FriendItem::setSessionId(const QString& sessionId) {
+    m_sessionId = sessionId;
+}
+
 void FriendItem::setAvatar(const QString& url) {
     m_avatarUrl = url;
     std::ignore = QtConcurrent::run([=]() {

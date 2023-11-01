@@ -22,6 +22,8 @@ public:
 
     void addMessageItem(MessageItem* messageItem);
 
+    void moveMessageItemToTop(MessageItem* messageItem);
+
 private:
     Ui::MessageWidget* ui;
     QVBoxLayout* m_messageItemLayout = nullptr;

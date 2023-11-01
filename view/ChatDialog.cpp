@@ -49,6 +49,8 @@ void WebController::previewImg(const QString& url) {
     imageViewWidget->show();
 }
 
+WebController* WebHelper::webController = nullptr;
+
 void WebHelper::addSelfMsg(const PersonMessage& pm) {
     switch (pm.message_type) {
         case MSG_TYPE_TEXT:
@@ -83,42 +85,8 @@ void WebHelper::addPeerMsg(const PersonMessage& pm) {
     }
 }
 
-WebController* WebHelper::webController = nullptr;
-
-void WebHelper::addPeerTextMsg(int userId, const QString& text) {
-    emit webController->SIG_addPeerTextMsg(IMStore::getInstance()->getFriend(userId)->avatar, text);
-}
-
-void WebHelper::addPeerImageMsg(int userId, const QString& url) {
-    emit webController->SIG_addPeerImageMsg(IMStore::getInstance()->getFriend(userId)->avatar, url);
-}
-
-void WebHelper::addPeerVideoMsg(int userId, const QString& url) {
-    emit webController->SIG_addPeerVideoMsg(IMStore::getInstance()->getFriend(userId)->avatar, url);
-}
-
-void WebHelper::addPeerFileMsg(int userId, const QString& url) {
-    emit webController->SIG_addPeerFileMsg(IMStore::getInstance()->getFriend(userId)->avatar, url);
-}
-
-void WebHelper::addSelfTextMsg(const QString& text) {
-    emit webController->SIG_addSelfTextMsg(IMStore::getInstance()->getSelf()->avatar, text);
-}
-
-void WebHelper::addSelfImageMsg(const QString& url) {
-    emit webController->SIG_addSelfImageMsg(IMStore::getInstance()->getSelf()->avatar, url);
-}
-
-void WebHelper::addSelfVideoMsg(const QString& url) {
-    emit webController->SIG_addSelfVideoMsg(IMStore::getInstance()->getSelf()->avatar, url);
-}
-
-void WebHelper::addSelfFileMsg(const QString& url) {
-    emit webController->SIG_addSelfFileMsg(IMStore::getInstance()->getSelf()->avatar, url);
-}
-
-void WebHelper::clearAllElement() {
-    emit webController->SIG_clearAllElement();
+void WebHelper::addTimeline(const QString& time) {
+    emit webController->SIG_addTimeline(time);
 }
 
 void WebHelper::openLoading() {
@@ -129,8 +97,80 @@ void WebHelper::closeLoading() {
     emit webController->SIG_closeLoading();
 }
 
+void WebHelper::clearAllElement() {
+    emit webController->SIG_clearAllElement();
+}
+
 void WebHelper::scrollToBottom() {
     emit webController->SIG_scrollToBottom();
+}
+
+void WebHelper::addSelfTextMsg(const QString& message) {
+    emit webController->SIG_addSelfTextMsg(IMStore::getInstance()->getSelf()->avatar, message);
+}
+
+void WebHelper::addSelfImageMsg(const QString& imageUrl) {
+    emit webController->SIG_addSelfImageMsg(IMStore::getInstance()->getSelf()->avatar, imageUrl);
+}
+
+void WebHelper::addSelfVideoMsg(const QString& videoUrl) {
+    emit webController->SIG_addSelfVideoMsg(IMStore::getInstance()->getSelf()->avatar, videoUrl);
+}
+
+void WebHelper::addSelfFileMsg(const QString& fileUrl) {
+    emit webController->SIG_addSelfFileMsg(IMStore::getInstance()->getSelf()->avatar, fileUrl);
+}
+
+void WebHelper::addPeerTextMsg(int userId, const QString& message) {
+    emit webController->SIG_addPeerTextMsg(IMStore::getInstance()->getFriend(userId)->avatar, message);
+}
+
+void WebHelper::addPeerImageMsg(int userId, const QString& imageUrl) {
+    emit webController->SIG_addPeerImageMsg(IMStore::getInstance()->getFriend(userId)->avatar, imageUrl);
+}
+
+void WebHelper::addPeerVideoMsg(int userId, const QString& videoUrl) {
+    emit webController->SIG_addPeerVideoMsg(IMStore::getInstance()->getFriend(userId)->avatar, videoUrl);
+}
+
+void WebHelper::addPeerFileMsg(int userId, const QString& fileUrl) {
+    emit webController->SIG_addPeerFileMsg(IMStore::getInstance()->getFriend(userId)->avatar, fileUrl);
+}
+
+void WebHelper::addSelfTextMsgGroup(const QString& message) {
+    emit webController->SIG_addSelfTextMsgGroup(IMStore::getInstance()->getSelf()->avatar, message);
+}
+
+void WebHelper::addSelfImageMsgGroup(const QString& imageUrl) {
+    emit webController->SIG_addSelfImageMsgGroup(IMStore::getInstance()->getSelf()->avatar, imageUrl);
+}
+
+void WebHelper::addSelfVideoMsgGroup(const QString& videoUrl) {
+    emit webController->SIG_addSelfVideoMsgGroup(IMStore::getInstance()->getSelf()->avatar, videoUrl);
+}
+
+void WebHelper::addSelfFileMsgGroup(const QString& fileUrl) {
+    emit webController->SIG_addSelfFileMsgGroup(IMStore::getInstance()->getSelf()->avatar, fileUrl);
+}
+
+void WebHelper::addPeerTextMsgGroup(int userId, const QString& message) {
+    auto fri = IMStore::getInstance()->getFriend(userId);
+    emit webController->SIG_addPeerTextMsgGroup(fri->nickname, fri->avatar, message);
+}
+
+void WebHelper::addPeerImageMsgGroup(int userId, const QString& imageUrl) {
+    auto fri = IMStore::getInstance()->getFriend(userId);
+    emit webController->SIG_addPeerImageMsgGroup(fri->nickname, fri->avatar, imageUrl);
+}
+
+void WebHelper::addPeerVideoMsgGroup(int userId, const QString& videoUrl) {
+    auto fri = IMStore::getInstance()->getFriend(userId);
+    emit webController->SIG_addPeerVideoMsgGroup(fri->nickname, fri->avatar, videoUrl);
+}
+
+void WebHelper::addPeerFileMsgGroup(int userId, const QString& fileUrl) {
+    auto fri = IMStore::getInstance()->getFriend(userId);
+    emit webController->SIG_addPeerFileMsgGroup(fri->nickname, fri->avatar, fileUrl);
 }
 
 ChatDialog::ChatDialog(QWidget* parent) : QDialog(parent), ui(new Ui::ChatDialog) {

@@ -5,10 +5,22 @@
 #include <QNetworkRequest>
 #include <QtConcurrent/QtConcurrent>
 
+#include "store/IMStore.hpp"
 #include "ui_MessageItem.h"
 
 MessageItem::MessageItem(QWidget* parent) : QWidget(parent), ui(new Ui::MessageItem) {
     ui->setupUi(this);
+    connect(ui->m_avatarPushButton, &QPushButton::clicked, [this]() {
+        if (!IMStore::getInstance()->getChatDialog()->isVisible()) {
+            IMStore::getInstance()->getChatDialog()->showDialog();
+        }
+        if (!IMStore::getInstance()->isOpenChatPage(m_id)) {
+            qDebug() << "open chat page";
+            IMStore::getInstance()->openChatPage(m_id);
+            IMStore::getInstance()->getChatDialog()->addChatItem(m_id);
+            IMStore::getInstance()->getChatDialog()->changeChatHistory(m_id);
+        }
+    });
 }
 
 MessageItem::~MessageItem() {
@@ -17,6 +29,10 @@ MessageItem::~MessageItem() {
 
 void MessageItem::setId(int id) {
     m_id = id;
+}
+
+int MessageItem::getId() const {
+    return m_id;
 }
 
 void MessageItem::setAvatar(const QString& url) {
@@ -69,4 +85,13 @@ void MessageItem::setTime(long long timestamp) {
             m_time = messageTime.toString("yy-MM-dd");
         }
     }
+    ui->m_timeLabel->setText(m_time);
+}
+
+void MessageItem::debug() {
+    qDebug() << "m_id: " << m_id;
+    qDebug() << "m_avatarUrl: " << m_avatarUrl;
+    qDebug() << "m_name: " << m_name;
+    qDebug() << "m_recentMsg: " << m_recentMsg;
+    qDebug() << "m_time: " << m_time;
 }

@@ -20,8 +20,7 @@ QString getTimeString(long long timestamp) {
 }
 
 int main() {
-    long long timestamp = time(nullptr);
-    auto timeString = getTimeString(timestamp);
+    auto timeString = getTimeString(1698764022);
     qDebug() << timeString;
     return 0;
 }

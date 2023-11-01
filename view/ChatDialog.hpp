@@ -24,18 +24,30 @@ public:
     void setPage(QWebEnginePage* page);
 
 signals:
-    void SIG_addPeerTextMsg(const QString& avatar, const QString& text);
-    void SIG_addPeerImageMsg(const QString& avatar, const QString& url);
-    void SIG_addPeerVideoMsg(const QString& avatar, const QString& url);
-    void SIG_addPeerFileMsg(const QString& avatar, const QString& url);
-    void SIG_addSelfTextMsg(const QString& avatar, const QString& text);
-    void SIG_addSelfImageMsg(const QString& avatar, const QString& url);
-    void SIG_addSelfVideoMsg(const QString& avatar, const QString& url);
-    void SIG_addSelfFileMsg(const QString& avatar, const QString& url);
-    void SIG_clearAllElement();
     void SIG_openLoading();
     void SIG_closeLoading();
+    void SIG_clearAllElement();
     void SIG_scrollToBottom();
+
+    void SIG_addTimeline(const QString& time);
+
+    void SIG_addSelfTextMsg(const QString& avatarUrl, const QString& message);
+    void SIG_addSelfImageMsg(const QString& avatarUrl, const QString& imageUrl);
+    void SIG_addSelfVideoMsg(const QString& avatarUrl, const QString& videoUrl);
+    void SIG_addSelfFileMsg(const QString& avatarUrl, const QString& fileUrl);
+    void SIG_addPeerTextMsg(const QString& avatarUrl, const QString& message);
+    void SIG_addPeerImageMsg(const QString& avatarUrl, const QString& imageUrl);
+    void SIG_addPeerVideoMsg(const QString& avatarUrl, const QString& videoUrl);
+    void SIG_addPeerFileMsg(const QString& avatarUrl, const QString& fileUrl);
+
+    void SIG_addSelfTextMsgGroup(const QString& avatarUrl, const QString& message);
+    void SIG_addSelfImageMsgGroup(const QString& avatarUrl, const QString& imageUrl);
+    void SIG_addSelfVideoMsgGroup(const QString& avatarUrl, const QString& videoUrl);
+    void SIG_addSelfFileMsgGroup(const QString& avatarUrl, const QString& fileUrl);
+    void SIG_addPeerTextMsgGroup(const QString& nickname, const QString& avatarUrl, const QString& message);
+    void SIG_addPeerImageMsgGroup(const QString& nickname, const QString& avatarUrl, const QString& imageUrl);
+    void SIG_addPeerVideoMsgGroup(const QString& nickname, const QString& avatarUrl, const QString& videoUrl);
+    void SIG_addPeerFileMsgGroup(const QString& nickname, const QString& avatarUrl, const QString& fileUrl);
 
 public slots:
     static void download(const QString& url);
@@ -50,33 +62,51 @@ class WebHelper {
 public:
     static WebController* webController;
 
-    static void addSelfMsg(const PersonMessage& pm);
-
-    static void addPeerMsg(const PersonMessage& pm);
-
-    static void addPeerTextMsg(int userId, const QString& text);
-
-    static void addPeerImageMsg(int userId, const QString& url);
-
-    static void addPeerVideoMsg(int userId, const QString& url);
-
-    static void addPeerFileMsg(int userId, const QString& url);
-
-    static void addSelfTextMsg(const QString& text);
-
-    static void addSelfImageMsg(const QString& url);
-
-    static void addSelfVideoMsg(const QString& url);
-
-    static void addSelfFileMsg(const QString& url);
-
-    static void clearAllElement();
-
     static void openLoading();
 
     static void closeLoading();
 
+    static void clearAllElement();
+
     static void scrollToBottom();
+
+    static void addSelfMsg(const PersonMessage& pm);
+
+    static void addPeerMsg(const PersonMessage& pm);
+
+    static void addTimeline(const QString& time);
+
+    static void addSelfTextMsg(const QString& message);
+
+    static void addSelfImageMsg(const QString& imageUrl);
+
+    static void addSelfVideoMsg(const QString& videoUrl);
+
+    static void addSelfFileMsg(const QString& fileUrl);
+
+    static void addPeerTextMsg(int userId, const QString& message);
+
+    static void addPeerImageMsg(int userId, const QString& imageUrl);
+
+    static void addPeerVideoMsg(int userId, const QString& videoUrl);
+
+    static void addPeerFileMsg(int userId, const QString& fileUrl);
+
+    static void addSelfTextMsgGroup(const QString& message);
+
+    static void addSelfImageMsgGroup(const QString& imageUrl);
+
+    static void addSelfVideoMsgGroup(const QString& videoUrl);
+
+    static void addSelfFileMsgGroup(const QString& fileUrl);
+
+    static void addPeerTextMsgGroup(int userId, const QString& message);
+
+    static void addPeerImageMsgGroup(int userId, const QString& imageUrl);
+
+    static void addPeerVideoMsgGroup(int userId, const QString& videoUrl);
+
+    static void addPeerFileMsgGroup(int userId, const QString& fileUrl);
 };
 
 class CustomWebEngineView : public QWebEngineView {

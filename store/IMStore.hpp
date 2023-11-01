@@ -89,6 +89,10 @@ public:
 
     void loadMessageWidget();
 
+    void updatePersonMessageItem(const PersonMessage& pm);
+
+    void movePersonMessageItemToTop(int userId);
+
     QString getLatestPersonMessageByUserId(int userId);
 
 private:
@@ -103,6 +107,7 @@ private:
     MessageWidget* m_messageWidget = nullptr;
     QMap<int, Friend*> m_friends;
     QMap<int, FriendItem*> m_friendItems;
+    QMap<int, MessageItem*> m_messageItems;
     FGSWidget* m_fgsWidget = nullptr;
     QVector<FriendApply*> m_friendApplyIs;
     QMap<int, FANItem*> m_fanItemIs;

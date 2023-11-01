@@ -63,11 +63,16 @@ background-color: #ffffff;</string>
   <widget class="QLabel" name="m_timeLabel">
    <property name="geometry">
     <rect>
-     <x>230</x>
+     <x>225</x>
      <y>10</y>
      <width>70</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>8</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>12:00</string>

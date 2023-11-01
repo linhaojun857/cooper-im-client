@@ -22,6 +22,10 @@ MainWidget::MainWidget(QWidget* parent) : QWidget(parent), ui(new Ui::MainWidget
     IMStore::getInstance()->setMainWidget(this);
     setWindowTitle("Cooper");
     setWindowIcon(QIcon(":/img/logo.ico"));
+    setMinimumWidth(300);
+    setMaximumWidth(300);
+    setMinimumHeight(635);
+    setMaximumHeight(635);
     connect(ui->m_minimizePushButton, SIGNAL(clicked(bool)), this, SLOT(showMinimized()));
     connect(ui->m_closePushButton, SIGNAL(clicked(bool)), this, SLOT(close()));
     connect(ui->m_optionPushButton, &QPushButton::clicked, [this]() {
@@ -51,10 +55,8 @@ MainWidget::MainWidget(QWidget* parent) : QWidget(parent), ui(new Ui::MainWidget
     FramelessWidgetsHelper::get(this)->setHitTestVisible(ui->m_closePushButton);
     m_cotPWidget = new CotPWidget(ui->m_tabWidget->widget(1));
     m_cotPWidget->setGeometry(0, 0, 300, 503);
-    setMinimumWidth(300);
-    setMaximumWidth(300);
-    setMinimumHeight(635);
-    setMaximumHeight(635);
+    m_messageWidget = new MessageWidget(ui->m_tabWidget->widget(0));
+    m_messageWidget->setGeometry(0, 0, 300, 503);
     ui->m_tabWidget->tabBar()->hide();
     m_tabBtnMap[0] = ui->m_msgPushButton;
     m_tabBtnMap[1] = ui->m_cotPPushButton;

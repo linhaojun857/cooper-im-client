@@ -129,7 +129,9 @@ void IMKernel::handlePersonMessageRecv(const QJsonObject& json) {
     DataSync::syncPersonMessagesBuServerPush(json);
     if (pm.from_id == IMStore::getInstance()->getChatDialog()->getCurrentPeerId()) {
         WebHelper::addPeerTextMsg(pm.from_id, pm.message);
+        WebHelper::scrollToBottom();
     }
+    IMStore::getInstance()->updatePersonMessageItem(pm);
 }
 
 void IMKernel::handlePersonMessageSend(const QJsonObject& json) {

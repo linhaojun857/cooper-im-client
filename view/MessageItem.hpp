@@ -19,6 +19,8 @@ public:
 
     void setId(int id);
 
+    [[nodiscard]] int getId() const;
+
     void setAvatar(const QString& url);
 
     void setName(const QString& name);
@@ -26,6 +28,8 @@ public:
     void setRecentMsg(const QString& recentMsg);
 
     void setTime(long long timestamp);
+
+    void debug();
 
 private:
     Ui::MessageItem* ui;
