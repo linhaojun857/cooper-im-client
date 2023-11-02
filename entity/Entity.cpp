@@ -1,13 +1,13 @@
 #include "entity/Entity.hpp"
 
 const QString SyncRecord::createTableSql =
-    "create table if not exists sync_record (\n"
+    "create table if not exists t_sync_record (\n"
     "    id integer primary key autoincrement,\n"
     "    timestamp integer not null\n"
     ");";
 
 const QString Self::createTableSql =
-    "create table if not exists self (\n"
+    "create table if not exists t_self (\n"
     "    id integer primary key autoincrement,\n"
     "    self_id integer unique not null,\n"
     "    username varchar(45) not null,\n"
@@ -18,7 +18,7 @@ const QString Self::createTableSql =
     ");";
 
 const QString Friend::createTableSql =
-    "create table if not exists friend (\n"
+    "create table if not exists t_friend (\n"
     "    id integer primary key autoincrement,\n"
     "    friend_id integer unique not null,\n"
     "    username varchar(45) not null,\n"
@@ -30,7 +30,7 @@ const QString Friend::createTableSql =
     ");";
 
 const QString PersonMessage::createTableSql =
-    "create table if not exists person_message (\n"
+    "create table if not exists t_person_message (\n"
     "    id integer primary key autoincrement,\n"
     "    msg_id integer unique not null,\n"
     "    from_id integer not null,\n"

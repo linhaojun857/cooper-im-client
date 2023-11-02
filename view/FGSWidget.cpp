@@ -81,7 +81,7 @@ void FGSWidget::handleUserClickSearchPushButton() {
         QJsonObject json;
         json.insert("keyword", keyword);
         json.insert("token", IMStore::getInstance()->getToken());
-        auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/search", json);
+        auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/searchFriend", json);
         if (ret["code"].toInt() == 20000) {
             IMStore::getInstance()->addFSRs(ret);
         } else {

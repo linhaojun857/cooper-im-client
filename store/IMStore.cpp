@@ -91,13 +91,13 @@ void IMStore::setSelf(const QJsonObject& json) {
         exit(-1);
     }
     m_database.commit();
-    query.exec("select * from self");
+    query.exec("select * from t_self");
     if (!query.next() || query.value(1).toInt() != m_self->id) {
-        query.exec("delete from sync_record");
+        query.exec("delete from t_sync_record");
     }
-    query.exec("delete from self");
+    query.exec("delete from t_self");
     QString sql = QString(
-                      "insert into self (self_id, username, nickname, avatar, status, feeling) "
+                      "insert into t_self (self_id, username, nickname, avatar, status, feeling) "
                       "values (%1, '%2', '%3', '%4', '%5', '%6')")
                       .arg(m_self->id)
                       .arg(m_self->username, m_self->nickname, m_self->avatar, m_self->status, m_self->feeling);
@@ -211,7 +211,7 @@ void IMStore::loadWidget() {
 
 void IMStore::loadFriendWidget() {
     QSqlQuery query(m_database);
-    query.exec("select friend_id, username, nickname, avatar, status, feeling, session_id from friend");
+    query.exec("select friend_id, username, nickname, avatar, status, feeling, session_id from t_friend");
     while (query.next()) {
         Friend fri(query.value(0).toInt(), query.value(1).toString(), query.value(2).toString(),
                    query.value(3).toString(), query.value(4).toString(), query.value(5).toString(),
@@ -231,18 +231,18 @@ void IMStore::loadFriendWidget() {
 void IMStore::loadMessageWidget() {
     QSqlQuery query(m_database);
     QString sql(
-        "select friend.friend_id,\n"
-        "       friend.nickname,\n"
-        "       friend.avatar,\n"
-        "       person_message.message,\n"
-        "       person_message.timestamp\n"
-        "from friend\n"
-        "         inner join person_message\n"
-        "                    on friend.session_id = person_message.session_id\n"
-        "where person_message.msg_id in (select max(msg_id)\n"
-        "                                from person_message\n"
-        "                                group by person_message.session_id)\n"
-        "order by person_message.msg_id desc;");
+        "select t_friend.friend_id,\n"
+        "       t_friend.nickname,\n"
+        "       t_friend.avatar,\n"
+        "       t_person_message.message,\n"
+        "       t_person_message.timestamp\n"
+        "from t_friend\n"
+        "         inner join t_person_message\n"
+        "                    on t_friend.session_id = t_person_message.session_id\n"
+        "where t_person_message.msg_id in (select max(msg_id)\n"
+        "                                from t_person_message\n"
+        "                                group by t_person_message.session_id)\n"
+        "order by t_person_message.msg_id desc;");
     if (!query.exec(sql)) {
         qDebug() << query.lastError().text();
     }
@@ -272,7 +272,7 @@ void IMStore::movePersonMessageItemToTop(int id) {
 
 QString IMStore::getLatestPersonMessageByUserId(int userId) {
     QSqlQuery query(m_database);
-    QString sql1 = QString("select session_id from friend where friend_id = %1").arg(userId);
+    QString sql1 = QString("select session_id from t_friend where friend_id = %1").arg(userId);
     if (!query.exec(sql1)) {
         qDebug() << query.lastError().text();
         return "";
@@ -282,7 +282,7 @@ QString IMStore::getLatestPersonMessageByUserId(int userId) {
     }
     QString sessionId = query.value(0).toString();
     QString sql2 =
-        QString("select message from person_message where session_id = '%1' order by id desc limit 1").arg(sessionId);
+        QString("select message from t_person_message where session_id = '%1' order by id desc limit 1").arg(sessionId);
     if (!query.exec(sql2)) {
         qDebug() << query.lastError().text();
         return "";

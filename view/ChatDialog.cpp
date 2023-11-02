@@ -263,7 +263,7 @@ void ChatDialog::changeChatHistory(int userId) {
     WebHelper::clearAllElement();
     ui->m_nameLabel->setText(m_chatItemMap[userId]->getName());
     QSqlQuery query(*IMStore::getInstance()->getDatabase());
-    QString sql1 = QString("select session_id from friend where friend_id = %1").arg(userId);
+    QString sql1 = QString("select session_id from t_friend where friend_id = %1").arg(userId);
     if (!query.exec(sql1)) {
         qDebug() << query.lastError().text();
         return;
@@ -272,7 +272,7 @@ void ChatDialog::changeChatHistory(int userId) {
         return;
     }
     QString sessionId = query.value(0).toString();
-    QString sql2 = QString("select * from person_message where session_id = '%1'").arg(sessionId);
+    QString sql2 = QString("select * from t_person_message where session_id = '%1'").arg(sessionId);
     if (!query.exec(sql2)) {
         qDebug() << query.lastError().text();
         return;

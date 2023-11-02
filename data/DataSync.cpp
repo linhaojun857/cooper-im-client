@@ -11,7 +11,7 @@
 bool DataSync::isFirstSync() {
     qDebug() << "DataSync::isFirstSync()";
     QSqlQuery query(*IMStore::getInstance()->getDatabase());
-    query.exec("select * from sync_record");
+    query.exec("select * from t_sync_record");
     return !query.next();
 }
 
@@ -36,7 +36,7 @@ void DataSync::syncAll() {
     DataSync::syncFriends(isFirstSync, &syncState);
     DataSync::syncPersonMessages(isFirstSync, &syncState);
     QSqlQuery query(*IMStore::getInstance()->getDatabase());
-    query.exec(QString("insert into sync_record (timestamp) values (%1)").arg(time(nullptr)));
+    query.exec(QString("insert into t_sync_record (timestamp) values (%1)").arg(time(nullptr)));
     IMStore::getInstance()->getIMKernel()->sendSyncCompleteMsg();
 }
 
@@ -59,7 +59,7 @@ void DataSync::syncFriends(bool isFirstSync, SyncState* syncState) {
     QSqlQuery query(*IMStore::getInstance()->getDatabase());
     try {
         if (isFirstSync) {
-            if (!query.exec("delete from friend")) {
+            if (!query.exec("delete from t_friend")) {
                 qDebug() << query.lastError();
                 throw std::exception();
             } else {
@@ -77,7 +77,7 @@ void DataSync::syncFriends(bool isFirstSync, SyncState* syncState) {
                 auto fri = Friend::fromJsonCommon(obj);
                 QString sql =
                     QString(
-                        "insert into friend (friend_id ,username, nickname, avatar, status, feeling, session_id) "
+                        "insert into t_friend (friend_id ,username, nickname, avatar, status, feeling, session_id) "
                         "values (%1 ,'%2', '%3', '%4', '%5', '%6', '%7')")
                         .arg(fri.id)
                         .arg(fri.username, fri.nickname, fri.avatar, fri.status, fri.feeling, fri.session_id);
@@ -108,7 +108,7 @@ void DataSync::syncFriends(bool isFirstSync, SyncState* syncState) {
                     auto fri = friendMap[updateId.first];
                     QString sql =
                         QString(
-                            "insert into friend (friend_id ,username, nickname, avatar, status, feeling) "
+                            "insert into t_friend (friend_id ,username, nickname, avatar, status, feeling) "
                             "values (%1 ,'%2', '%3', '%4', '%5', '%6', '%7')")
                             .arg(fri.id)
                             .arg(fri.username, fri.nickname, fri.avatar, fri.status, fri.feeling, fri.session_id);
@@ -123,7 +123,7 @@ void DataSync::syncFriends(bool isFirstSync, SyncState* syncState) {
                     auto fri = friendMap[updateId.first];
                     QString sql =
                         QString(
-                            "update friend set username = '%1', nickname = '%2', avatar = '%3', status = '%4', "
+                            "update t_friend set username = '%1', nickname = '%2', avatar = '%3', status = '%4', "
                             "feeling = '%5', session_id = '%6' "
                             "where friend_id = %7")
                             .arg(fri.username, fri.nickname, fri.avatar, fri.status, fri.feeling, fri.session_id)
@@ -136,7 +136,7 @@ void DataSync::syncFriends(bool isFirstSync, SyncState* syncState) {
                         qDebug() << "updated";
                     }
                 } else if (updateId.second == SYNC_DATA_FRIEND_ENTITY_DELETE) {
-                    QString sql = QString("delete from friend where friend_id = %1").arg(updateId.first);
+                    QString sql = QString("delete from t_friend where friend_id = %1").arg(updateId.first);
                     qDebug() << sql;
                     if (!query.exec(sql)) {
                         qDebug() << query.lastError();
@@ -160,7 +160,7 @@ void DataSync::syncFriendsByServerPush(const QJsonObject& json) {
         if (json["status"].toInt() == SYNC_DATA_FRIEND_ENTITY_INSERT) {
             auto fri = Friend::fromJsonCommon(json);
             QString sql = QString(
-                              "insert into friend (friend_id ,username, nickname, avatar, status, feeling) "
+                              "insert into t_friend (friend_id ,username, nickname, avatar, status, feeling) "
                               "values (%1 ,'%2', '%3', '%4', '%5', '%6', '%7')")
                               .arg(fri.id)
                               .arg(fri.username, fri.nickname, fri.avatar, fri.status, fri.feeling, fri.session_id);
@@ -174,7 +174,7 @@ void DataSync::syncFriendsByServerPush(const QJsonObject& json) {
         } else if (json["status"].toInt() == SYNC_DATA_FRIEND_ENTITY_UPDATE) {
             auto fri = Friend::fromJsonCommon(json);
             QString sql = QString(
-                              "update friend set username = '%1', nickname = '%2', avatar = '%3', status = '%4', "
+                              "update t_friend set username = '%1', nickname = '%2', avatar = '%3', status = '%4', "
                               "feeling = '%5', session_id = '%6'"
                               "where friend_id = %6")
                               .arg(fri.username, fri.nickname, fri.avatar, fri.status, fri.feeling, fri.session_id)
@@ -188,7 +188,7 @@ void DataSync::syncFriendsByServerPush(const QJsonObject& json) {
             }
         } else if (json["status"].toInt() == SYNC_DATA_FRIEND_ENTITY_DELETE) {
             int userId = json["user_id"].toInt();
-            QString sql = QString("delete from friend where friend_id = %1").arg(userId);
+            QString sql = QString("delete from t_friend where friend_id = %1").arg(userId);
             qDebug() << sql;
             if (!query.exec(sql)) {
                 qDebug() << query.lastError();
@@ -222,7 +222,7 @@ void DataSync::syncPersonMessages(bool isFirstSync, SyncState* syncState) {
     QSqlQuery query(*IMStore::getInstance()->getDatabase());
     try {
         if (isFirstSync) {
-            if (!query.exec("delete from person_message")) {
+            if (!query.exec("delete from t_person_message")) {
                 qDebug() << query.lastError();
                 throw std::exception();
             } else {
@@ -239,7 +239,7 @@ void DataSync::syncPersonMessages(bool isFirstSync, SyncState* syncState) {
                 auto obj = pm.toObject();
                 auto personMessage = PersonMessage::fromJson(obj);
                 QString sql = QString(
-                                  "insert into person_message (msg_id, from_id, to_id, session_id, message_type, "
+                                  "insert into t_person_message (msg_id, from_id, to_id, session_id, message_type, "
                                   "message, file_url, timestamp) "
                                   "values (%1, %2, %3, '%4', %5, '%6', '%7', %8)")
                                   .arg(personMessage.id)
@@ -275,7 +275,7 @@ void DataSync::syncPersonMessages(bool isFirstSync, SyncState* syncState) {
                 if (updateId.second == SYNC_DATA_PERSON_MESSAGE_INSERT) {
                     auto personMessage = personMessageMap[updateId.first];
                     QString sql = QString(
-                                      "insert into person_message (msg_id, from_id, to_id, session_id, message_type, "
+                                      "insert into t_person_message (msg_id, from_id, to_id, session_id, message_type, "
                                       "message, file_url, timestamp) "
                                       "values (%1, %2, %3, '%4', %5, '%6', '%7', %8)")
                                       .arg(personMessage.id)
@@ -293,7 +293,7 @@ void DataSync::syncPersonMessages(bool isFirstSync, SyncState* syncState) {
                         qDebug() << "inserted";
                     }
                 } else if (updateId.second == SYNC_DATA_PERSON_MESSAGE_DELETE) {
-                    QString sql = QString("delete from person_message where msg_id = %1").arg(updateId.first);
+                    QString sql = QString("delete from t_person_message where msg_id = %1").arg(updateId.first);
                     qDebug() << sql;
                     if (!query.exec(sql)) {
                         qDebug() << query.lastError();
@@ -317,7 +317,7 @@ void DataSync::syncPersonMessagesBuServerPush(const QJsonObject& json) {
         if (json["status"].toInt() == SYNC_DATA_PERSON_MESSAGE_INSERT) {
             auto personMessage = PersonMessage::fromJson(json);
             QString sql = QString(
-                              "insert into person_message (msg_id, from_id, to_id, session_id, message_type, "
+                              "insert into t_person_message (msg_id, from_id, to_id, session_id, message_type, "
                               "message, file_url, timestamp) "
                               "values (%1, %2, %3, '%4', %5, '%6', '%7', %8)")
                               .arg(personMessage.id)
@@ -336,7 +336,7 @@ void DataSync::syncPersonMessagesBuServerPush(const QJsonObject& json) {
             }
         } else if (json["status"].toInt() == SYNC_DATA_PERSON_MESSAGE_DELETE) {
             int msgId = json["msg_id"].toInt();
-            QString sql = QString("delete from person_message where msg_id = %1").arg(msgId);
+            QString sql = QString("delete from t_person_message where msg_id = %1").arg(msgId);
             qDebug() << sql;
             if (!query.exec(sql)) {
                 qDebug() << query.lastError();
