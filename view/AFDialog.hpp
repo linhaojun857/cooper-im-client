@@ -19,7 +19,9 @@ public:
 
     void setId(int id);
 
-    int getId() const;
+    [[nodiscard]] int getId() const;
+
+    void setMode(int mode);
 
     void setAvatar(const QString& url);
 
@@ -34,9 +36,11 @@ private slots:
 
 private:
     Ui::AFDialog* ui;
-    int m_id{};
+    int m_id = 0;
+    // 0: friend 1: group
+    int m_mode{};
     QString m_avatarUrl;
-    QString m_nickname;
+    QString m_name;
 };
 
 #endif

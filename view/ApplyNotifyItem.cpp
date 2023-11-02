@@ -1,4 +1,4 @@
-#include "FANItem.hpp"
+#include "ApplyNotifyItem.hpp"
 
 #include <QMessageBox>
 #include <QNetworkAccessManager>
@@ -8,21 +8,21 @@
 
 #include "define/IMDefine.hpp"
 #include "store/IMStore.hpp"
-#include "ui_FANItem.h"
+#include "ui_ApplyNotifyItem.h"
 #include "util/HttpUtil.hpp"
 
-FANItem::FANItem(QWidget* parent) : QWidget(parent), ui(new Ui::FANItem) {
+ApplyNotifyItem::ApplyNotifyItem(QWidget* parent) : QWidget(parent), ui(new Ui::ApplyNotifyItem) {
     ui->setupUi(this);
-    connect(ui->m_agreePushButton, &QPushButton::clicked, std::bind(&FANItem::responseFriendApply, this, 1));
-    connect(ui->m_rejectPushButton, &QPushButton::clicked, std::bind(&FANItem::responseFriendApply, this, 2));
+    connect(ui->m_agreePushButton, &QPushButton::clicked, std::bind(&ApplyNotifyItem::responseFriendApply, this, 1));
+    connect(ui->m_rejectPushButton, &QPushButton::clicked, std::bind(&ApplyNotifyItem::responseFriendApply, this, 2));
 }
 
-FANItem::~FANItem() {
+ApplyNotifyItem::~ApplyNotifyItem() {
     delete ui;
 }
 
-void FANItem::setMode(int mode) {
-    m_mode = mode;
+void ApplyNotifyItem::setIPMode(int mode) {
+    m_IPMode = mode;
     if (mode == 0) {
         ui->m_statusLabel->show();
         ui->m_agreePushButton->hide();
@@ -34,11 +34,20 @@ void FANItem::setMode(int mode) {
     }
 }
 
-void FANItem::setFromId(int fromId) {
+void ApplyNotifyItem::setFGMode(int mode) {
+    m_FGMode = mode;
+    if (mode == 0) {
+        ui->m_statusLabel->setText("等待验证");
+    } else {
+        ui->m_statusLabel->setText("等待审核");
+    }
+}
+
+void ApplyNotifyItem::setFromId(int fromId) {
     m_fromId = fromId;
 }
 
-void FANItem::setAvatar(const QString& url) {
+void ApplyNotifyItem::setAvatar(const QString& url) {
     m_avatarUrl = url;
     std::ignore = QtConcurrent::run([=]() {
         auto manager = new QNetworkAccessManager();
@@ -60,23 +69,27 @@ void FANItem::setAvatar(const QString& url) {
     });
 }
 
-void FANItem::setNickname(const QString& nickname) {
-    m_nickname = nickname;
-    ui->m_nicknameLabel->setText(nickname);
+void ApplyNotifyItem::setName(const QString& nickname) {
+    m_name = nickname;
+    ui->m_nameLabel->setText(nickname);
 }
 
-void FANItem::setReason(const QString& reason) {
-    m_reason = reason;
-    QFontMetrics fontMetrics(ui->m_reasonLabel->font());
-    QString elideText = fontMetrics.elidedText(reason, Qt::ElideRight, ui->m_reasonLabel->width());
-    ui->m_reasonLabel->setText(elideText);
+void ApplyNotifyItem::setOperation(const QString& operation) {
+    m_reason = operation;
+    QFontMetrics fontMetrics(ui->m_operationLabel->font());
+    QString elideText = fontMetrics.elidedText(operation, Qt::ElideRight, ui->m_operationLabel->width());
+    ui->m_operationLabel->setText(elideText);
 }
 
-void FANItem::setStatus(const QString& status) {
+void ApplyNotifyItem::setStatus(const QString& status) {
     ui->m_statusLabel->setText(status);
 }
 
-void FANItem::responseFriendApply(int agree) {
+void ApplyNotifyItem::setReason(const QString& reason) {
+    ui->m_widget->setToolTip("验证信息：<br>" + reason);
+}
+
+void ApplyNotifyItem::responseFriendApply(int agree) {
     QJsonObject json;
     json["from_id"] = m_fromId;
     json["agree"] = agree;

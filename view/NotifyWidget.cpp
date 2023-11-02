@@ -28,7 +28,7 @@ NotifyWidget::~NotifyWidget() {
     delete ui;
 }
 
-void NotifyWidget::addFANItem(FANItem* item) {
+void NotifyWidget::addApplyNotifyItem(ApplyNotifyItem* item) {
     qDebug() << "NotifyWidget::addNewFriItem";
     m_newFriendItems.append(item);
     m_layout->insertWidget(0, item);

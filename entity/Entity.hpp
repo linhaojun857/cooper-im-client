@@ -170,6 +170,42 @@ struct FriendApply {
     }
 };
 
+struct GroupApply {
+    int id{};
+    int from_id{};
+    int to_id{};
+    QString from_avatar;
+    QString from_nickname;
+    QString to_avatar;
+    QString to_name;
+    QString reason;
+    // 0: 待处理 1: 通过申请 2: 拒绝申请
+    int agree{};
+
+    GroupApply() = default;
+
+    GroupApply(int id, int from_id, int to_id, const QString& from_avatar, const QString& from_nickname,
+               const QString& to_avatar, const QString& to_name, const QString& reason, int agree) {
+        this->id = id;
+        this->from_id = from_id;
+        this->to_id = to_id;
+        this->from_avatar = from_avatar;
+        this->from_nickname = from_nickname;
+        this->to_avatar = to_avatar;
+        this->to_name = to_name;
+        this->reason = reason;
+        this->agree = agree;
+    }
+
+    static GroupApply* fromJson(const QJsonObject& json) {
+        auto ga = new GroupApply(json["id"].toInt(), json["from_id"].toInt(), json["to_id"].toInt(),
+                                 json["from_avatar"].toString(), json["from_nickname"].toString(),
+                                 json["to_avatar"].toString(), json["to_name"].toString(), json["reason"].toString(),
+                                 json["agree"].toInt());
+        return ga;
+    }
+};
+
 struct PersonMessage {
     int id{};
     int from_id{};

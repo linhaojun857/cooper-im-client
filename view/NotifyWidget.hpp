@@ -5,7 +5,7 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
-#include "view/FANItem.hpp"
+#include "view/ApplyNotifyItem.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -21,11 +21,11 @@ public:
 
     ~NotifyWidget() override;
 
-    void addFANItem(FANItem* item);
+    void addApplyNotifyItem(ApplyNotifyItem* item);
 
 private:
     Ui::NotifyWidget* ui;
-    QList<FANItem*> m_newFriendItems;
+    QList<ApplyNotifyItem*> m_newFriendItems;
     QVBoxLayout* m_layout = nullptr;
 };
 

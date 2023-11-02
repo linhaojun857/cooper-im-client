@@ -132,12 +132,6 @@ void LRWidget::getVFCode(int type) {
 }
 
 void LRWidget::userLogin() {
-    // dev use
-    // {
-    //     hide();
-    //     m_mainWidget->show();
-    //     return;
-    // }
     QString username = ui->m_phoneLineEdit->text();
     QString usernameTemp = username;
     if (username.isEmpty() || usernameTemp.remove(" ").isEmpty()) {

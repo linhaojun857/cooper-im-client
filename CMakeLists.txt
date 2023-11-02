@@ -67,9 +67,9 @@ add_library(cooper_im_lib
         view/ChatItem.hpp
         view/ChatItem.cpp
         view/ChatItem.ui
-        view/FANItem.hpp
-        view/FANItem.cpp
-        view/FANItem.ui
+        view/ApplyNotifyItem.hpp
+        view/ApplyNotifyItem.cpp
+        view/ApplyNotifyItem.ui
         view/NotifyWidget.hpp
         view/NotifyWidget.cpp
         view/NotifyWidget.ui
@@ -97,6 +97,9 @@ add_library(cooper_im_lib
         view/CGWidget.hpp
         view/CGWidget.cpp
         view/CGWidget.ui
+        view/GSRItem.hpp
+        view/GSRItem.cpp
+        view/GSRItem.ui
         # core
         core/IMKernel.hpp
         core/IMKernel.cpp

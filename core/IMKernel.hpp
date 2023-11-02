@@ -36,9 +36,13 @@ private:
 
     static void handleErrorMsg(const QJsonObject& json);
 
-    static void handleFriendAppleNotifyI(const QJsonObject& json);
+    static void handleFriendApplyNotifyI(const QJsonObject& json);
 
-    static void handleFriendAppleNotifyP(const QJsonObject& json);
+    static void handleFriendApplyNotifyP(const QJsonObject& json);
+
+    static void handleGroupApplyNotifyI(const QJsonObject& json);
+
+    static void handleGroupApplyNotifyP(const QJsonObject& json);
 
     static void handleFriendEntity(const QJsonObject& json);
 

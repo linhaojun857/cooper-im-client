@@ -168,11 +168,31 @@ void IMStore::addFSRs(const QJsonObject& json) {
     }
 }
 
+void IMStore::addGSRs(const QJsonObject& json) {
+    qDebug() << "IMStore::addGSRs";
+    QJsonArray gsrs = json["gsrs"].toArray();
+    int row;
+    int column;
+    for (int i = 0; i < gsrs.size(); ++i) {
+        row = i / 3;
+        column = i % 3;
+        auto gsrItem = new GSRItem();
+        auto obj = gsrs[i].toObject();
+        gsrItem->setId(obj["id"].toInt());
+        gsrItem->setAvatar(obj["avatar"].toString());
+        gsrItem->setName(obj["name"].toString());
+        gsrItem->setMemberCount(obj["member_count"].toInt());
+        if (m_fgsWidget) {
+            m_fgsWidget->addGSRItem(gsrItem, row, column);
+        }
+    }
+}
+
 void IMStore::addFriendApplyI(FriendApply* friendApply) {
     m_friendApplyIs.append(friendApply);
 }
 
-void IMStore::addFANItemI(int id, FANItem* fanItem) {
+void IMStore::addFANItemI(int id, ApplyNotifyItem* fanItem) {
     m_fanItemIs[id] = fanItem;
 }
 
@@ -180,7 +200,7 @@ bool IMStore::haveFANItemI(int id) {
     return m_fanItemIs.contains(id);
 }
 
-FANItem* IMStore::getFANItemI(int id) {
+ApplyNotifyItem* IMStore::getFANItemI(int id) {
     return m_fanItemIs[id];
 }
 
@@ -188,7 +208,7 @@ void IMStore::addFriendApplyP(FriendApply* friendApply) {
     m_friendApplyPs.append(friendApply);
 }
 
-void IMStore::addFANItemP(int id, FANItem* fanItem) {
+void IMStore::addFANItemP(int id, ApplyNotifyItem* fanItem) {
     m_fanItemPs[id] = fanItem;
 }
 
@@ -196,8 +216,32 @@ bool IMStore::haveFANItemP(int id) {
     return m_fanItemPs.contains(id);
 }
 
-FANItem* IMStore::getFANItemP(int id) {
+ApplyNotifyItem* IMStore::getFANItemP(int id) {
     return m_fanItemPs[id];
+}
+
+void IMStore::addGANItemI(int id, ApplyNotifyItem* ganItem) {
+    m_ganItemIs[id] = ganItem;
+}
+
+bool IMStore::haveGANItemI(int id) {
+    return m_ganItemIs.contains(id);
+}
+
+ApplyNotifyItem* IMStore::getGANItemI(int id) {
+    return m_ganItemIs[id];
+}
+
+void IMStore::addGANItemP(int id, ApplyNotifyItem* ganItem) {
+    m_ganItemPs[id] = ganItem;
+}
+
+bool IMStore::haveGANItemP(int id) {
+    return m_ganItemPs.contains(id);
+}
+
+ApplyNotifyItem* IMStore::getGANItemP(int id) {
+    return m_ganItemPs[id];
 }
 
 Friend* IMStore::getFriend(int id) {

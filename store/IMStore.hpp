@@ -68,21 +68,35 @@ public:
 
     void addFSRs(const QJsonObject& json);
 
+    void addGSRs(const QJsonObject& json);
+
     void addFriendApplyI(FriendApply* friendApply);
 
-    void addFANItemI(int id, FANItem* fanItem);
+    void addFANItemI(int id, ApplyNotifyItem* fanItem);
 
     bool haveFANItemI(int id);
 
-    FANItem* getFANItemI(int id);
+    ApplyNotifyItem* getFANItemI(int id);
 
     void addFriendApplyP(FriendApply* friendApply);
 
-    void addFANItemP(int id, FANItem* fanItem);
+    void addFANItemP(int id, ApplyNotifyItem* fanItem);
 
     bool haveFANItemP(int id);
 
-    FANItem* getFANItemP(int id);
+    ApplyNotifyItem* getFANItemP(int id);
+
+    void addGANItemI(int id, ApplyNotifyItem* ganItem);
+
+    bool haveGANItemI(int id);
+
+    ApplyNotifyItem* getGANItemI(int id);
+
+    void addGANItemP(int id, ApplyNotifyItem* ganItem);
+
+    bool haveGANItemP(int id);
+
+    ApplyNotifyItem* getGANItemP(int id);
 
     Friend* getFriend(int id);
 
@@ -114,9 +128,11 @@ private:
     FGSWidget* m_fgsWidget = nullptr;
     CGWidget* m_cgWidget = nullptr;
     QVector<FriendApply*> m_friendApplyIs;
-    QMap<int, FANItem*> m_fanItemIs;
+    QMap<int, ApplyNotifyItem*> m_fanItemIs;
     QVector<FriendApply*> m_friendApplyPs;
-    QMap<int, FANItem*> m_fanItemPs;
+    QMap<int, ApplyNotifyItem*> m_fanItemPs;
+    QMap<int, ApplyNotifyItem*> m_ganItemIs;
+    QMap<int, ApplyNotifyItem*> m_ganItemPs;
     NotifyWidget* m_notifyWidget = nullptr;
 };
 

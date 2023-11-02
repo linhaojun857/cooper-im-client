@@ -37,20 +37,36 @@ FGSWidget::FGSWidget(QWidget* parent) : QWidget(parent), ui(new Ui::FGSWidget) {
             "background-color: #d9d9d9;");
     });
     connect(ui->m_sPushButton, &QPushButton::clicked, this, &FGSWidget::handleUserClickSearchPushButton);
+
+    ui->m_tabWidget->setCurrentIndex(m_tabCurrentIndex);
+
     ui->m_fScrollArea->setFrameStyle(QFrame::NoFrame);
     ui->m_fScrollArea->setFrameShape(QFrame::NoFrame);
     ui->m_fScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->m_fScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    auto fSRWidget = new QWidget();
-    ui->m_fScrollArea->setWidget(fSRWidget);
+    auto fsrWidget = new QWidget();
+    ui->m_fScrollArea->setWidget(fsrWidget);
     m_fsrItemsLayout = new QGridLayout();
     m_fsrItemsLayout->setContentsMargins(0, 0, 0, 0);
     m_fsrItemsLayout->setSpacing(0);
     m_fsrItemsLayout->setColumnMinimumWidth(0, 150);
     m_fsrItemsLayout->setColumnMinimumWidth(1, 150);
     m_fsrItemsLayout->setColumnMinimumWidth(2, 150);
-    fSRWidget->setLayout(m_fsrItemsLayout);
-    ui->m_tabWidget->setCurrentIndex(m_tabCurrentIndex);
+    fsrWidget->setLayout(m_fsrItemsLayout);
+
+    ui->m_gScrollArea->setFrameStyle(QFrame::NoFrame);
+    ui->m_gScrollArea->setFrameShape(QFrame::NoFrame);
+    ui->m_gScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->m_gScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    auto gsrWidget = new QWidget();
+    ui->m_gScrollArea->setWidget(gsrWidget);
+    m_gsrItemsLayout = new QGridLayout();
+    m_gsrItemsLayout->setContentsMargins(0, 0, 0, 0);
+    m_gsrItemsLayout->setSpacing(0);
+    m_gsrItemsLayout->setColumnMinimumWidth(0, 150);
+    m_gsrItemsLayout->setColumnMinimumWidth(1, 150);
+    m_gsrItemsLayout->setColumnMinimumWidth(2, 150);
+    gsrWidget->setLayout(m_gsrItemsLayout);
 }
 
 FGSWidget::~FGSWidget() {
@@ -66,27 +82,47 @@ void FGSWidget::clearAllFSRItems() {
     m_fsrItems.clear();
 }
 
+void FGSWidget::clearAllGSRItems() {
+    QLayoutItem* child;
+    while ((child = m_gsrItemsLayout->takeAt(0)) != nullptr) {
+        delete child->widget();
+        delete child;
+    }
+    m_gsrItems.clear();
+}
+
 void FGSWidget::addFSRItem(FSRItem* fsrItem, int row, int column) {
     m_fsrItemsLayout->addWidget(fsrItem, row, column, Qt::AlignLeft | Qt::AlignTop);
 }
 
+void FGSWidget::addGSRItem(GSRItem* gsrItem, int row, int column) {
+    m_gsrItemsLayout->addWidget(gsrItem, row, column, Qt::AlignLeft | Qt::AlignTop);
+}
+
 void FGSWidget::handleUserClickSearchPushButton() {
     qDebug() << "handleUserClickSearchPushButton";
-    clearAllFSRItems();
     auto keyword = ui->m_sLineEdit->text();
     if (keyword.isEmpty()) {
         return;
     }
+    QJsonObject json;
+    json.insert("keyword", keyword);
+    json.insert("token", IMStore::getInstance()->getToken());
     if (m_searchMode == 0) {
-        QJsonObject json;
-        json.insert("keyword", keyword);
-        json.insert("token", IMStore::getInstance()->getToken());
+        clearAllFSRItems();
         auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/searchFriend", json);
-        if (ret["code"].toInt() == 20000) {
+        if (ret["code"].toInt() == HTTP_SUCCESS_CODE) {
             IMStore::getInstance()->addFSRs(ret);
         } else {
             QMessageBox::warning(this, "提示", ret["msg"].toString());
         }
     } else {
+        clearAllGSRItems();
+        auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/searchGroup", json);
+        if (ret["code"].toInt() == HTTP_SUCCESS_CODE) {
+            IMStore::getInstance()->addGSRs(ret);
+        } else {
+            QMessageBox::warning(this, "提示", ret["msg"].toString());
+        }
     }
 }

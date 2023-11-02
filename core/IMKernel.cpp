@@ -6,7 +6,7 @@
 #include "data/DataSync.hpp"
 #include "mock/Mock.hpp"
 #include "store/IMStore.hpp"
-#include "view/FANItem.hpp"
+#include "view/ApplyNotifyItem.hpp"
 
 using namespace std::placeholders;
 
@@ -70,8 +70,8 @@ void IMKernel::dealData(const QJsonObject& jsonObject) {
 
 void IMKernel::initHandlers() {
     m_handlers[PROTOCOL_TYPE_ERROR_MSG] = std::bind(&IMKernel::handleErrorMsg, _1);
-    m_handlers[PROTOCOL_TYPE_FRIEND_APPLY_NOTIFY_I] = std::bind(&IMKernel::handleFriendAppleNotifyI, _1);
-    m_handlers[PROTOCOL_TYPE_FRIEND_APPLY_NOTIFY_P] = std::bind(&IMKernel::handleFriendAppleNotifyP, _1);
+    m_handlers[PROTOCOL_TYPE_FRIEND_APPLY_NOTIFY_I] = std::bind(&IMKernel::handleFriendApplyNotifyI, _1);
+    m_handlers[PROTOCOL_TYPE_FRIEND_APPLY_NOTIFY_P] = std::bind(&IMKernel::handleFriendApplyNotifyP, _1);
     m_handlers[PROTOCOL_TYPE_FRIEND_ENTITY] = std::bind(&IMKernel::handleFriendEntity, _1);
     m_handlers[PROTOCOL_TYPE_PERSON_MESSAGE_RECV] = std::bind(&IMKernel::handlePersonMessageRecv, _1);
     m_handlers[PROTOCOL_TYPE_PERSON_MESSAGE_SEND] = std::bind(&IMKernel::handlePersonMessageSend, _1);
@@ -81,41 +81,92 @@ void IMKernel::handleErrorMsg(const QJsonObject& json) {
     QMessageBox::warning(nullptr, "提示", json["msg"].toString());
 }
 
-void IMKernel::handleFriendAppleNotifyI(const QJsonObject& json) {
+void IMKernel::handleFriendApplyNotifyI(const QJsonObject& json) {
     auto fa = FriendApply::fromJson(json);
-    auto fanItem = IMStore::getInstance()->getFANItemI(fa->to_id);
-    if (fanItem == nullptr) {
-        fanItem = new FANItem();
-        fanItem->setMode(0);
+    if (!IMStore::getInstance()->haveFANItemI(fa->to_id)) {
+        auto fanItem = new ApplyNotifyItem();
+        fanItem->setIPMode(0);
+        fanItem->setFGMode(0);
         fanItem->setAvatar(fa->from_avatar);
-        fanItem->setNickname(fa->from_nickname);
-        fanItem->setReason("请求添加对方为好友");
+        fanItem->setName(fa->from_nickname);
+        fanItem->setOperation("请求添加对方为好友");
+        fanItem->setReason(fa->reason);
         IMStore::getInstance()->addFANItemI(fa->to_id, fanItem);
-        IMStore::getInstance()->getNotifyWidget()->addFANItem(fanItem);
-    }
-    if (fa->agree == 1) {
-        fanItem->setStatus("对方已同意");
-    } else if (fa->agree == 2) {
-        fanItem->setStatus("对方已拒绝");
+        IMStore::getInstance()->getNotifyWidget()->addApplyNotifyItem(fanItem);
+    } else {
+        auto fanItem = IMStore::getInstance()->getFANItemI(fa->to_id);
+        if (fa->agree == 1) {
+            fanItem->setStatus("对方已同意");
+        } else if (fa->agree == 2) {
+            fanItem->setStatus("对方已拒绝");
+        }
     }
 }
 
-void IMKernel::handleFriendAppleNotifyP(const QJsonObject& json) {
+void IMKernel::handleFriendApplyNotifyP(const QJsonObject& json) {
     auto fa = FriendApply::fromJson(json);
     IMStore::getInstance()->addFriendApplyP(fa);
     if (!IMStore::getInstance()->haveFANItemP(fa->from_id)) {
-        auto fanItem = new FANItem();
-        fanItem->setMode(1);
+        auto fanItem = new ApplyNotifyItem();
+        fanItem->setIPMode(1);
+        fanItem->setFGMode(0);
         fanItem->setFromId(fa->from_id);
         fanItem->setAvatar(fa->from_avatar);
-        fanItem->setNickname(fa->from_nickname);
+        fanItem->setName(fa->from_nickname);
+        fanItem->setOperation("申请添加你为好友");
         fanItem->setReason(fa->reason);
-        IMStore::getInstance()->getNotifyWidget()->addFANItem(fanItem);
         IMStore::getInstance()->addFANItemP(fa->from_id, fanItem);
+        IMStore::getInstance()->getNotifyWidget()->addApplyNotifyItem(fanItem);
     } else {
         auto fanItem = IMStore::getInstance()->getFANItemP(fa->from_id);
+        fanItem->setOperation("申请添加你为好友");
         fanItem->setReason(fa->reason);
-        fanItem->setMode(1);
+        fanItem->setIPMode(1);
+        fanItem->setFGMode(0);
+    }
+}
+
+void IMKernel::handleGroupApplyNotifyI(const QJsonObject& json) {
+    auto ga = GroupApply::fromJson(json);
+    if (!IMStore::getInstance()->haveGANItemI(ga->to_id)) {
+        auto ganItem = new ApplyNotifyItem();
+        ganItem->setIPMode(0);
+        ganItem->setFGMode(1);
+        ganItem->setAvatar(ga->to_avatar);
+        ganItem->setName(ga->to_name);
+        ganItem->setOperation("请求加入群聊");
+        ganItem->setReason(ga->reason);
+        IMStore::getInstance()->addGANItemI(ga->to_id, ganItem);
+        IMStore::getInstance()->getNotifyWidget()->addApplyNotifyItem(ganItem);
+    } else {
+        auto ganItem = IMStore::getInstance()->getGANItemI(ga->to_id);
+        if (ga->agree == 1) {
+            ganItem->setStatus("已同意");
+        } else if (ga->agree == 2) {
+            ganItem->setStatus("已拒绝");
+        }
+    }
+}
+
+void IMKernel::handleGroupApplyNotifyP(const QJsonObject& json) {
+    auto ga = GroupApply::fromJson(json);
+    if (!IMStore::getInstance()->haveFANItemP(ga->from_id)) {
+        auto ganItem = new ApplyNotifyItem();
+        ganItem->setIPMode(1);
+        ganItem->setFGMode(1);
+        ganItem->setFromId(ga->from_id);
+        ganItem->setAvatar(ga->from_avatar);
+        ganItem->setName(ga->from_nickname);
+        ganItem->setOperation("申请加入 " + ga->to_name);
+        ganItem->setReason(ga->reason);
+        IMStore::getInstance()->addGANItemP(ga->from_id, ganItem);
+        IMStore::getInstance()->getNotifyWidget()->addApplyNotifyItem(ganItem);
+    } else {
+        auto ganItem = IMStore::getInstance()->getFANItemP(ga->from_id);
+        ganItem->setOperation("申请加入 " + ga->to_name);
+        ganItem->setReason(ga->reason);
+        ganItem->setIPMode(1);
+        ganItem->setFGMode(1);
     }
 }
 

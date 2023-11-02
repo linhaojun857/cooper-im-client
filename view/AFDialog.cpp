@@ -13,7 +13,6 @@
 
 AFDialog::AFDialog(QWidget* parent) : QWidget(parent), ui(new Ui::AFDialog) {
     ui->setupUi(this);
-    ui->m_reasonTextEdit->setPlaceholderText("我是...");
     connect(ui->m_completePushButton, &QPushButton::clicked, this, &AFDialog::addFriend);
 }
 
@@ -27,6 +26,10 @@ void AFDialog::setId(int id) {
 
 int AFDialog::getId() const {
     return m_id;
+}
+
+void AFDialog::setMode(int mode) {
+    m_mode = mode;
 }
 
 void AFDialog::setAvatar(const QString& url) {
@@ -53,12 +56,12 @@ QString AFDialog::getAvatar() {
 }
 
 void AFDialog::setNickname(const QString& nickname) {
-    m_nickname = nickname;
+    m_name = nickname;
     setWindowTitle(nickname);
 }
 
 QString AFDialog::getNickname() {
-    return m_nickname;
+    return m_name;
 }
 
 void AFDialog::addFriend() {
@@ -68,27 +71,53 @@ void AFDialog::addFriend() {
         return;
     }
     QJsonObject json;
-    json["reason"] = reason;
-    json["peerId"] = m_id;
     json["token"] = IMStore::getInstance()->getToken();
-    auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/addFriend", json);
-    if (ret["code"] == HTTP_SUCCESS_CODE) {
-        QMessageBox::information(this, "提示", "发送成功");
-        close();
-        if (!IMStore::getInstance()->haveFANItemI(m_id)) {
-            auto fanItem = new FANItem();
-            fanItem->setMode(0);
-            fanItem->setAvatar(m_avatarUrl);
-            fanItem->setNickname(m_nickname);
-            fanItem->setReason("请求添加对方为好友");
-            fanItem->setStatus("等待验证");
-            IMStore::getInstance()->getNotifyWidget()->addFANItem(fanItem);
-            IMStore::getInstance()->addFANItemI(m_id, fanItem);
+    json["reason"] = reason;
+    if (m_mode == 0) {
+        json["peerId"] = m_id;
+        auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/addFriend", json);
+        if (ret["code"] == HTTP_SUCCESS_CODE) {
+            QMessageBox::information(this, "提示", "发送成功");
+            close();
+            if (!IMStore::getInstance()->haveFANItemI(m_id)) {
+                auto fanItem = new ApplyNotifyItem();
+                fanItem->setIPMode(0);
+                fanItem->setFGMode(0);
+                fanItem->setAvatar(m_avatarUrl);
+                fanItem->setName(m_name);
+                fanItem->setOperation("请求添加对方为好友");
+                fanItem->setReason(reason);
+                IMStore::getInstance()->getNotifyWidget()->addApplyNotifyItem(fanItem);
+                IMStore::getInstance()->addFANItemI(m_id, fanItem);
+            } else {
+                auto fanItem = IMStore::getInstance()->getFANItemI(m_id);
+                fanItem->setStatus("等待验证");
+            }
         } else {
-            auto fanItem = IMStore::getInstance()->getFANItemI(m_id);
-            fanItem->setStatus("等待验证");
+            QMessageBox::warning(this, "提示", ret["msg"].toString());
         }
-    } else {
-        QMessageBox::warning(this, "提示", ret["msg"].toString());
+    } else if (m_mode == 1) {
+        json["group_id"] = m_id;
+        auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/addGroup", json);
+        if (ret["code"] == HTTP_SUCCESS_CODE) {
+            QMessageBox::information(this, "提示", "发送成功");
+            close();
+            if (!IMStore::getInstance()->haveFANItemI(m_id)) {
+                auto ganItem = new ApplyNotifyItem();
+                ganItem->setIPMode(0);
+                ganItem->setFGMode(1);
+                ganItem->setAvatar(m_avatarUrl);
+                ganItem->setName(m_name);
+                ganItem->setOperation("申请加入群聊");
+                ganItem->setReason(reason);
+                IMStore::getInstance()->getNotifyWidget()->addApplyNotifyItem(ganItem);
+                IMStore::getInstance()->addGANItemI(m_id, ganItem);
+            } else {
+                auto fanItem = IMStore::getInstance()->getFANItemI(m_id);
+                fanItem->setStatus("等待审核");
+            }
+        } else {
+            QMessageBox::warning(this, "提示", ret["msg"].toString());
+        }
     }
 }

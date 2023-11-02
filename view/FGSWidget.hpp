@@ -6,6 +6,7 @@
 #include <QWidget>
 
 #include "view/FSRItem.hpp"
+#include "view/GSRItem.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -23,7 +24,11 @@ public:
 
     void clearAllFSRItems();
 
+    void clearAllGSRItems();
+
     void addFSRItem(FSRItem* fsrItem, int row, int column);
+
+    void addGSRItem(GSRItem* gsrItem, int row, int column);
 
 private:
     void handleUserClickSearchPushButton();
@@ -34,7 +39,9 @@ private:
     QMap<int, QPushButton*> m_tabBtnMap;
     int m_searchMode = 0;
     QList<FSRItem*> m_fsrItems;
+    QList<GSRItem*> m_gsrItems;
     QGridLayout* m_fsrItemsLayout = nullptr;
+    QGridLayout* m_gsrItemsLayout = nullptr;
 };
 
 #endif
