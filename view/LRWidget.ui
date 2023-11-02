@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>300</width>
+    <width>360</width>
     <height>270</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>300</width>
+    <width>360</width>
     <height>270</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>300</width>
+    <width>360</width>
     <height>270</height>
    </size>
   </property>
@@ -30,7 +30,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>320</width>
+     <width>360</width>
      <height>280</height>
     </rect>
    </property>
@@ -50,7 +50,7 @@
     <widget class="QLabel" name="phoneLabel">
      <property name="geometry">
       <rect>
-       <x>40</x>
+       <x>70</x>
        <y>40</y>
        <width>70</width>
        <height>26</height>
@@ -68,7 +68,7 @@
     <widget class="QLabel" name="passwordLabel">
      <property name="geometry">
       <rect>
-       <x>40</x>
+       <x>70</x>
        <y>85</y>
        <width>70</width>
        <height>26</height>
@@ -86,7 +86,7 @@
     <widget class="QLineEdit" name="m_phoneLineEdit">
      <property name="geometry">
       <rect>
-       <x>110</x>
+       <x>140</x>
        <y>40</y>
        <width>150</width>
        <height>26</height>
@@ -100,7 +100,7 @@ background-color: #ffffff;</string>
     <widget class="QLineEdit" name="m_passwordLineEdit">
      <property name="geometry">
       <rect>
-       <x>110</x>
+       <x>140</x>
        <y>85</y>
        <width>150</width>
        <height>26</height>
@@ -114,7 +114,7 @@ background-color: #ffffff;</string>
     <widget class="QPushButton" name="m_loginPushButton">
      <property name="geometry">
       <rect>
-       <x>40</x>
+       <x>70</x>
        <y>180</y>
        <width>100</width>
        <height>26</height>
@@ -136,7 +136,7 @@ background-color: #ffffff;</string>
     <widget class="QPushButton" name="m_registerPushButton">
      <property name="geometry">
       <rect>
-       <x>160</x>
+       <x>190</x>
        <y>180</y>
        <width>100</width>
        <height>26</height>
@@ -158,7 +158,7 @@ background-color: #ffffff;</string>
     <widget class="QLabel" name="vfCodeLabel">
      <property name="geometry">
       <rect>
-       <x>40</x>
+       <x>70</x>
        <y>130</y>
        <width>70</width>
        <height>26</height>
@@ -176,7 +176,7 @@ background-color: #ffffff;</string>
     <widget class="QLineEdit" name="m_vfCodeLineEdit">
      <property name="geometry">
       <rect>
-       <x>110</x>
+       <x>140</x>
        <y>130</y>
        <width>90</width>
        <height>26</height>
@@ -190,7 +190,7 @@ background-color: #ffffff;</string>
     <widget class="QPushButton" name="m_getVfCodepushButton">
      <property name="geometry">
       <rect>
-       <x>210</x>
+       <x>240</x>
        <y>130</y>
        <width>50</width>
        <height>26</height>
@@ -217,7 +217,7 @@ background-color: #ffffff;</string>
     <widget class="QLabel" name="vfCodeLabel_r">
      <property name="geometry">
       <rect>
-       <x>40</x>
+       <x>70</x>
        <y>155</y>
        <width>70</width>
        <height>26</height>
@@ -235,7 +235,7 @@ background-color: #ffffff;</string>
     <widget class="QLineEdit" name="m_passwordLineEdit_r">
      <property name="geometry">
       <rect>
-       <x>110</x>
+       <x>140</x>
        <y>65</y>
        <width>150</width>
        <height>26</height>
@@ -249,7 +249,7 @@ background-color: #ffffff;</string>
     <widget class="QLabel" name="passwordLabel_r">
      <property name="geometry">
       <rect>
-       <x>40</x>
+       <x>70</x>
        <y>65</y>
        <width>70</width>
        <height>26</height>
@@ -267,7 +267,7 @@ background-color: #ffffff;</string>
     <widget class="QLabel" name="phoneLabel_r">
      <property name="geometry">
       <rect>
-       <x>40</x>
+       <x>70</x>
        <y>20</y>
        <width>70</width>
        <height>26</height>
@@ -285,7 +285,7 @@ background-color: #ffffff;</string>
     <widget class="QPushButton" name="m_getVfCodepushButton_r">
      <property name="geometry">
       <rect>
-       <x>210</x>
+       <x>240</x>
        <y>155</y>
        <width>50</width>
        <height>26</height>
@@ -307,7 +307,7 @@ background-color: #ffffff;</string>
     <widget class="QLineEdit" name="m_vfCodeLineEdit_r">
      <property name="geometry">
       <rect>
-       <x>110</x>
+       <x>140</x>
        <y>155</y>
        <width>90</width>
        <height>26</height>
@@ -321,7 +321,7 @@ background-color: #ffffff;</string>
     <widget class="QLineEdit" name="m_phoneLineEdit_r">
      <property name="geometry">
       <rect>
-       <x>110</x>
+       <x>140</x>
        <y>20</y>
        <width>150</width>
        <height>26</height>
@@ -335,7 +335,7 @@ background-color: #ffffff;</string>
     <widget class="QPushButton" name="m_registerPushButton_r">
      <property name="geometry">
       <rect>
-       <x>40</x>
+       <x>70</x>
        <y>200</y>
        <width>100</width>
        <height>26</height>
@@ -357,7 +357,7 @@ background-color: #ffffff;</string>
     <widget class="QLabel" name="rePasswordLabel_r">
      <property name="geometry">
       <rect>
-       <x>40</x>
+       <x>70</x>
        <y>110</y>
        <width>70</width>
        <height>26</height>
@@ -375,7 +375,7 @@ background-color: #ffffff;</string>
     <widget class="QLineEdit" name="m_rePasswordLineEdit_r">
      <property name="geometry">
       <rect>
-       <x>110</x>
+       <x>140</x>
        <y>110</y>
        <width>150</width>
        <height>26</height>
@@ -389,7 +389,7 @@ background-color: #ffffff;</string>
     <widget class="QPushButton" name="m_loginPushButton_r">
      <property name="geometry">
       <rect>
-       <x>160</x>
+       <x>190</x>
        <y>200</y>
        <width>100</width>
        <height>26</height>
