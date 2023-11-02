@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CGWidget</class>
+ <widget class="QWidget" name="CGWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>300</width>
+    <height>260</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>9</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>CGWidget</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: #ffffff;</string>
+  </property>
+  <widget class="QLabel" name="nameLabel">
+   <property name="geometry">
+    <rect>
+     <x>45</x>
+     <y>30</y>
+     <width>60</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>9</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>群名：</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="m_nameLineEdit">
+   <property name="geometry">
+    <rect>
+     <x>105</x>
+     <y>30</y>
+     <width>160</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 1px solid #000000;
+background-color: #ffffff;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="descLabel">
+   <property name="geometry">
+    <rect>
+     <x>45</x>
+     <y>70</y>
+     <width>60</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>9</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>群描述：</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="m_descTextEdit">
+   <property name="geometry">
+    <rect>
+     <x>105</x>
+     <y>70</y>
+     <width>160</width>
+     <height>100</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 1px solid #000000;
+background-color: #ffffff;</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="m_createPushButton">
+   <property name="geometry">
+    <rect>
+     <x>45</x>
+     <y>190</y>
+     <width>220</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>9</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 1px solid #000000;
+background-color: #ffffff;</string>
+   </property>
+   <property name="text">
+    <string>创建</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

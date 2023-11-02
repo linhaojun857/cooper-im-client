@@ -7,6 +7,7 @@
 #include <QWebEngineView>
 
 #include "entity/Entity.hpp"
+#include "view/CGWidget.hpp"
 #include "view/ChatDialog.hpp"
 #include "view/FGSWidget.hpp"
 #include "view/FriendItem.hpp"
@@ -63,6 +64,8 @@ public:
 
     [[nodiscard]] FGSWidget* getFGSWidget() const;
 
+    [[nodiscard]] CGWidget* getCGWidget() const;
+
     void addFSRs(const QJsonObject& json);
 
     void addFriendApplyI(FriendApply* friendApply);
@@ -109,6 +112,7 @@ private:
     QMap<int, FriendItem*> m_friendItems;
     QMap<int, MessageItem*> m_messageItems;
     FGSWidget* m_fgsWidget = nullptr;
+    CGWidget* m_cgWidget = nullptr;
     QVector<FriendApply*> m_friendApplyIs;
     QMap<int, FANItem*> m_fanItemIs;
     QVector<FriendApply*> m_friendApplyPs;

@@ -16,10 +16,6 @@ LRWidget::LRWidget(QWidget* parent) : QWidget(parent), ui(new Ui::LRWidget) {
     ui->setupUi(this);
     setWindowTitle("Cooper");
     setWindowIcon(QIcon(":/img/logo.ico"));
-    setMinimumWidth(394);
-    setMaximumWidth(394);
-    setMinimumHeight(260);
-    setMaximumHeight(260);
     ui->m_lRTabWidget->tabBar()->hide();
     setLineEditLimit();
     ui->m_passwordLineEdit->setEchoMode(QLineEdit::Password);
@@ -128,7 +124,7 @@ void LRWidget::getVFCode(int type) {
     QJsonObject json;
     json["username"] = username;
     auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/getVFCode", json);
-    if (ret["code"].toInt() == 20000) {
+    if (ret["code"].toInt() == HTTP_SUCCESS_CODE) {
         QMessageBox::information(this, "提示", "验证码已发送");
     } else {
         QMessageBox::warning(this, "提示", ret["msg"].toString());
@@ -233,7 +229,7 @@ void LRWidget::userRegister() {
     json["password"] = password;
     json["vfCode"] = vfCode;
     auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/register", json);
-    if (ret["code"].toInt() == 20000) {
+    if (ret["code"].toInt() == HTTP_SUCCESS_CODE) {
         QMessageBox::information(this, "提示", "注册成功");
         resetRegisterWidget();
     } else {

@@ -94,6 +94,9 @@ add_library(cooper_im_lib
         view/MessageItem.hpp
         view/MessageItem.cpp
         view/MessageItem.ui
+        view/CGWidget.hpp
+        view/CGWidget.cpp
+        view/CGWidget.ui
         # core
         core/IMKernel.hpp
         core/IMKernel.cpp

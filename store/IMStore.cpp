@@ -16,6 +16,7 @@ QSqlDatabase* IMStore::getDatabase() {
 IMStore::IMStore() {
     m_chatDialog = new ChatDialog();
     m_fgsWidget = new FGSWidget();
+    m_cgWidget = new CGWidget();
 }
 
 void IMStore::setIMKernel(IMKernel* imKernel) {
@@ -142,6 +143,10 @@ void IMStore::addFriend(const QJsonObject& json) {
 
 FGSWidget* IMStore::getFGSWidget() const {
     return m_fgsWidget;
+}
+
+CGWidget* IMStore::getCGWidget() const {
+    return m_cgWidget;
 }
 
 void IMStore::addFSRs(const QJsonObject& json) {
