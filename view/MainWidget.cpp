@@ -41,15 +41,14 @@ MainWidget::MainWidget(QWidget* parent) : QWidget(parent), ui(new Ui::MainWidget
             "QMenu::item:selected {"
             "    background-color: #ffffff;"
             "}");
-        auto createGroupAction = menu.addAction("创建群");
-        connect(createGroupAction, &QAction::triggered, []() {
-            IMStore::getInstance()->getCGWidget()->show();
-        });
         auto addFriendAndGroupAction = menu.addAction("加好友/群");
         connect(addFriendAndGroupAction, &QAction::triggered, []() {
             IMStore::getInstance()->getFGSWidget()->show();
         });
-        menu.addAction("设置");
+        auto createGroupAction = menu.addAction("创建群聊");
+        connect(createGroupAction, &QAction::triggered, []() {
+            IMStore::getInstance()->getCGWidget()->show();
+        });
         menu.exec(QCursor::pos());
     });
     FramelessWidgetsHelper::get(this)->extendsContentIntoTitleBar();

@@ -51,6 +51,7 @@ FGSWidget::FGSWidget(QWidget* parent) : QWidget(parent), ui(new Ui::FGSWidget) {
     m_fsrItemsLayout = new QGridLayout();
     m_fsrItemsLayout->setContentsMargins(0, 0, 0, 0);
     m_fsrItemsLayout->setSpacing(0);
+    m_fsrItemsLayout->setAlignment(Qt::AlignTop);
     m_fsrItemsLayout->setColumnMinimumWidth(0, 150);
     m_fsrItemsLayout->setColumnMinimumWidth(1, 150);
     m_fsrItemsLayout->setColumnMinimumWidth(2, 150);
@@ -65,6 +66,7 @@ FGSWidget::FGSWidget(QWidget* parent) : QWidget(parent), ui(new Ui::FGSWidget) {
     m_gsrItemsLayout = new QGridLayout();
     m_gsrItemsLayout->setContentsMargins(0, 0, 0, 0);
     m_gsrItemsLayout->setSpacing(0);
+    m_fsrItemsLayout->setAlignment(Qt::AlignTop);
     m_gsrItemsLayout->setColumnMinimumWidth(0, 150);
     m_gsrItemsLayout->setColumnMinimumWidth(1, 150);
     m_gsrItemsLayout->setColumnMinimumWidth(2, 150);
@@ -94,11 +96,11 @@ void FGSWidget::clearAllGSRItems() {
 }
 
 void FGSWidget::addFSRItem(FSRItem* fsrItem, int row, int column) {
-    m_fsrItemsLayout->addWidget(fsrItem, row, column, Qt::AlignLeft | Qt::AlignTop);
+    m_fsrItemsLayout->addWidget(fsrItem, row, column);
 }
 
 void FGSWidget::addGSRItem(GSRItem* gsrItem, int row, int column) {
-    m_gsrItemsLayout->addWidget(gsrItem, row, column, Qt::AlignLeft | Qt::AlignTop);
+    m_gsrItemsLayout->addWidget(gsrItem, row, column);
 }
 
 void FGSWidget::handleUserClickSearchPushButton() {

@@ -112,7 +112,7 @@ void IMKernel::handleFriendApplyNotifyP(const QJsonObject& json) {
         auto fanItem = new ApplyNotifyItem();
         fanItem->setIPMode(1);
         fanItem->setFGMode(0);
-        fanItem->setFromId(fa->from_id);
+        fanItem->setAppleId(fa->id);
         fanItem->setAvatar(fa->from_avatar);
         fanItem->setName(fa->from_nickname);
         fanItem->setOperation("申请添加你为好友");
@@ -130,7 +130,7 @@ void IMKernel::handleFriendApplyNotifyP(const QJsonObject& json) {
 
 void IMKernel::handleGroupApplyNotifyI(const QJsonObject& json) {
     auto ga = GroupApply::fromJson(json);
-    if (!IMStore::getInstance()->haveGANItemI(ga->to_id)) {
+    if (!IMStore::getInstance()->haveGANItemI(ga->group_id)) {
         auto ganItem = new ApplyNotifyItem();
         ganItem->setIPMode(0);
         ganItem->setFGMode(1);
@@ -138,10 +138,10 @@ void IMKernel::handleGroupApplyNotifyI(const QJsonObject& json) {
         ganItem->setName(ga->to_name);
         ganItem->setOperation("请求加入群聊");
         ganItem->setReason(ga->reason);
-        IMStore::getInstance()->addGANItemI(ga->to_id, ganItem);
+        IMStore::getInstance()->addGANItemI(ga->group_id, ganItem);
         IMStore::getInstance()->getNotifyWidget()->addApplyNotifyItem(ganItem);
     } else {
-        auto ganItem = IMStore::getInstance()->getGANItemI(ga->to_id);
+        auto ganItem = IMStore::getInstance()->getGANItemI(ga->group_id);
         if (ga->agree == 1) {
             ganItem->setStatus("已同意");
         } else if (ga->agree == 2) {
@@ -151,12 +151,13 @@ void IMKernel::handleGroupApplyNotifyI(const QJsonObject& json) {
 }
 
 void IMKernel::handleGroupApplyNotifyP(const QJsonObject& json) {
+    qDebug() << "IMKernel::handleGroupApplyNotifyP:\n" << json;
     auto ga = GroupApply::fromJson(json);
     if (!IMStore::getInstance()->haveFANItemP(ga->from_id)) {
         auto ganItem = new ApplyNotifyItem();
         ganItem->setIPMode(1);
         ganItem->setFGMode(1);
-        ganItem->setFromId(ga->from_id);
+        ganItem->setAppleId(ga->id);
         ganItem->setAvatar(ga->from_avatar);
         ganItem->setName(ga->from_nickname);
         ganItem->setOperation("申请加入 " + ga->to_name);

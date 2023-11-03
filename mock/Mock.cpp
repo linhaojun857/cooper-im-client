@@ -115,7 +115,7 @@ FGSWidget* Mock::fgsWidget = nullptr;
 void Mock::addMockFGSItems() {
     int row;
     int column;
-    for (int i = 0; i < 2; ++i) {
+    for (int i = 0; i < 20; ++i) {
         row = i / 3;
         column = i % 3;
         auto fsrItem = new FSRItem();

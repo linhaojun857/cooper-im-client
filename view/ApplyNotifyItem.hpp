@@ -21,7 +21,7 @@ public:
 
     void setFGMode(int mode);
 
-    void setFromId(int fromId);
+    void setAppleId(int appleId);
 
     void setAvatar(const QString& url);
 
@@ -42,7 +42,7 @@ private:
     int m_IPMode = 0;
     // 0: friend 1: group
     int m_FGMode = 0;
-    int m_fromId{};
+    int m_appleId{};
     QString m_avatarUrl;
     QString m_name;
     QString m_reason;

@@ -43,8 +43,8 @@ void ApplyNotifyItem::setFGMode(int mode) {
     }
 }
 
-void ApplyNotifyItem::setFromId(int fromId) {
-    m_fromId = fromId;
+void ApplyNotifyItem::setAppleId(int appleId) {
+    m_appleId = appleId;
 }
 
 void ApplyNotifyItem::setAvatar(const QString& url) {
@@ -91,36 +91,25 @@ void ApplyNotifyItem::setReason(const QString& reason) {
 
 void ApplyNotifyItem::responseFriendApply(int agree) {
     QJsonObject json;
-    json["from_id"] = m_fromId;
+    json["apply_id"] = m_appleId;
     json["agree"] = agree;
     json["token"] = IMStore::getInstance()->getToken();
+    QJsonObject ret;
     if (m_FGMode == 0) {
-        auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/responseFriendApply", json);
-        if (ret["code"] == HTTP_SUCCESS_CODE) {
-            ui->m_agreePushButton->hide();
-            ui->m_rejectPushButton->hide();
-            ui->m_statusLabel->show();
-            if (agree == 1) {
-                ui->m_statusLabel->setText("已同意");
-            } else {
-                ui->m_statusLabel->setText("已拒绝");
-            }
+        ret = HttpUtil::post(HTTP_SERVER_URL "/user/responseFriendApply", json);
+    } else {
+        ret = HttpUtil::post(HTTP_SERVER_URL "/user/responseGroupApply", json);
+    }
+    if (ret["code"] == HTTP_SUCCESS_CODE) {
+        ui->m_agreePushButton->hide();
+        ui->m_rejectPushButton->hide();
+        ui->m_statusLabel->show();
+        if (agree == 1) {
+            ui->m_statusLabel->setText("已同意");
         } else {
-            QMessageBox::warning(this, "提示", ret["msg"].toString());
+            ui->m_statusLabel->setText("已拒绝");
         }
     } else {
-        auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/responseGroupApply", json);
-        if (ret["code"] == HTTP_SUCCESS_CODE) {
-            ui->m_agreePushButton->hide();
-            ui->m_rejectPushButton->hide();
-            ui->m_statusLabel->show();
-            if (agree == 1) {
-                ui->m_statusLabel->setText("已同意");
-            } else {
-                ui->m_statusLabel->setText("已拒绝");
-            }
-        } else {
-            QMessageBox::warning(this, "提示", ret["msg"].toString());
-        }
+        QMessageBox::warning(this, "提示", ret["msg"].toString());
     }
 }
