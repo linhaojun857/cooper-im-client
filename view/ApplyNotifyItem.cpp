@@ -94,17 +94,33 @@ void ApplyNotifyItem::responseFriendApply(int agree) {
     json["from_id"] = m_fromId;
     json["agree"] = agree;
     json["token"] = IMStore::getInstance()->getToken();
-    auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/responseFriendApply", json);
-    if (ret["code"] == HTTP_SUCCESS_CODE) {
-        ui->m_agreePushButton->hide();
-        ui->m_rejectPushButton->hide();
-        ui->m_statusLabel->show();
-        if (agree == 1) {
-            ui->m_statusLabel->setText("已同意");
+    if (m_FGMode == 0) {
+        auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/responseFriendApply", json);
+        if (ret["code"] == HTTP_SUCCESS_CODE) {
+            ui->m_agreePushButton->hide();
+            ui->m_rejectPushButton->hide();
+            ui->m_statusLabel->show();
+            if (agree == 1) {
+                ui->m_statusLabel->setText("已同意");
+            } else {
+                ui->m_statusLabel->setText("已拒绝");
+            }
         } else {
-            ui->m_statusLabel->setText("已拒绝");
+            QMessageBox::warning(this, "提示", ret["msg"].toString());
         }
     } else {
-        QMessageBox::warning(this, "提示", ret["msg"].toString());
+        auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/responseGroupApply", json);
+        if (ret["code"] == HTTP_SUCCESS_CODE) {
+            ui->m_agreePushButton->hide();
+            ui->m_rejectPushButton->hide();
+            ui->m_statusLabel->show();
+            if (agree == 1) {
+                ui->m_statusLabel->setText("已同意");
+            } else {
+                ui->m_statusLabel->setText("已拒绝");
+            }
+        } else {
+            QMessageBox::warning(this, "提示", ret["msg"].toString());
+        }
     }
 }

@@ -10,10 +10,11 @@
 FSRItem::FSRItem(QWidget* parent) : QWidget(parent), ui(new Ui::FSRItem) {
     ui->setupUi(this);
     m_dialog = new AFDialog();
+    m_dialog->setMode(0);
     connect(ui->m_addPushButton, &QPushButton::clicked, [this]() {
         m_dialog->setId(m_id);
         m_dialog->setAvatar(m_avatarUrl);
-        m_dialog->setNickname(m_nickname);
+        m_dialog->setName(m_nickname);
         m_dialog->show();
     });
 }

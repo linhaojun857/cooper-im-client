@@ -2,6 +2,7 @@
 #define view_GSRItem_hpp
 
 #include <QWidget>
+#include <view/AFDialog.hpp>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -26,11 +27,11 @@ public:
     void setMemberCount(int memberCount);
 
 private:
-    void handleUserClickAddPushButton();
-
-private:
     Ui::GSRItem* ui;
     int m_id = 0;
+    QString m_avatarUrl;
+    QString m_name;
+    AFDialog* m_dialog = nullptr;
 };
 
 #endif

@@ -27,9 +27,9 @@ public:
 
     QString getAvatar();
 
-    void setNickname(const QString& nickname);
+    void setName(const QString& name);
 
-    QString getNickname();
+    QString getName();
 
 private slots:
     void addFriend();

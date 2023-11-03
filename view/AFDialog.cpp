@@ -55,12 +55,12 @@ QString AFDialog::getAvatar() {
     return m_avatarUrl;
 }
 
-void AFDialog::setNickname(const QString& nickname) {
-    m_name = nickname;
-    setWindowTitle(nickname);
+void AFDialog::setName(const QString& name) {
+    m_name = name;
+    setWindowTitle(name);
 }
 
-QString AFDialog::getNickname() {
+QString AFDialog::getName() {
     return m_name;
 }
 

@@ -75,6 +75,8 @@ void IMKernel::initHandlers() {
     m_handlers[PROTOCOL_TYPE_FRIEND_ENTITY] = std::bind(&IMKernel::handleFriendEntity, _1);
     m_handlers[PROTOCOL_TYPE_PERSON_MESSAGE_RECV] = std::bind(&IMKernel::handlePersonMessageRecv, _1);
     m_handlers[PROTOCOL_TYPE_PERSON_MESSAGE_SEND] = std::bind(&IMKernel::handlePersonMessageSend, _1);
+    m_handlers[PROTOCOL_TYPE_GROUP_APPLY_NOTIFY_I] = std::bind(&IMKernel::handleGroupApplyNotifyI, _1);
+    m_handlers[PROTOCOL_TYPE_GROUP_APPLY_NOTIFY_P] = std::bind(&IMKernel::handleGroupApplyNotifyP, _1);
 }
 
 void IMKernel::handleErrorMsg(const QJsonObject& json) {

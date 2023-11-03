@@ -9,7 +9,14 @@
 
 GSRItem::GSRItem(QWidget* parent) : QWidget(parent), ui(new Ui::GSRItem) {
     ui->setupUi(this);
-    connect(ui->m_addPushButton, &QPushButton::clicked, this, &GSRItem::handleUserClickAddPushButton);
+    m_dialog = new AFDialog();
+    m_dialog->setMode(1);
+    connect(ui->m_addPushButton, &QPushButton::clicked, [this]() {
+        m_dialog->setId(m_id);
+        m_dialog->setAvatar(m_avatarUrl);
+        m_dialog->setName(m_name);
+        m_dialog->show();
+    });
 }
 
 GSRItem::~GSRItem() {
@@ -21,6 +28,7 @@ void GSRItem::setId(int id) {
 }
 
 void GSRItem::setAvatar(const QString& url) {
+    m_avatarUrl = url;
     std::ignore = QtConcurrent::run([=]() {
         auto manager = new QNetworkAccessManager();
         QNetworkRequest request(url);
@@ -42,6 +50,7 @@ void GSRItem::setAvatar(const QString& url) {
 }
 
 void GSRItem::setName(const QString& name) {
+    m_name = name;
     QFontMetrics fontMetrics(ui->m_nameLabel->font());
     QString elideText = fontMetrics.elidedText(name, Qt::ElideRight, ui->m_nameLabel->width());
     ui->m_nameLabel->setText(elideText);
@@ -49,7 +58,4 @@ void GSRItem::setName(const QString& name) {
 
 void GSRItem::setMemberCount(int memberCount) {
     ui->m_memberCountLabel->setText(QString::number(memberCount) + "人");
-}
-
-void GSRItem::handleUserClickAddPushButton() {
 }

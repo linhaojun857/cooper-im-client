@@ -174,6 +174,7 @@ struct GroupApply {
     int id{};
     int from_id{};
     int to_id{};
+    int group_id{};
     QString from_avatar;
     QString from_nickname;
     QString to_avatar;
@@ -184,11 +185,12 @@ struct GroupApply {
 
     GroupApply() = default;
 
-    GroupApply(int id, int from_id, int to_id, const QString& from_avatar, const QString& from_nickname,
+    GroupApply(int id, int from_id, int to_id, int group_id, const QString& from_avatar, const QString& from_nickname,
                const QString& to_avatar, const QString& to_name, const QString& reason, int agree) {
         this->id = id;
         this->from_id = from_id;
         this->to_id = to_id;
+        this->group_id = group_id;
         this->from_avatar = from_avatar;
         this->from_nickname = from_nickname;
         this->to_avatar = to_avatar;
@@ -199,9 +201,9 @@ struct GroupApply {
 
     static GroupApply* fromJson(const QJsonObject& json) {
         auto ga = new GroupApply(json["id"].toInt(), json["from_id"].toInt(), json["to_id"].toInt(),
-                                 json["from_avatar"].toString(), json["from_nickname"].toString(),
-                                 json["to_avatar"].toString(), json["to_name"].toString(), json["reason"].toString(),
-                                 json["agree"].toInt());
+                                 json["group_id"].toInt(), json["from_avatar"].toString(),
+                                 json["from_nickname"].toString(), json["to_avatar"].toString(),
+                                 json["to_name"].toString(), json["reason"].toString(), json["agree"].toInt());
         return ga;
     }
 };

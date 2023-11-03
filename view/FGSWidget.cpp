@@ -26,6 +26,7 @@ FGSWidget::FGSWidget(QWidget* parent) : QWidget(parent), ui(new Ui::FGSWidget) {
         m_tabBtnMap[m_tabCurrentIndex]->setStyleSheet(
             "border: 0px;\n"
             "background-color: #d9d9d9;");
+        ui->m_sLineEdit->setPlaceholderText("请输入账号/昵称");
     });
     connect(ui->m_findGPushButton, &QPushButton::clicked, [this]() {
         m_searchMode = 1;
@@ -35,6 +36,7 @@ FGSWidget::FGSWidget(QWidget* parent) : QWidget(parent), ui(new Ui::FGSWidget) {
         m_tabBtnMap[m_tabCurrentIndex]->setStyleSheet(
             "border: 0px;\n"
             "background-color: #d9d9d9;");
+        ui->m_sLineEdit->setPlaceholderText("请输入群号/群名称");
     });
     connect(ui->m_sPushButton, &QPushButton::clicked, this, &FGSWidget::handleUserClickSearchPushButton);
 
