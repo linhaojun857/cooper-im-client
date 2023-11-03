@@ -49,7 +49,7 @@ QString GroupItem::getAvatar() {
     return m_avatarUrl;
 }
 
-void GroupItem::setGroupName(const QString& groupName) {
+void GroupItem::setName(const QString& groupName) {
     m_groupName = groupName;
     QFontMetrics fontMetrics(ui->m_groupNameLabel->font());
     QString elideText = fontMetrics.elidedText(groupName, Qt::ElideRight, ui->m_groupNameLabel->width());

@@ -93,7 +93,7 @@ void Mock::addMockGroupItems() {
         auto item = new GroupItem();
         item->setId(i);
         item->setAvatar(Mock::urls[i % Mock::urls.size()]);
-        item->setGroupName(Mock::groupNames[i % Mock::groupNames.size()]);
+        item->setName(Mock::groupNames[i % Mock::groupNames.size()]);
         groupWidget->addGroupItem(item);
     }
 }

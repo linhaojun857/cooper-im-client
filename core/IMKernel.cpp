@@ -35,7 +35,6 @@ void IMKernel::createLRWidget() {
 void IMKernel::createMainWidget() {
     m_mainWidget = new MainWidget();
     m_mainWidget->show();
-    Mock::addMockGroupItems();
 }
 
 void IMKernel::sendAuthMsg() {

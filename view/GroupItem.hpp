@@ -19,13 +19,13 @@ public:
 
     void setId(int id);
 
-    int getId() const;
+    [[nodiscard]] int getId() const;
 
     void setAvatar(const QString& url);
 
     QString getAvatar();
 
-    void setGroupName(const QString& groupName);
+    void setName(const QString& groupName);
 
     QString getGroupName();
 

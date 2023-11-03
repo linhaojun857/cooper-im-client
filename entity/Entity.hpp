@@ -134,6 +134,38 @@ struct Friend {
     }
 };
 
+struct Group {
+    int id{};
+    QString session_id;
+    QString group_num;
+    int owner_id{};
+    QString name;
+    QString avatar;
+    QString description;
+    int member_count{};
+
+    Group() = default;
+
+    Group(int id, const QString& session_id, const QString& group_num, int owner_id, const QString& name,
+          const QString& avatar, const QString& description, int member_count) {
+        this->id = id;
+        this->session_id = session_id;
+        this->group_num = group_num;
+        this->owner_id = owner_id;
+        this->name = name;
+        this->avatar = avatar;
+        this->description = description;
+        this->member_count = member_count;
+    }
+
+    static Group fromJson(const QJsonObject& json) {
+        Group group(json["id"].toInt(), json["session_id"].toString(), json["group_num"].toString(),
+                    json["owner_id"].toInt(), json["name"].toString(), json["avatar"].toString(),
+                    json["description"].toString(), json["member_count"].toInt());
+        return group;
+    }
+};
+
 struct FriendApply {
     int id{};
     int from_id{};

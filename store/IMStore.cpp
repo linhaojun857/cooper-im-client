@@ -4,6 +4,9 @@
 #include <QJsonObject>
 #include <QThread>
 
+#include "define/IMDefine.hpp"
+#include "util/HttpUtil.hpp"
+
 IMStore* IMStore::getInstance() {
     static IMStore store;
     return &store;
@@ -53,6 +56,10 @@ bool IMStore::isOpenChatPage(int id) {
 
 void IMStore::setFriendWidget(FriendWidget* friendWidget) {
     m_friendWidget = friendWidget;
+}
+
+void IMStore::setGroupWidget(GroupWidget* groupWidget) {
+    m_groupWidget = groupWidget;
 }
 
 void IMStore::setMessageWidget(MessageWidget* messageWidget) {
@@ -250,6 +257,7 @@ Friend* IMStore::getFriend(int id) {
 
 void IMStore::loadWidget() {
     loadFriendWidget();
+    loadGroupWidget();
     loadMessageWidget();
 }
 
@@ -269,6 +277,28 @@ void IMStore::loadFriendWidget() {
         friendItem->setStatusAndFeeling(fri.status, fri.feeling);
         m_friendItems[fri.id] = friendItem;
         m_friendWidget->addFriendItem(friendItem);
+    }
+}
+
+void IMStore::loadGroupWidget() {
+    QJsonObject json;
+    json["token"] = getToken();
+    auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/getAllGroups", json);
+    if (ret["code"].toInt() == HTTP_SUCCESS_CODE) {
+        QJsonArray groups = ret["groups"].toArray();
+        for (const auto& g : groups) {
+            auto obj = g.toObject();
+            auto group = Group::fromJson(obj);
+            m_groups[group.id] = group;
+            auto groupItem = new GroupItem();
+            groupItem->setId(group.id);
+            groupItem->setAvatar(group.avatar);
+            groupItem->setName(group.name);
+            m_groupItems[group.id] = groupItem;
+            m_groupWidget->addGroupItem(groupItem);
+        }
+    } else {
+        qDebug() << ret["msg"].toString();
     }
 }
 
@@ -297,8 +327,8 @@ void IMStore::loadMessageWidget() {
         messageItem->setAvatar(query.value(2).toString());
         messageItem->setRecentMsg(query.value(3).toString());
         messageItem->setTime(query.value(4).toLongLong());
-        m_messageWidget->addMessageItem(messageItem);
         m_messageItems[messageItem->getId()] = messageItem;
+        m_messageWidget->addMessageItem(messageItem);
     }
 }
 

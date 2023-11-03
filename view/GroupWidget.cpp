@@ -1,12 +1,14 @@
 #include "GroupWidget.hpp"
 
 #include "mock/Mock.hpp"
+#include "store/IMStore.hpp"
 #include "ui_GroupWidget.h"
 
 GroupWidget::GroupWidget(QWidget* parent) : QWidget(parent), ui(new Ui::GroupWidget) {
+    ui->setupUi(this);
     // mock
     Mock::groupWidget = this;
-    ui->setupUi(this);
+    IMStore::getInstance()->setGroupWidget(this);
     ui->m_scrollArea->setFrameStyle(QFrame::NoFrame);
     ui->m_scrollArea->setFrameShape(QFrame::NoFrame);
     ui->m_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

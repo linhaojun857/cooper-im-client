@@ -44,6 +44,8 @@ public:
 
     void setFriendWidget(FriendWidget* friendWidget);
 
+    void setGroupWidget(GroupWidget* groupWidget);
+
     void setMessageWidget(MessageWidget* messageWidget);
 
     void setNotifyWidget(NotifyWidget* notifyWidget);
@@ -104,6 +106,8 @@ public:
 
     void loadFriendWidget();
 
+    void loadGroupWidget();
+
     void loadMessageWidget();
 
     void updatePersonMessageItem(const PersonMessage& pm);
@@ -121,6 +125,7 @@ private:
     ChatDialog* m_chatDialog = nullptr;
     QSet<int> m_openChatPageIds;
     FriendWidget* m_friendWidget = nullptr;
+    GroupWidget* m_groupWidget = nullptr;
     MessageWidget* m_messageWidget = nullptr;
     QMap<int, Friend*> m_friends;
     QMap<int, FriendItem*> m_friendItems;
@@ -134,6 +139,8 @@ private:
     QMap<int, ApplyNotifyItem*> m_ganItemIs;
     QMap<int, ApplyNotifyItem*> m_ganItemPs;
     NotifyWidget* m_notifyWidget = nullptr;
+    QMap<int, Group> m_groups;
+    QMap<int, GroupItem*> m_groupItems;
 };
 
 #endif
