@@ -70,9 +70,13 @@ public:
 
     static void scrollToBottom();
 
-    static void addSelfMsg(const PersonMessage& pm);
+    static void addSelfPersonMsg(const PersonMessage& pm);
 
-    static void addPeerMsg(const PersonMessage& pm);
+    static void addPeerPersonMsg(const PersonMessage& pm);
+
+    static void addSelfGroupMsg(const GroupMessage& gm);
+
+    static void addPeerGroupMsg(const GroupMessage& gm);
 
     static void addTimeline(const QString& time);
 
@@ -151,11 +155,13 @@ public:
 
     void showDialog();
 
-    void addChatItem(int id);
+    void addChatItem(int id, int mode);
 
-    void changeChatHistory(int id);
+    void changeChatHistory(int id, int mode);
 
     [[nodiscard]] int getCurrentPeerId() const;
+
+    [[nodiscard]] int getCurrentGroupId() const;
 
 private:
     void handleClickSendPushButton() const;
@@ -163,11 +169,14 @@ private:
 private:
     Ui::ChatDialog* ui;
     int m_currentPeerId = 0;
+    int m_currentGroupId = 0;
     CustomWebEngineView* m_friendChatView = nullptr;
     QWebChannel* m_webChannel = nullptr;
-    QMap<int, ChatItem*> m_chatItemMap;
+    QMap<int, ChatItem*> m_personChatItemMap;
+    QMap<int, ChatItem*> m_groupChatItemMap;
     QVBoxLayout* m_chatItemLayout = nullptr;
     QVector<PersonMessage> m_personMessages;
+    QVector<GroupMessage> m_groupMessages;
     WebController* m_webController;
 };
 

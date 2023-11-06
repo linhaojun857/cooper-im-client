@@ -51,7 +51,7 @@ void WebController::previewImg(const QString& url) {
 
 WebController* WebHelper::webController = nullptr;
 
-void WebHelper::addSelfMsg(const PersonMessage& pm) {
+void WebHelper::addSelfPersonMsg(const PersonMessage& pm) {
     switch (pm.message_type) {
         case MSG_TYPE_TEXT:
             addSelfTextMsg(pm.message);
@@ -68,7 +68,7 @@ void WebHelper::addSelfMsg(const PersonMessage& pm) {
     }
 }
 
-void WebHelper::addPeerMsg(const PersonMessage& pm) {
+void WebHelper::addPeerPersonMsg(const PersonMessage& pm) {
     switch (pm.message_type) {
         case MSG_TYPE_TEXT:
             addPeerTextMsg(pm.from_id, pm.message);
@@ -81,6 +81,40 @@ void WebHelper::addPeerMsg(const PersonMessage& pm) {
             break;
         case MSG_TYPE_FILE:
             addPeerFileMsg(pm.from_id, pm.file_url);
+            break;
+    }
+}
+
+void WebHelper::addSelfGroupMsg(const GroupMessage& gm) {
+    switch (gm.message_type) {
+        case MSG_TYPE_TEXT:
+            addSelfTextMsgGroup(gm.message);
+            break;
+        case MSG_TYPE_IMAGE:
+            addSelfImageMsgGroup(gm.file_url);
+            break;
+        case MSG_TYPE_ViDEO:
+            addSelfVideoMsgGroup(gm.file_url);
+            break;
+        case MSG_TYPE_FILE:
+            addSelfFileMsgGroup(gm.file_url);
+            break;
+    }
+}
+
+void WebHelper::addPeerGroupMsg(const GroupMessage& gm) {
+    switch (gm.message_type) {
+        case MSG_TYPE_TEXT:
+            addPeerTextMsgGroup(gm.from_id, gm.message);
+            break;
+        case MSG_TYPE_IMAGE:
+            addPeerImageMsgGroup(gm.from_id, gm.file_url);
+            break;
+        case MSG_TYPE_ViDEO:
+            addPeerVideoMsgGroup(gm.from_id, gm.file_url);
+            break;
+        case MSG_TYPE_FILE:
+            addPeerFileMsgGroup(gm.from_id, gm.file_url);
             break;
     }
 }
@@ -180,8 +214,8 @@ ChatDialog::ChatDialog(QWidget* parent) : QDialog(parent), ui(new Ui::ChatDialog
     connect(ui->m_closePushButton, &QPushButton::clicked, [this]() {
         qDebug() << "ui->m_closePushButton, &QPushButton::clicked";
         m_currentPeerId = -1;
-        for (const auto& item : m_chatItemMap) {
-            IMStore::getInstance()->closeChatPage(item->getId());
+        for (const auto& item : m_personChatItemMap) {
+            IMStore::getInstance()->closePersonChatPage(item->getId());
             item->hide();
         }
         hideDialog();
@@ -239,60 +273,108 @@ void ChatDialog::showDialog() {
     this->show();
 }
 
-void ChatDialog::addChatItem(int id) {
+void ChatDialog::addChatItem(int id, int mode) {
     qDebug() << "ChatDialog::addChatItem";
-    if (m_chatItemMap.contains(id)) {
-        m_chatItemMap[id]->show();
-        return;
+    if (mode == 0) {
+        if (m_personChatItemMap.contains(id)) {
+            m_personChatItemMap[id]->show();
+            return;
+        }
+        auto chatItem = new ChatItem();
+        chatItem->setMode(0);
+        chatItem->setId(id);
+        chatItem->setAvatar(IMStore::getInstance()->getFriend(id)->avatar);
+        chatItem->setName(IMStore::getInstance()->getFriend(id)->nickname);
+        chatItem->setRecentMsg(IMStore::getInstance()->getLatestPersonMessageByUserId(id));
+        m_personChatItemMap.insert(id, chatItem);
+        m_chatItemLayout->insertWidget(m_chatItemLayout->count() - 1, chatItem);
+    } else {
+        if (m_groupChatItemMap.contains(id)) {
+            m_groupChatItemMap[id]->show();
+            return;
+        }
+        auto chatItem = new ChatItem();
+        chatItem->setMode(1);
+        chatItem->setId(id);
+        chatItem->setAvatar(IMStore::getInstance()->getGroup(id)->avatar);
+        chatItem->setName(IMStore::getInstance()->getGroup(id)->name);
+        chatItem->setRecentMsg(IMStore::getInstance()->getLatestGroupMessageByGroupId(id));
+        m_groupChatItemMap.insert(id, chatItem);
+        m_chatItemLayout->insertWidget(m_chatItemLayout->count() - 1, chatItem);
     }
-    auto chatItem = new ChatItem();
-    chatItem->setId(id);
-    chatItem->setAvatar(IMStore::getInstance()->getFriend(id)->avatar);
-    chatItem->setName(IMStore::getInstance()->getFriend(id)->nickname);
-    chatItem->setRecentMsg(IMStore::getInstance()->getLatestPersonMessageByUserId(id));
-    m_chatItemMap.insert(id, chatItem);
-    m_chatItemLayout->insertWidget(m_chatItemLayout->count() - 1, chatItem);
 }
 
-void ChatDialog::changeChatHistory(int id) {
+void ChatDialog::changeChatHistory(int id, int mode) {
     qDebug() << "ChatDialog::changeChatHistory";
-    if (m_currentPeerId == id) {
-        return;
-    }
-    m_currentPeerId = id;
-    WebHelper::clearAllElement();
-    ui->m_nameLabel->setText(m_chatItemMap[id]->getName());
-    QSqlQuery query(*IMStore::getInstance()->getDatabase());
-    QString sql1 = QString("select session_id from t_friend where friend_id = %1").arg(id);
-    if (!query.exec(sql1)) {
-        qDebug() << query.lastError().text();
-        return;
-    }
-    if (!query.next()) {
-        return;
-    }
-    QString sessionId = query.value(0).toString();
-    QString sql2 = QString("select * from t_person_message where session_id = '%1'").arg(sessionId);
-    if (!query.exec(sql2)) {
-        qDebug() << query.lastError().text();
-        return;
-    }
-    while (query.next()) {
-        PersonMessage pm(query.value(1).toInt(), query.value(2).toInt(), query.value(3).toInt(),
-                         query.value(4).toString(), query.value(5).toInt(), query.value(6).toString(),
-                         query.value(7).toString(), query.value(8).toLongLong());
-        m_personMessages.push_back(pm);
-        if (pm.from_id == IMStore::getInstance()->getSelf()->id) {
-            WebHelper::addSelfMsg(pm);
-        } else {
-            WebHelper::addPeerMsg(pm);
+    if (mode == 0) {
+        if (m_currentPeerId == id) {
+            return;
         }
-        WebHelper::scrollToBottom();
+        m_currentPeerId = id;
+        m_currentGroupId = -1;
+        WebHelper::clearAllElement();
+        ui->m_nameLabel->setText(m_personChatItemMap[id]->getName());
+        QSqlQuery query(*IMStore::getInstance()->getDatabase());
+        QString sql1 = QString("select session_id from t_friend where friend_id = %1").arg(id);
+        if (!query.exec(sql1)) {
+            qDebug() << query.lastError().text();
+            return;
+        }
+        if (!query.next()) {
+            return;
+        }
+        QString sessionId = query.value(0).toString();
+        QString sql2 = QString("select * from t_person_message where session_id = '%1'").arg(sessionId);
+        if (!query.exec(sql2)) {
+            qDebug() << query.lastError().text();
+            return;
+        }
+        while (query.next()) {
+            PersonMessage pm(query.value(1).toInt(), query.value(2).toInt(), query.value(3).toInt(),
+                             query.value(4).toString(), query.value(5).toInt(), query.value(6).toString(),
+                             query.value(7).toString(), query.value(8).toLongLong());
+            m_personMessages.push_back(pm);
+            if (pm.from_id == IMStore::getInstance()->getSelf()->id) {
+                WebHelper::addSelfPersonMsg(pm);
+            } else {
+                WebHelper::addPeerPersonMsg(pm);
+            }
+            WebHelper::scrollToBottom();
+        }
+    } else {
+        if (m_currentGroupId == id) {
+            return;
+        }
+        m_currentGroupId = id;
+        m_currentPeerId = -1;
+        WebHelper::clearAllElement();
+        ui->m_nameLabel->setText(m_groupChatItemMap[id]->getName());
+        QSqlQuery query(*IMStore::getInstance()->getDatabase());
+        QString sql = QString("select * from t_group_message where group_id = %1").arg(id);
+        if (!query.exec(sql)) {
+            qDebug() << query.lastError().text();
+            return;
+        }
+        while (query.next()) {
+            GroupMessage gm(query.value(1).toInt(), query.value(2).toInt(), query.value(3).toInt(),
+                            query.value(4).toInt(), query.value(5).toString(), query.value(6).toString(),
+                            query.value(7).toLongLong());
+            if (gm.from_id == IMStore::getInstance()->getSelf()->id) {
+                WebHelper::addSelfGroupMsg(gm);
+            } else {
+                WebHelper::addPeerGroupMsg(gm);
+            }
+            WebHelper::scrollToBottom();
+        }
     }
 }
 
 int ChatDialog::getCurrentPeerId() const {
     return m_currentPeerId;
+}
+
+int ChatDialog::getCurrentGroupId() const {
+    return m_currentGroupId;
 }
 
 void ChatDialog::handleClickSendPushButton() const {
@@ -304,6 +386,6 @@ void ChatDialog::handleClickSendPushButton() const {
     pm.message = ui->m_plainTextEdit->toPlainText();
     pm.timestamp = time(nullptr);
     IMStore::getInstance()->getIMKernel()->sendPersonMsg(pm);
-    WebHelper::addSelfMsg(pm);
+    WebHelper::addSelfPersonMsg(pm);
     WebHelper::scrollToBottom();
 }

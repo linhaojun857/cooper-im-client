@@ -14,17 +14,28 @@ MessageItem::MessageItem(QWidget* parent) : QWidget(parent), ui(new Ui::MessageI
         if (!IMStore::getInstance()->getChatDialog()->isVisible()) {
             IMStore::getInstance()->getChatDialog()->showDialog();
         }
-        if (!IMStore::getInstance()->isOpenChatPage(m_id)) {
-            qDebug() << "open chat page";
-            IMStore::getInstance()->openChatPage(m_id);
-            IMStore::getInstance()->getChatDialog()->addChatItem(m_id);
-            IMStore::getInstance()->getChatDialog()->changeChatHistory(m_id);
+        if (m_mode == 0) {
+            if (!IMStore::getInstance()->isOpenPersonChatPage(m_id)) {
+                IMStore::getInstance()->openPersonChatPage(m_id);
+                IMStore::getInstance()->getChatDialog()->addChatItem(m_id, 0);
+                IMStore::getInstance()->getChatDialog()->changeChatHistory(m_id, 0);
+            }
+        } else {
+            if (!IMStore::getInstance()->isOpenGroupChatPage(m_id)) {
+                IMStore::getInstance()->openGroupChatPage(m_id);
+                IMStore::getInstance()->getChatDialog()->addChatItem(m_id, 1);
+                IMStore::getInstance()->getChatDialog()->changeChatHistory(m_id, 1);
+            }
         }
     });
 }
 
 MessageItem::~MessageItem() {
     delete ui;
+}
+
+void MessageItem::setMode(int mode) {
+    m_mode = mode;
 }
 
 void MessageItem::setId(int id) {

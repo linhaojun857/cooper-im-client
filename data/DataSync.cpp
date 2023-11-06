@@ -35,6 +35,7 @@ void DataSync::syncAll() {
     auto syncState = DataSync::getSyncState();
     DataSync::syncFriends(isFirstSync, &syncState);
     DataSync::syncPersonMessages(isFirstSync, &syncState);
+    // DataSync::syncGroupMessages(isFirstSync, &syncState);
     QSqlQuery query(*IMStore::getInstance()->getDatabase());
     query.exec(QString("insert into t_sync_record (timestamp) values (%1)").arg(time(nullptr)));
     IMStore::getInstance()->getIMKernel()->sendSyncCompleteMsg();

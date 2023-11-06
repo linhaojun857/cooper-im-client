@@ -171,10 +171,10 @@ struct Group {
         this->member_count = member_count;
     }
 
-    static Group fromJson(const QJsonObject& json) {
-        Group group(json["id"].toInt(), json["session_id"].toString(), json["group_num"].toString(),
-                    json["owner_id"].toInt(), json["name"].toString(), json["avatar"].toString(),
-                    json["description"].toString(), json["member_count"].toInt());
+    static Group* fromJson(const QJsonObject& json) {
+        auto group = new Group(json["id"].toInt(), json["session_id"].toString(), json["group_num"].toString(),
+                               json["owner_id"].toInt(), json["name"].toString(), json["avatar"].toString(),
+                               json["description"].toString(), json["member_count"].toInt());
         return group;
     }
 };

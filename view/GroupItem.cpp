@@ -5,10 +5,21 @@
 #include <QNetworkRequest>
 #include <QtConcurrent/QtConcurrent>
 
+#include "store/IMStore.hpp"
 #include "ui_GroupItem.h"
 
 GroupItem::GroupItem(QWidget* parent) : QWidget(parent), ui(new Ui::GroupItem) {
     ui->setupUi(this);
+    connect(ui->m_avatarPushButton, &QPushButton::clicked, [this]() {
+        if (!IMStore::getInstance()->getChatDialog()->isVisible()) {
+            IMStore::getInstance()->getChatDialog()->showDialog();
+        }
+        if (!IMStore::getInstance()->isOpenGroupChatPage(m_id)) {
+            IMStore::getInstance()->openGroupChatPage(m_id);
+            IMStore::getInstance()->getChatDialog()->addChatItem(m_id, 1);
+            IMStore::getInstance()->getChatDialog()->changeChatHistory(m_id, 1);
+        }
+    });
 }
 
 GroupItem::~GroupItem() {

@@ -17,6 +17,8 @@ public:
 
     ~ChatItem() override;
 
+    void setMode(int mode);
+
     void setId(int id);
 
     [[nodiscard]] int getId() const;
@@ -33,6 +35,7 @@ public:
 
 private:
     Ui::ChatItem* ui;
+    int m_mode = 0;
     int m_id = 0;
     QString m_avatarUrl;
     QString m_name;

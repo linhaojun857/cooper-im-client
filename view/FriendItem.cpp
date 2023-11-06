@@ -15,11 +15,10 @@ FriendItem::FriendItem(QWidget* parent) : QWidget(parent), ui(new Ui::FriendItem
         if (!IMStore::getInstance()->getChatDialog()->isVisible()) {
             IMStore::getInstance()->getChatDialog()->showDialog();
         }
-        if (!IMStore::getInstance()->isOpenChatPage(m_id)) {
-            qDebug() << "open chat page";
-            IMStore::getInstance()->openChatPage(m_id);
-            IMStore::getInstance()->getChatDialog()->addChatItem(m_id);
-            IMStore::getInstance()->getChatDialog()->changeChatHistory(m_id);
+        if (!IMStore::getInstance()->isOpenPersonChatPage(m_id)) {
+            IMStore::getInstance()->openPersonChatPage(m_id);
+            IMStore::getInstance()->getChatDialog()->addChatItem(m_id, 0);
+            IMStore::getInstance()->getChatDialog()->changeChatHistory(m_id, 0);
         }
     });
 }

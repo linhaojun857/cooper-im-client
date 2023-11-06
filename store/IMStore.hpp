@@ -36,11 +36,17 @@ public:
 
     ChatDialog* getChatDialog();
 
-    void openChatPage(int id);
+    void openPersonChatPage(int id);
 
-    void closeChatPage(int id);
+    void closePersonChatPage(int id);
 
-    bool isOpenChatPage(int id);
+    bool isOpenPersonChatPage(int id);
+
+    void openGroupChatPage(int id);
+
+    void closeGroupChatPage(int id);
+
+    bool isOpenGroupChatPage(int id);
 
     void setFriendWidget(FriendWidget* friendWidget);
 
@@ -63,6 +69,8 @@ public:
     QString getToken();
 
     void addFriend(const QJsonObject& json);
+
+    void addGroup(const QJsonObject& json);
 
     [[nodiscard]] FGSWidget* getFGSWidget() const;
 
@@ -102,6 +110,8 @@ public:
 
     Friend* getFriend(int id);
 
+    Group* getGroup(int id);
+
     void loadWidget();
 
     void loadFriendWidget();
@@ -110,11 +120,21 @@ public:
 
     void loadMessageWidget();
 
+    void loadPersonMessageWidget();
+
+    void loadGroupMessageWidget();
+
     void updatePersonMessageItem(const PersonMessage& pm);
 
     void movePersonMessageItemToTop(int userId);
 
+    void updateGroupMessageItem(const GroupMessage& gm);
+
+    void moveGroupMessageItemToTop(int groupId);
+
     QString getLatestPersonMessageByUserId(int userId);
+
+    QString getLatestGroupMessageByGroupId(int groupId);
 
 private:
     QSqlDatabase m_database;
@@ -123,13 +143,15 @@ private:
     IMKernel* m_imKernel = nullptr;
     MainWidget* m_mainWidget = nullptr;
     ChatDialog* m_chatDialog = nullptr;
-    QSet<int> m_openChatPageIds;
+    QSet<int> m_openPersonChatPageIds;
+    QSet<int> m_openGroupChatPageIds;
     FriendWidget* m_friendWidget = nullptr;
     GroupWidget* m_groupWidget = nullptr;
     MessageWidget* m_messageWidget = nullptr;
     QMap<int, Friend*> m_friends;
     QMap<int, FriendItem*> m_friendItems;
-    QMap<int, MessageItem*> m_messageItems;
+    QMap<int, MessageItem*> m_personMessageItems;
+    QMap<int, MessageItem*> m_groupMessageItems;
     FGSWidget* m_fgsWidget = nullptr;
     CGWidget* m_cgWidget = nullptr;
     QVector<FriendApply*> m_friendApplyIs;
@@ -139,7 +161,7 @@ private:
     QMap<int, ApplyNotifyItem*> m_ganItemIs;
     QMap<int, ApplyNotifyItem*> m_ganItemPs;
     NotifyWidget* m_notifyWidget = nullptr;
-    QMap<int, Group> m_groups;
+    QMap<int, Group*> m_groups;
     QMap<int, GroupItem*> m_groupItems;
 };
 

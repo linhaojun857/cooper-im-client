@@ -12,12 +12,20 @@
 ChatItem::ChatItem(QWidget* parent) : QWidget(parent), ui(new Ui::ChatItem) {
     ui->setupUi(this);
     connect(ui->m_avatarPushButton, &QPushButton::clicked, [this]() {
-        IMStore::getInstance()->getChatDialog()->changeChatHistory(m_id);
+        if (m_mode == 0) {
+            IMStore::getInstance()->getChatDialog()->changeChatHistory(m_id, 0);
+        } else {
+            IMStore::getInstance()->getChatDialog()->changeChatHistory(m_id, 1);
+        }
     });
 }
 
 ChatItem::~ChatItem() {
     delete ui;
+}
+
+void ChatItem::setMode(int mode) {
+    m_mode = mode;
 }
 
 void ChatItem::setId(int id) {

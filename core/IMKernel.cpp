@@ -76,6 +76,9 @@ void IMKernel::initHandlers() {
     m_handlers[PROTOCOL_TYPE_PERSON_MESSAGE_SEND] = std::bind(&IMKernel::handlePersonMessageSend, _1);
     m_handlers[PROTOCOL_TYPE_GROUP_APPLY_NOTIFY_I] = std::bind(&IMKernel::handleGroupApplyNotifyI, _1);
     m_handlers[PROTOCOL_TYPE_GROUP_APPLY_NOTIFY_P] = std::bind(&IMKernel::handleGroupApplyNotifyP, _1);
+    m_handlers[PROTOCOL_TYPE_GROUP_ENTITY] = std::bind(&IMKernel::handleGroupEntity, _1);
+    m_handlers[PROTOCOL_TYPE_GROUP_MESSAGE_RECV] = std::bind(&IMKernel::handleGroupMessageRecv, _1);
+    m_handlers[PROTOCOL_TYPE_GROUP_MESSAGE_SEND] = std::bind(&IMKernel::handleGroupMessageSend, _1);
 }
 
 void IMKernel::handleErrorMsg(const QJsonObject& json) {
@@ -181,7 +184,7 @@ void IMKernel::handlePersonMessageRecv(const QJsonObject& json) {
     auto pm = PersonMessage::fromJson(json);
     DataSync::syncPersonMessagesBuServerPush(json);
     if (pm.from_id == IMStore::getInstance()->getChatDialog()->getCurrentPeerId()) {
-        WebHelper::addPeerTextMsg(pm.from_id, pm.message);
+        WebHelper::addPeerPersonMsg(pm);
         WebHelper::scrollToBottom();
     }
     IMStore::getInstance()->updatePersonMessageItem(pm);
@@ -190,4 +193,23 @@ void IMKernel::handlePersonMessageRecv(const QJsonObject& json) {
 void IMKernel::handlePersonMessageSend(const QJsonObject& json) {
     auto pm = PersonMessage::fromJson(json);
     DataSync::syncPersonMessagesBuServerPush(json);
+}
+
+void IMKernel::handleGroupEntity(const QJsonObject& json) {
+    IMStore::getInstance()->addGroup(json);
+}
+
+void IMKernel::handleGroupMessageRecv(const QJsonObject& json) {
+    auto gm = GroupMessage::fromJson(json);
+    DataSync::syncGroupMessagesByServerPush(json);
+    if (gm.group_id == IMStore::getInstance()->getChatDialog()->getCurrentGroupId()) {
+        WebHelper::addPeerGroupMsg(gm);
+        WebHelper::scrollToBottom();
+    }
+    IMStore::getInstance()->updateGroupMessageItem(gm);
+}
+
+void IMKernel::handleGroupMessageSend(const QJsonObject& json) {
+    auto gm = GroupMessage::fromJson(json);
+    DataSync::syncGroupMessagesByServerPush(json);
 }

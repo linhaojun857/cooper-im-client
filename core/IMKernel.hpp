@@ -50,6 +50,12 @@ private:
 
     static void handlePersonMessageSend(const QJsonObject& json);
 
+    static void handleGroupEntity(const QJsonObject& json);
+
+    static void handleGroupMessageRecv(const QJsonObject& json);
+
+    static void handleGroupMessageSend(const QJsonObject& json);
+
 private:
     TcpClientMediator* m_mediator = nullptr;
     LRWidget* m_lRWidget = nullptr;

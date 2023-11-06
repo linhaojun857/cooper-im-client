@@ -42,16 +42,28 @@ ChatDialog* IMStore::getChatDialog() {
     return m_chatDialog;
 }
 
-void IMStore::openChatPage(int id) {
-    m_openChatPageIds.insert(id);
+void IMStore::openPersonChatPage(int id) {
+    m_openPersonChatPageIds.insert(id);
 }
 
-void IMStore::closeChatPage(int id) {
-    m_openChatPageIds.remove(id);
+void IMStore::closePersonChatPage(int id) {
+    m_openPersonChatPageIds.remove(id);
 }
 
-bool IMStore::isOpenChatPage(int id) {
-    return m_openChatPageIds.contains(id);
+bool IMStore::isOpenPersonChatPage(int id) {
+    return m_openPersonChatPageIds.contains(id);
+}
+
+void IMStore::openGroupChatPage(int id) {
+    m_openGroupChatPageIds.insert(id);
+}
+
+void IMStore::closeGroupChatPage(int id) {
+    m_openGroupChatPageIds.remove(id);
+}
+
+bool IMStore::isOpenGroupChatPage(int id) {
+    return m_openGroupChatPageIds.contains(id);
 }
 
 void IMStore::setFriendWidget(FriendWidget* friendWidget) {
@@ -146,6 +158,18 @@ void IMStore::addFriend(const QJsonObject& json) {
     m_friends[fri->id] = fri;
     m_friendItems[fri->id] = friendItem;
     m_friendWidget->addFriendItem(friendItem);
+}
+
+void IMStore::addGroup(const QJsonObject& json) {
+    qDebug() << "IMStore::addGroup";
+    auto group = Group::fromJson(json);
+    auto groupItem = new GroupItem();
+    groupItem->setId(group->id);
+    groupItem->setAvatar(group->avatar);
+    groupItem->setName(group->name);
+    m_groups[group->id] = group;
+    m_groupItems[group->id] = groupItem;
+    m_groupWidget->addGroupItem(groupItem);
 }
 
 FGSWidget* IMStore::getFGSWidget() const {
@@ -255,6 +279,10 @@ Friend* IMStore::getFriend(int id) {
     return m_friends[id];
 }
 
+Group* IMStore::getGroup(int id) {
+    return m_groups[id];
+}
+
 void IMStore::loadWidget() {
     loadFriendWidget();
     loadGroupWidget();
@@ -289,12 +317,12 @@ void IMStore::loadGroupWidget() {
         for (const auto& g : groups) {
             auto obj = g.toObject();
             auto group = Group::fromJson(obj);
-            m_groups[group.id] = group;
+            m_groups[group->id] = group;
             auto groupItem = new GroupItem();
-            groupItem->setId(group.id);
-            groupItem->setAvatar(group.avatar);
-            groupItem->setName(group.name);
-            m_groupItems[group.id] = groupItem;
+            groupItem->setId(group->id);
+            groupItem->setAvatar(group->avatar);
+            groupItem->setName(group->name);
+            m_groupItems[group->id] = groupItem;
             m_groupWidget->addGroupItem(groupItem);
         }
     } else {
@@ -303,6 +331,11 @@ void IMStore::loadGroupWidget() {
 }
 
 void IMStore::loadMessageWidget() {
+    loadPersonMessageWidget();
+    // loadGroupMessageWidget();
+}
+
+void IMStore::loadPersonMessageWidget() {
     QSqlQuery query(m_database);
     QString sql(
         "select t_friend.friend_id,\n"
@@ -322,25 +355,69 @@ void IMStore::loadMessageWidget() {
     }
     while (query.next()) {
         auto messageItem = new MessageItem();
+        messageItem->setMode(0);
         messageItem->setId(query.value(0).toInt());
         messageItem->setName(query.value(1).toString());
         messageItem->setAvatar(query.value(2).toString());
         messageItem->setRecentMsg(query.value(3).toString());
         messageItem->setTime(query.value(4).toLongLong());
-        m_messageItems[messageItem->getId()] = messageItem;
+        m_personMessageItems[messageItem->getId()] = messageItem;
+        m_messageWidget->addMessageItem(messageItem);
+    }
+}
+
+void IMStore::loadGroupMessageWidget() {
+    QSqlQuery query(m_database);
+    QString sql(
+        "select t_group.group_id,\n"
+        "       t_group.name,\n"
+        "       t_group.avatar,\n"
+        "       t_group_message.message,\n"
+        "       t_group_message.timestamp\n"
+        "from t_group\n"
+        "         inner join t_group_message\n"
+        "                    on t_group.group_id = t_group_message.group_id\n"
+        "where t_group_message.msg_id in (select max(msg_id)\n"
+        "                                from t_group_message\n"
+        "                                group by t_group_message.group_id)\n"
+        "order by t_group_message.msg_id desc;");
+    if (!query.exec(sql)) {
+        qDebug() << query.lastError().text();
+    }
+    while (query.next()) {
+        auto messageItem = new MessageItem();
+        messageItem->setMode(1);
+        messageItem->setId(query.value(0).toInt());
+        messageItem->setName(query.value(1).toString());
+        messageItem->setAvatar(query.value(2).toString());
+        messageItem->setRecentMsg(query.value(3).toString());
+        messageItem->setTime(query.value(4).toLongLong());
+        m_groupMessageItems[messageItem->getId()] = messageItem;
         m_messageWidget->addMessageItem(messageItem);
     }
 }
 
 void IMStore::updatePersonMessageItem(const PersonMessage& pm) {
-    auto messageItem = m_messageItems[pm.from_id];
+    auto messageItem = m_personMessageItems[pm.from_id];
     messageItem->setRecentMsg(pm.message);
     messageItem->setTime(pm.timestamp);
     movePersonMessageItemToTop(pm.from_id);
 }
 
 void IMStore::movePersonMessageItemToTop(int id) {
-    auto messageItem = m_messageItems[id];
+    auto messageItem = m_personMessageItems[id];
+    m_messageWidget->moveMessageItemToTop(messageItem);
+}
+
+void IMStore::updateGroupMessageItem(const GroupMessage& gm) {
+    auto messageItem = m_groupMessageItems[gm.group_id];
+    messageItem->setRecentMsg(gm.message);
+    messageItem->setTime(gm.timestamp);
+    moveGroupMessageItemToTop(gm.group_id);
+}
+
+void IMStore::moveGroupMessageItemToTop(int id) {
+    auto messageItem = m_groupMessageItems[id];
     m_messageWidget->moveMessageItemToTop(messageItem);
 }
 
@@ -358,6 +435,20 @@ QString IMStore::getLatestPersonMessageByUserId(int userId) {
     QString sql2 =
         QString("select message from t_person_message where session_id = '%1' order by id desc limit 1").arg(sessionId);
     if (!query.exec(sql2)) {
+        qDebug() << query.lastError().text();
+        return "";
+    }
+    if (query.next()) {
+        return query.value(0).toString();
+    }
+    return "";
+}
+
+QString IMStore::getLatestGroupMessageByGroupId(int groupId) {
+    QSqlQuery query(m_database);
+    QString sql =
+        QString("select message from t_group_message where group_id = %1 order by id desc limit 1").arg(groupId);
+    if (!query.exec(sql)) {
         qDebug() << query.lastError().text();
         return "";
     }
