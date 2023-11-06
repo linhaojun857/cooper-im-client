@@ -22,6 +22,8 @@ public:
 
     void addMessageItem(MessageItem* messageItem);
 
+    void addMessageItem1(MessageItem* messageItem);
+
     void moveMessageItemToTop(MessageItem* messageItem);
 
 private:

@@ -105,16 +105,16 @@ void WebHelper::addSelfGroupMsg(const GroupMessage& gm) {
 void WebHelper::addPeerGroupMsg(const GroupMessage& gm) {
     switch (gm.message_type) {
         case MSG_TYPE_TEXT:
-            addPeerTextMsgGroup(gm.from_id, gm.message);
+            addPeerTextMsgGroup(gm.from_nickname, gm.from_avatar, gm.message);
             break;
         case MSG_TYPE_IMAGE:
-            addPeerImageMsgGroup(gm.from_id, gm.file_url);
+            addPeerImageMsgGroup(gm.from_nickname, gm.from_avatar, gm.file_url);
             break;
         case MSG_TYPE_ViDEO:
-            addPeerVideoMsgGroup(gm.from_id, gm.file_url);
+            addPeerVideoMsgGroup(gm.from_nickname, gm.from_avatar, gm.file_url);
             break;
         case MSG_TYPE_FILE:
-            addPeerFileMsgGroup(gm.from_id, gm.file_url);
+            addPeerFileMsgGroup(gm.from_nickname, gm.from_avatar, gm.file_url);
             break;
     }
 }
@@ -187,24 +187,20 @@ void WebHelper::addSelfFileMsgGroup(const QString& fileUrl) {
     emit webController->SIG_addSelfFileMsgGroup(IMStore::getInstance()->getSelf()->avatar, fileUrl);
 }
 
-void WebHelper::addPeerTextMsgGroup(int userId, const QString& message) {
-    auto fri = IMStore::getInstance()->getFriend(userId);
-    emit webController->SIG_addPeerTextMsgGroup(fri->nickname, fri->avatar, message);
+void WebHelper::addPeerTextMsgGroup(const QString& nickname, const QString& avatar, const QString& message) {
+    emit webController->SIG_addPeerTextMsgGroup(nickname, avatar, message);
 }
 
-void WebHelper::addPeerImageMsgGroup(int userId, const QString& imageUrl) {
-    auto fri = IMStore::getInstance()->getFriend(userId);
-    emit webController->SIG_addPeerImageMsgGroup(fri->nickname, fri->avatar, imageUrl);
+void WebHelper::addPeerImageMsgGroup(const QString& nickname, const QString& avatar, const QString& imageUrl) {
+    emit webController->SIG_addPeerImageMsgGroup(nickname, avatar, imageUrl);
 }
 
-void WebHelper::addPeerVideoMsgGroup(int userId, const QString& videoUrl) {
-    auto fri = IMStore::getInstance()->getFriend(userId);
-    emit webController->SIG_addPeerVideoMsgGroup(fri->nickname, fri->avatar, videoUrl);
+void WebHelper::addPeerVideoMsgGroup(const QString& nickname, const QString& avatar, const QString& videoUrl) {
+    emit webController->SIG_addPeerVideoMsgGroup(nickname, avatar, videoUrl);
 }
 
-void WebHelper::addPeerFileMsgGroup(int userId, const QString& fileUrl) {
-    auto fri = IMStore::getInstance()->getFriend(userId);
-    emit webController->SIG_addPeerFileMsgGroup(fri->nickname, fri->avatar, fileUrl);
+void WebHelper::addPeerFileMsgGroup(const QString& nickname, const QString& avatar, const QString& fileUrl) {
+    emit webController->SIG_addPeerFileMsgGroup(nickname, avatar, fileUrl);
 }
 
 ChatDialog::ChatDialog(QWidget* parent) : QDialog(parent), ui(new Ui::ChatDialog) {
@@ -214,8 +210,13 @@ ChatDialog::ChatDialog(QWidget* parent) : QDialog(parent), ui(new Ui::ChatDialog
     connect(ui->m_closePushButton, &QPushButton::clicked, [this]() {
         qDebug() << "ui->m_closePushButton, &QPushButton::clicked";
         m_currentPeerId = -1;
+        m_currentGroupId = -1;
         for (const auto& item : m_personChatItemMap) {
             IMStore::getInstance()->closePersonChatPage(item->getId());
+            item->hide();
+        }
+        for (const auto& item : m_groupChatItemMap) {
+            IMStore::getInstance()->closeGroupChatPage(item->getId());
             item->hide();
         }
         hideDialog();
@@ -312,6 +313,7 @@ void ChatDialog::changeChatHistory(int id, int mode) {
         }
         m_currentPeerId = id;
         m_currentGroupId = -1;
+        m_mode = 0;
         WebHelper::clearAllElement();
         ui->m_nameLabel->setText(m_personChatItemMap[id]->getName());
         QSqlQuery query(*IMStore::getInstance()->getDatabase());
@@ -347,6 +349,7 @@ void ChatDialog::changeChatHistory(int id, int mode) {
         }
         m_currentGroupId = id;
         m_currentPeerId = -1;
+        m_mode = 1;
         WebHelper::clearAllElement();
         ui->m_nameLabel->setText(m_groupChatItemMap[id]->getName());
         QSqlQuery query(*IMStore::getInstance()->getDatabase());
@@ -356,9 +359,9 @@ void ChatDialog::changeChatHistory(int id, int mode) {
             return;
         }
         while (query.next()) {
-            GroupMessage gm(query.value(1).toInt(), query.value(2).toInt(), query.value(3).toInt(),
-                            query.value(4).toInt(), query.value(5).toString(), query.value(6).toString(),
-                            query.value(7).toLongLong());
+            GroupMessage gm(query.value(1).toInt(), query.value(2).toInt(), query.value(3).toString(),
+                            query.value(4).toString(), query.value(5).toInt(), query.value(6).toInt(),
+                            query.value(7).toString(), query.value(8).toString(), query.value(9).toLongLong());
             if (gm.from_id == IMStore::getInstance()->getSelf()->id) {
                 WebHelper::addSelfGroupMsg(gm);
             } else {
@@ -379,13 +382,24 @@ int ChatDialog::getCurrentGroupId() const {
 
 void ChatDialog::handleClickSendPushButton() const {
     qDebug() << "ChatDialog::handleClickSendPushButton";
-    PersonMessage pm;
-    pm.from_id = IMStore::getInstance()->getSelf()->id;
-    pm.to_id = m_currentPeerId;
-    pm.message_type = MSG_TYPE_TEXT;
-    pm.message = ui->m_plainTextEdit->toPlainText();
-    pm.timestamp = time(nullptr);
-    IMStore::getInstance()->getIMKernel()->sendPersonMsg(pm);
-    WebHelper::addSelfPersonMsg(pm);
+    if (m_mode == 0) {
+        PersonMessage pm;
+        pm.from_id = IMStore::getInstance()->getSelf()->id;
+        pm.to_id = m_currentPeerId;
+        pm.message_type = MSG_TYPE_TEXT;
+        pm.message = ui->m_plainTextEdit->toPlainText();
+        pm.timestamp = time(nullptr);
+        IMStore::getInstance()->getIMKernel()->sendPersonMsg(pm);
+        WebHelper::addSelfPersonMsg(pm);
+    } else {
+        GroupMessage gm;
+        gm.from_id = IMStore::getInstance()->getSelf()->id;
+        gm.group_id = m_currentGroupId;
+        gm.message_type = MSG_TYPE_TEXT;
+        gm.message = ui->m_plainTextEdit->toPlainText();
+        gm.timestamp = time(nullptr);
+        IMStore::getInstance()->getIMKernel()->sendGroupMsg(gm);
+        WebHelper::addSelfGroupMsg(gm);
+    }
     WebHelper::scrollToBottom();
 }

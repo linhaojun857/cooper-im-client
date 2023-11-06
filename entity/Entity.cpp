@@ -47,6 +47,8 @@ const QString GroupMessage::createTableSql =
     "    id integer primary key autoincrement,\n"
     "    msg_id integer unique not null,\n"
     "    from_id integer not null,\n"
+    "    from_nickname varchar(45) not null,\n"
+    "    from_avatar varchar(45) not null,\n"
     "    group_id integer not null,\n"
     "    message_type integer not null,\n"
     "    message varchar(100) not null,\n"

@@ -59,6 +59,14 @@ void IMKernel::sendPersonMsg(const PersonMessage& personMessage) {
     m_mediator->sendData(json);
 }
 
+void IMKernel::sendGroupMsg(const GroupMessage& groupMessage) {
+    QJsonObject json;
+    json["type"] = PROTOCOL_TYPE_GROUP_MESSAGE_SEND;
+    json["token"] = IMStore::getInstance()->getToken();
+    json["groupMessage"] = groupMessage.toJson();
+    m_mediator->sendData(json);
+}
+
 void IMKernel::dealData(const QJsonObject& jsonObject) {
     auto type = jsonObject["type"].toInt();
     auto it = m_handlers.find(type);
@@ -200,6 +208,7 @@ void IMKernel::handleGroupEntity(const QJsonObject& json) {
 }
 
 void IMKernel::handleGroupMessageRecv(const QJsonObject& json) {
+    qDebug() << "IMKernel::handleGroupMessageRecv begin";
     auto gm = GroupMessage::fromJson(json);
     DataSync::syncGroupMessagesByServerPush(json);
     if (gm.group_id == IMStore::getInstance()->getChatDialog()->getCurrentGroupId()) {
@@ -207,9 +216,12 @@ void IMKernel::handleGroupMessageRecv(const QJsonObject& json) {
         WebHelper::scrollToBottom();
     }
     IMStore::getInstance()->updateGroupMessageItem(gm);
+    qDebug() << "IMKernel::handleGroupMessageRecv end";
 }
 
 void IMKernel::handleGroupMessageSend(const QJsonObject& json) {
+    qDebug() << "IMKernel::handleGroupMessageSend begin";
     auto gm = GroupMessage::fromJson(json);
     DataSync::syncGroupMessagesByServerPush(json);
+    qDebug() << "IMKernel::handleGroupMessageSend end";
 }

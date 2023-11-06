@@ -104,13 +104,13 @@ public:
 
     static void addSelfFileMsgGroup(const QString& fileUrl);
 
-    static void addPeerTextMsgGroup(int userId, const QString& message);
+    static void addPeerTextMsgGroup(const QString& nickname, const QString& avatar, const QString& message);
 
-    static void addPeerImageMsgGroup(int userId, const QString& imageUrl);
+    static void addPeerImageMsgGroup(const QString& nickname, const QString& avatar, const QString& imageUrl);
 
-    static void addPeerVideoMsgGroup(int userId, const QString& videoUrl);
+    static void addPeerVideoMsgGroup(const QString& nickname, const QString& avatar, const QString& videoUrl);
 
-    static void addPeerFileMsgGroup(int userId, const QString& fileUrl);
+    static void addPeerFileMsgGroup(const QString& nickname, const QString& avatar, const QString& fileUrl);
 };
 
 class CustomWebEngineView : public QWebEngineView {
@@ -168,8 +168,9 @@ private:
 
 private:
     Ui::ChatDialog* ui;
-    int m_currentPeerId = 0;
-    int m_currentGroupId = 0;
+    int m_mode = 0;
+    int m_currentPeerId = -1;
+    int m_currentGroupId = -1;
     CustomWebEngineView* m_friendChatView = nullptr;
     QWebChannel* m_webChannel = nullptr;
     QMap<int, ChatItem*> m_personChatItemMap;

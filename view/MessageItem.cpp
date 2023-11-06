@@ -81,9 +81,9 @@ void MessageItem::setRecentMsg(const QString& recentMsg) {
 }
 
 void MessageItem::setTime(long long timestamp) {
+    m_timestamp = timestamp;
     QDateTime currentTime = QDateTime::currentDateTime();
     QDateTime messageTime = QDateTime::fromSecsSinceEpoch(timestamp);
-
     if (currentTime.date() == messageTime.date()) {
         m_time = messageTime.toString("hh:mm");
     } else {
@@ -97,6 +97,10 @@ void MessageItem::setTime(long long timestamp) {
         }
     }
     ui->m_timeLabel->setText(m_time);
+}
+
+long long MessageItem::getTime() const {
+    return m_timestamp;
 }
 
 void MessageItem::debug() {

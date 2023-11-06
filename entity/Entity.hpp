@@ -303,6 +303,8 @@ struct PersonMessage {
 struct GroupMessage {
     int id{};
     int from_id{};
+    QString from_avatar;
+    QString from_nickname;
     int group_id{};
     int message_type{};
     QString message;
@@ -313,10 +315,12 @@ struct GroupMessage {
 
     GroupMessage() = default;
 
-    GroupMessage(int id, int from_id, int group_id, int message_type, const QString& message, const QString& file_url,
-                 time_t timestamp) {
+    GroupMessage(int id, int from_id, const QString& from_nickname, const QString& from_avatar, int group_id,
+                 int message_type, const QString& message, const QString& file_url, time_t timestamp) {
         this->id = id;
         this->from_id = from_id;
+        this->from_nickname = from_nickname;
+        this->from_avatar = from_avatar;
         this->group_id = group_id;
         this->message_type = message_type;
         this->message = message;
@@ -337,9 +341,9 @@ struct GroupMessage {
     }
 
     static GroupMessage fromJson(const QJsonObject& json) {
-        GroupMessage gm(json["id"].toInt(), json["from_id"].toInt(), json["group_id"].toInt(),
-                        json["message_type"].toInt(), json["message"].toString(), json["file_url"].toString(),
-                        json["timestamp"].toInt());
+        GroupMessage gm(json["id"].toInt(), json["from_id"].toInt(), json["from_nickname"].toString(),
+                        json["from_avatar"].toString(), json["group_id"].toInt(), json["message_type"].toInt(),
+                        json["message"].toString(), json["file_url"].toString(), json["timestamp"].toInt());
         return gm;
     }
 };

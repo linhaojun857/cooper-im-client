@@ -104,7 +104,8 @@ void IMStore::setSelf(const QJsonObject& json) {
     m_database.transaction();
     QSqlQuery query(m_database);
     if (!query.exec(Self::createTableSql) || !query.exec(Friend::createTableSql) ||
-        !query.exec(SyncRecord::createTableSql) || !query.exec(PersonMessage::createTableSql)) {
+        !query.exec(SyncRecord::createTableSql) || !query.exec(PersonMessage::createTableSql) ||
+        !query.exec(GroupMessage::createTableSql)) {
         qDebug() << "local data table create failed";
         m_database.rollback();
         exit(-1);
@@ -332,7 +333,7 @@ void IMStore::loadGroupWidget() {
 
 void IMStore::loadMessageWidget() {
     loadPersonMessageWidget();
-    // loadGroupMessageWidget();
+    loadGroupMessageWidget();
 }
 
 void IMStore::loadPersonMessageWidget() {
@@ -369,14 +370,10 @@ void IMStore::loadPersonMessageWidget() {
 void IMStore::loadGroupMessageWidget() {
     QSqlQuery query(m_database);
     QString sql(
-        "select t_group.group_id,\n"
-        "       t_group.name,\n"
-        "       t_group.avatar,\n"
+        "select t_group_message.group_id,\n"
         "       t_group_message.message,\n"
         "       t_group_message.timestamp\n"
-        "from t_group\n"
-        "         inner join t_group_message\n"
-        "                    on t_group.group_id = t_group_message.group_id\n"
+        "from t_group_message\n"
         "where t_group_message.msg_id in (select max(msg_id)\n"
         "                                from t_group_message\n"
         "                                group by t_group_message.group_id)\n"
@@ -385,15 +382,16 @@ void IMStore::loadGroupMessageWidget() {
         qDebug() << query.lastError().text();
     }
     while (query.next()) {
+        int groupId = query.value(0).toInt();
         auto messageItem = new MessageItem();
         messageItem->setMode(1);
         messageItem->setId(query.value(0).toInt());
-        messageItem->setName(query.value(1).toString());
-        messageItem->setAvatar(query.value(2).toString());
-        messageItem->setRecentMsg(query.value(3).toString());
-        messageItem->setTime(query.value(4).toLongLong());
+        messageItem->setName(m_groups[groupId]->name);
+        messageItem->setAvatar(m_groups[groupId]->avatar);
+        messageItem->setRecentMsg(query.value(1).toString());
+        messageItem->setTime(query.value(2).toLongLong());
         m_groupMessageItems[messageItem->getId()] = messageItem;
-        m_messageWidget->addMessageItem(messageItem);
+        m_messageWidget->addMessageItem1(messageItem);
     }
 }
 

@@ -64,7 +64,9 @@ QString ChatItem::getAvatar() {
 
 void ChatItem::setName(const QString& name) {
     m_name = name;
-    ui->m_nameLabel->setText(name);
+    QFontMetrics fontMetrics(ui->m_nameLabel->font());
+    QString elideText = fontMetrics.elidedText(m_name, Qt::ElideRight, ui->m_nameLabel->width());
+    ui->m_nameLabel->setText(elideText);
 }
 
 QString ChatItem::getName() {

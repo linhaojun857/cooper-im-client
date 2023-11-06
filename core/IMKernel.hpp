@@ -28,6 +28,8 @@ public:
 
     void sendPersonMsg(const PersonMessage& personMessage);
 
+    void sendGroupMsg(const GroupMessage& groupMessage);
+
 public slots:
     void dealData(const QJsonObject& jsonObject);
 

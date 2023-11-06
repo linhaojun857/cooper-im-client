@@ -31,6 +31,8 @@ public:
 
     void setTime(long long timestamp);
 
+    long long getTime() const;
+
     void debug();
 
 private:
@@ -40,6 +42,7 @@ private:
     QString m_avatarUrl;
     QString m_name;
     QString m_recentMsg;
+    long long m_timestamp = 0;
     QString m_time;
 };
 

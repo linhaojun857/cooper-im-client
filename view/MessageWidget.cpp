@@ -28,6 +28,17 @@ void MessageWidget::addMessageItem(MessageItem* messageItem) {
     m_messageItemLayout->insertWidget(m_messageItemLayout->count() - 1, messageItem);
 }
 
+void MessageWidget::addMessageItem1(MessageItem* messageItem) {
+    qDebug() << "MessageWidget::addMessageItem1";
+    for (int i = 0; i < m_messageItemLayout->count(); i++) {
+        auto item = dynamic_cast<MessageItem*>(m_messageItemLayout->itemAt(i)->widget());
+        if (item && item->getTime() < messageItem->getTime()) {
+            m_messageItemLayout->insertWidget(i, messageItem);
+            return;
+        }
+    }
+}
+
 void MessageWidget::moveMessageItemToTop(MessageItem* messageItem) {
     qDebug() << "MessageWidget::moveMessageItemToTop";
     m_messageItemLayout->removeWidget(messageItem);

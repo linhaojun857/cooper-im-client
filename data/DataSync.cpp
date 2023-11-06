@@ -35,7 +35,7 @@ void DataSync::syncAll() {
     auto syncState = DataSync::getSyncState();
     DataSync::syncFriends(isFirstSync, &syncState);
     DataSync::syncPersonMessages(isFirstSync, &syncState);
-    // DataSync::syncGroupMessages(isFirstSync, &syncState);
+    DataSync::syncGroupMessages(isFirstSync, &syncState);
     QSqlQuery query(*IMStore::getInstance()->getDatabase());
     query.exec(QString("insert into t_sync_record (timestamp) values (%1)").arg(time(nullptr)));
     IMStore::getInstance()->getIMKernel()->sendSyncCompleteMsg();
@@ -390,11 +390,13 @@ void DataSync::syncGroupMessages(bool isFirstSync, SyncState* syncState) {
                 auto obj = gm.toObject();
                 auto groupMessage = GroupMessage::fromJson(obj);
                 QString sql = QString(
-                                  "insert into t_group_message (msg_id, from_id, group_id, message_type, message, "
+                                  "insert into t_group_message (msg_id, from_id, from_nickname, from_avatar, group_id, "
+                                  "message_type, message, "
                                   "file_url, timestamp) "
-                                  "values (%1, %2, %3, %4, '%5', '%6', %7)")
+                                  "values (%1, %2, '%3', '%4', %5, %6, '%7', '%8', %9)")
                                   .arg(groupMessage.id)
                                   .arg(groupMessage.from_id)
+                                  .arg(groupMessage.from_nickname, groupMessage.from_avatar)
                                   .arg(groupMessage.group_id)
                                   .arg(groupMessage.message_type)
                                   .arg(groupMessage.message, groupMessage.file_url)
@@ -425,11 +427,14 @@ void DataSync::syncGroupMessages(bool isFirstSync, SyncState* syncState) {
                 if (updateId.second == SYNC_DATA_GROUP_MESSAGE_INSERT) {
                     auto groupMessage = groupMessageMap[updateId.first];
                     QString sql = QString(
-                                      "insert into t_group_message (msg_id, from_id, group_id, message_type, message, "
+                                      "insert into t_group_message (msg_id, from_id, from_nickname, from_avatar, "
+                                      "group_id, "
+                                      "message_type, message, "
                                       "file_url, timestamp) "
-                                      "values (%1, %2, %3, %4, '%5', '%6', %7)")
+                                      "values (%1, %2, '%3', '%4', %5, %6, '%7', '%8', %9)")
                                       .arg(groupMessage.id)
                                       .arg(groupMessage.from_id)
+                                      .arg(groupMessage.from_nickname, groupMessage.from_avatar)
                                       .arg(groupMessage.group_id)
                                       .arg(groupMessage.message_type)
                                       .arg(groupMessage.message, groupMessage.file_url)
@@ -467,11 +472,13 @@ void DataSync::syncGroupMessagesByServerPush(const QJsonObject& json) {
         if (json["status"].toInt() == SYNC_DATA_GROUP_MESSAGE_INSERT) {
             auto groupMessage = GroupMessage::fromJson(json);
             QString sql = QString(
-                              "insert into t_group_message (msg_id, from_id, group_id, message_type, message, "
+                              "insert into t_group_message (msg_id, from_id, from_nickname, from_avatar, group_id, "
+                              "message_type, message, "
                               "file_url, timestamp) "
-                              "values (%1, %2, %3, %4, '%5', '%6', %7)")
+                              "values (%1, %2, '%3', '%4', %5, %6, '%7', '%8', %9)")
                               .arg(groupMessage.id)
                               .arg(groupMessage.from_id)
+                              .arg(groupMessage.from_nickname, groupMessage.from_avatar)
                               .arg(groupMessage.group_id)
                               .arg(groupMessage.message_type)
                               .arg(groupMessage.message, groupMessage.file_url)
