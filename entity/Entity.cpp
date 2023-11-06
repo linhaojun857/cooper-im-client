@@ -41,3 +41,15 @@ const QString PersonMessage::createTableSql =
     "    file_url varchar(100) not null,\n"
     "    timestamp integer not null\n"
     ");";
+
+const QString GroupMessage::createTableSql =
+    "create table if not exists t_group_message (\n"
+    "    id integer primary key autoincrement,\n"
+    "    msg_id integer unique not null,\n"
+    "    from_id integer not null,\n"
+    "    group_id integer not null,\n"
+    "    message_type integer not null,\n"
+    "    message varchar(100) not null,\n"
+    "    file_url varchar(100) not null,\n"
+    "    timestamp integer not null\n"
+    ");";

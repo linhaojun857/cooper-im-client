@@ -9,26 +9,34 @@ struct SyncState {
     int server_state_err{};
     int friend_sync_state{};
     int person_message_sync_state{};
+    int group_message_sync_state{};
     QVector<QPair<int, int>> friendIds;
     QVector<QPair<int, int>> personMessageIds;
+    QVector<QPair<int, int>> groupMessageIds;
 
     SyncState() = default;
 
-    explicit SyncState(int friend_sync_state, int person_sync_person_message, const QVector<QPair<int, int>>& friendIds,
-                       const QVector<QPair<int, int>>& personMessageIds) {
+    explicit SyncState(int friend_sync_state, int person_sync_person_message, int group_message_sync_state,
+                       const QVector<QPair<int, int>>& friendIds, const QVector<QPair<int, int>>& personMessageIds,
+                       const QVector<QPair<int, int>>& groupMessageIds) {
         this->friend_sync_state = friend_sync_state;
         this->person_message_sync_state = person_sync_person_message;
+        this->group_message_sync_state = group_message_sync_state;
         this->friendIds = friendIds;
         this->personMessageIds = personMessageIds;
+        this->groupMessageIds = groupMessageIds;
     }
 
     static SyncState fromJson(const QJsonObject& json) {
         int friend_sync_state = json["friend_sync_state"].toInt();
         int person_message_sync_state = json["person_message_sync_state"].toInt();
+        int group_message_sync_state = json["group_message_sync_state"].toInt();
         QVector<QPair<int, int>> friendIds_temp;
         QVector<QPair<int, int>> personMessageIds_temp;
+        QVector<QPair<int, int>> groupMessageIds_temp;
         QJsonArray friendIds_json = json["friendIds"].toArray();
         QJsonArray personMessageIds_json = json["personMessageIds"].toArray();
+        QJsonArray groupMessageIds_json = json["groupMessageIds"].toArray();
         for (const auto& f : friendIds_json) {
             auto arr = f.toArray();
             friendIds_temp.push_back(QPair<int, int>(arr[0].toInt(), arr[1].toInt()));
@@ -37,8 +45,13 @@ struct SyncState {
             auto arr = p.toArray();
             personMessageIds_temp.push_back(QPair<int, int>(arr[0].toInt(), arr[1].toInt()));
         }
-        SyncState state(friend_sync_state, person_message_sync_state, friendIds_temp, personMessageIds_temp);
-        return state;
+        for (const auto& g : groupMessageIds_json) {
+            auto arr = g.toArray();
+            groupMessageIds_temp.push_back(QPair<int, int>(arr[0].toInt(), arr[1].toInt()));
+        }
+        SyncState syncState(friend_sync_state, person_message_sync_state, group_message_sync_state, friendIds_temp,
+                            personMessageIds_temp, groupMessageIds_temp);
+        return syncState;
     }
 };
 
@@ -284,6 +297,50 @@ struct PersonMessage {
                          json["session_id"].toString(), json["message_type"].toInt(), json["message"].toString(),
                          json["file_url"].toString(), json["timestamp"].toInt());
         return pm;
+    }
+};
+
+struct GroupMessage {
+    int id{};
+    int from_id{};
+    int group_id{};
+    int message_type{};
+    QString message;
+    QString file_url;
+    time_t timestamp{};
+
+    static const QString createTableSql;
+
+    GroupMessage() = default;
+
+    GroupMessage(int id, int from_id, int group_id, int message_type, const QString& message, const QString& file_url,
+                 time_t timestamp) {
+        this->id = id;
+        this->from_id = from_id;
+        this->group_id = group_id;
+        this->message_type = message_type;
+        this->message = message;
+        this->file_url = file_url;
+        this->timestamp = timestamp;
+    }
+
+    [[nodiscard]] QJsonObject toJson() const {
+        QJsonObject json;
+        json["id"] = id;
+        json["from_id"] = from_id;
+        json["group_id"] = group_id;
+        json["message_type"] = message_type;
+        json["message"] = message;
+        json["file_url"] = file_url;
+        json["timestamp"] = timestamp;
+        return json;
+    }
+
+    static GroupMessage fromJson(const QJsonObject& json) {
+        GroupMessage gm(json["id"].toInt(), json["from_id"].toInt(), json["group_id"].toInt(),
+                        json["message_type"].toInt(), json["message"].toString(), json["file_url"].toString(),
+                        json["timestamp"].toInt());
+        return gm;
     }
 };
 

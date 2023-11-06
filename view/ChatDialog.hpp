@@ -153,7 +153,7 @@ public:
 
     void addChatItem(int id);
 
-    void changeChatHistory(int userId);
+    void changeChatHistory(int id);
 
     [[nodiscard]] int getCurrentPeerId() const;
 

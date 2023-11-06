@@ -18,6 +18,10 @@ public:
     static void syncPersonMessages(bool isFirstSync, SyncState* syncState);
 
     static void syncPersonMessagesBuServerPush(const QJsonObject& json);
+
+    static void syncGroupMessages(bool isFirstSync, SyncState* syncState);
+
+    static void syncGroupMessagesByServerPush(const QJsonObject& json);
 };
 
 #endif

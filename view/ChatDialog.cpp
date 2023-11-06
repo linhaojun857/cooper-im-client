@@ -254,16 +254,16 @@ void ChatDialog::addChatItem(int id) {
     m_chatItemLayout->insertWidget(m_chatItemLayout->count() - 1, chatItem);
 }
 
-void ChatDialog::changeChatHistory(int userId) {
+void ChatDialog::changeChatHistory(int id) {
     qDebug() << "ChatDialog::changeChatHistory";
-    if (m_currentPeerId == userId) {
+    if (m_currentPeerId == id) {
         return;
     }
-    m_currentPeerId = userId;
+    m_currentPeerId = id;
     WebHelper::clearAllElement();
-    ui->m_nameLabel->setText(m_chatItemMap[userId]->getName());
+    ui->m_nameLabel->setText(m_chatItemMap[id]->getName());
     QSqlQuery query(*IMStore::getInstance()->getDatabase());
-    QString sql1 = QString("select session_id from t_friend where friend_id = %1").arg(userId);
+    QString sql1 = QString("select session_id from t_friend where friend_id = %1").arg(id);
     if (!query.exec(sql1)) {
         qDebug() << query.lastError().text();
         return;

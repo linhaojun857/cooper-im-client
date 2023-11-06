@@ -154,6 +154,7 @@ void DataSync::syncFriends(bool isFirstSync, SyncState* syncState) {
 }
 
 void DataSync::syncFriendsByServerPush(const QJsonObject& json) {
+    qDebug() << "DataSync::syncFriendsByServerPush()";
     IMStore::getInstance()->getDatabase()->transaction();
     try {
         QSqlQuery query(*IMStore::getInstance()->getDatabase());
@@ -311,6 +312,7 @@ void DataSync::syncPersonMessages(bool isFirstSync, SyncState* syncState) {
 }
 
 void DataSync::syncPersonMessagesBuServerPush(const QJsonObject& json) {
+    qDebug() << "DataSync::syncPersonMessagesBuServerPush()";
     IMStore::getInstance()->getDatabase()->transaction();
     try {
         QSqlQuery query(*IMStore::getInstance()->getDatabase());
@@ -337,6 +339,152 @@ void DataSync::syncPersonMessagesBuServerPush(const QJsonObject& json) {
         } else if (json["status"].toInt() == SYNC_DATA_PERSON_MESSAGE_DELETE) {
             int msgId = json["msg_id"].toInt();
             QString sql = QString("delete from t_person_message where msg_id = %1").arg(msgId);
+            qDebug() << sql;
+            if (!query.exec(sql)) {
+                qDebug() << query.lastError();
+                throw std::exception();
+            } else {
+                qDebug() << "deleted";
+            }
+        }
+    } catch (const std::exception& ex) {
+        IMStore::getInstance()->getDatabase()->rollback();
+    }
+    IMStore::getInstance()->getDatabase()->commit();
+}
+
+void DataSync::syncGroupMessages(bool isFirstSync, SyncState* syncState) {
+    qDebug() << "DataSync::syncGroupMessages()";
+    SyncState state{};
+    if (!syncState) {
+        QJsonObject json;
+        json["token"] = IMStore::getInstance()->getToken();
+        auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/getSyncState", json);
+        if (ret["code"].toInt() != HTTP_SUCCESS_CODE) {
+            qDebug() << "get sync state failed! error: " << ret["msg"].toString();
+            state.server_state_err = 1;
+        } else {
+            state = SyncState::fromJson(ret);
+        }
+        syncState = &state;
+    }
+    IMStore::getInstance()->getDatabase()->transaction();
+    QSqlQuery query(*IMStore::getInstance()->getDatabase());
+    try {
+        if (isFirstSync) {
+            if (!query.exec("delete from t_group_message")) {
+                qDebug() << query.lastError();
+                throw std::exception();
+            } else {
+                qDebug() << "deleted";
+            }
+            QJsonObject json;
+            json["token"] = IMStore::getInstance()->getToken();
+            auto ret = HttpUtil::post(HTTP_SERVER_URL "/msg/getAllGroupMessages", json);
+            if (ret["code"].toInt() != HTTP_SUCCESS_CODE) {
+                qDebug() << "sync friends failed! error: " << ret["msg"].toString();
+            }
+            QJsonArray groupMessages = ret["groupMessages"].toArray();
+            for (const auto& gm : groupMessages) {
+                auto obj = gm.toObject();
+                auto groupMessage = GroupMessage::fromJson(obj);
+                QString sql = QString(
+                                  "insert into t_group_message (msg_id, from_id, group_id, message_type, message, "
+                                  "file_url, timestamp) "
+                                  "values (%1, %2, %3, %4, '%5', '%6', %7)")
+                                  .arg(groupMessage.id)
+                                  .arg(groupMessage.from_id)
+                                  .arg(groupMessage.group_id)
+                                  .arg(groupMessage.message_type)
+                                  .arg(groupMessage.message, groupMessage.file_url)
+                                  .arg(groupMessage.timestamp);
+                qDebug() << sql;
+                if (!query.exec(sql)) {
+                    qDebug() << query.lastError();
+                    throw std::exception();
+                } else {
+                    qDebug() << "inserted";
+                }
+            }
+        } else if (syncState->server_state_err == 0 && syncState->group_message_sync_state == 1) {
+            QJsonObject json;
+            json["token"] = IMStore::getInstance()->getToken();
+            auto ret = HttpUtil::post(HTTP_SERVER_URL "/msg/getSyncGroupMessages", json);
+            if (ret["code"].toInt() != HTTP_SUCCESS_CODE) {
+                qDebug() << "sync friends failed! error: " << ret["msg"].toString();
+            }
+            QJsonArray groupMessages = ret["groupMessages"].toArray();
+            QMap<int, GroupMessage> groupMessageMap;
+            for (const auto& gm : groupMessages) {
+                auto obj = gm.toObject();
+                auto groupMessage = GroupMessage::fromJson(obj);
+                groupMessageMap[groupMessage.id] = groupMessage;
+            }
+            for (const auto& updateId : syncState->groupMessageIds) {
+                if (updateId.second == SYNC_DATA_GROUP_MESSAGE_INSERT) {
+                    auto groupMessage = groupMessageMap[updateId.first];
+                    QString sql = QString(
+                                      "insert into t_group_message (msg_id, from_id, group_id, message_type, message, "
+                                      "file_url, timestamp) "
+                                      "values (%1, %2, %3, %4, '%5', '%6', %7)")
+                                      .arg(groupMessage.id)
+                                      .arg(groupMessage.from_id)
+                                      .arg(groupMessage.group_id)
+                                      .arg(groupMessage.message_type)
+                                      .arg(groupMessage.message, groupMessage.file_url)
+                                      .arg(groupMessage.timestamp);
+                    qDebug() << sql;
+                    if (!query.exec(sql)) {
+                        qDebug() << query.lastError();
+                        throw std::exception();
+                    } else {
+                        qDebug() << "inserted";
+                    }
+                } else if (updateId.second == SYNC_DATA_GROUP_MESSAGE_DELETE) {
+                    QString sql = QString("delete from t_group_message where msg_id = %1").arg(updateId.first);
+                    qDebug() << sql;
+                    if (!query.exec(sql)) {
+                        qDebug() << query.lastError();
+                        throw std::exception();
+                    } else {
+                        qDebug() << "deleted";
+                    }
+                }
+            }
+        }
+    } catch (const std::exception& ex) {
+        IMStore::getInstance()->getDatabase()->rollback();
+    }
+    IMStore::getInstance()->getDatabase()->commit();
+}
+
+void DataSync::syncGroupMessagesByServerPush(const QJsonObject& json) {
+    qDebug() << "DataSync::syncGroupMessagesByServerPush()";
+    IMStore::getInstance()->getDatabase()->transaction();
+    try {
+        QSqlQuery query(*IMStore::getInstance()->getDatabase());
+        if (json["status"].toInt() == SYNC_DATA_GROUP_MESSAGE_INSERT) {
+            auto groupMessage = GroupMessage::fromJson(json);
+            QString sql = QString(
+                              "insert into t_group_message (msg_id, from_id, group_id, message_type, message, "
+                              "file_url, timestamp) "
+                              "values (%1, %2, %3, %4, '%5', '%6', %7)")
+                              .arg(groupMessage.id)
+                              .arg(groupMessage.from_id)
+                              .arg(groupMessage.group_id)
+                              .arg(groupMessage.message_type)
+                              .arg(groupMessage.message, groupMessage.file_url)
+                              .arg(groupMessage.timestamp);
+            qDebug() << sql;
+            if (!query.exec(sql)) {
+                qDebug() << query.lastError();
+                throw std::exception();
+            } else {
+                qDebug() << "inserted";
+            }
+        } else if (json["status"].toInt() == SYNC_DATA_GROUP_MESSAGE_DELETE) {
+            int msgId = json["msg_id"].toInt();
+            QString sql = QString("delete from t_group_message where msg_id = %1").arg(msgId);
             qDebug() << sql;
             if (!query.exec(sql)) {
                 qDebug() << query.lastError();
