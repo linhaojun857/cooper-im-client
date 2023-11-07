@@ -380,14 +380,20 @@ int ChatDialog::getCurrentGroupId() const {
     return m_currentGroupId;
 }
 
-void ChatDialog::handleClickSendPushButton() const {
+void ChatDialog::handleClickSendPushButton() {
     qDebug() << "ChatDialog::handleClickSendPushButton";
+    QString message = ui->m_plainTextEdit->toPlainText();
+    QString messageTemp = message;
+    if (message.isEmpty() || messageTemp.replace(" ", "").replace("\n", "").isEmpty()) {
+        QMessageBox::warning(this, "提示", "不能发送空消息");
+        return;
+    }
     if (m_mode == 0) {
         PersonMessage pm;
         pm.from_id = IMStore::getInstance()->getSelf()->id;
         pm.to_id = m_currentPeerId;
         pm.message_type = MSG_TYPE_TEXT;
-        pm.message = ui->m_plainTextEdit->toPlainText();
+        pm.message = message;
         pm.timestamp = time(nullptr);
         IMStore::getInstance()->getIMKernel()->sendPersonMsg(pm);
         WebHelper::addSelfPersonMsg(pm);
@@ -396,7 +402,7 @@ void ChatDialog::handleClickSendPushButton() const {
         gm.from_id = IMStore::getInstance()->getSelf()->id;
         gm.group_id = m_currentGroupId;
         gm.message_type = MSG_TYPE_TEXT;
-        gm.message = ui->m_plainTextEdit->toPlainText();
+        gm.message = message;
         gm.timestamp = time(nullptr);
         IMStore::getInstance()->getIMKernel()->sendGroupMsg(gm);
         WebHelper::addSelfGroupMsg(gm);

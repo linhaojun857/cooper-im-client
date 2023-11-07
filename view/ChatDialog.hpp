@@ -164,7 +164,7 @@ public:
     [[nodiscard]] int getCurrentGroupId() const;
 
 private:
-    void handleClickSendPushButton() const;
+    void handleClickSendPushButton();
 
 private:
     Ui::ChatDialog* ui;
