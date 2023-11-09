@@ -312,7 +312,7 @@ void IMStore::loadFriendWidget() {
 void IMStore::loadGroupWidget() {
     QJsonObject json;
     json["token"] = getToken();
-    auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/getAllGroups", json);
+    auto ret = HttpUtil::post(HTTP_SERVER_URL "/group/getAllGroups", json);
     if (ret["code"].toInt() == HTTP_SUCCESS_CODE) {
         QJsonArray groups = ret["groups"].toArray();
         for (const auto& g : groups) {

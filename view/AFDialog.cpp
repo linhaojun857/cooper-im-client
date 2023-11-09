@@ -75,7 +75,7 @@ void AFDialog::addFriend() {
     json["reason"] = reason;
     if (m_mode == 0) {
         json["peerId"] = m_id;
-        auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/addFriend", json);
+        auto ret = HttpUtil::post(HTTP_SERVER_URL "/friend/addFriend", json);
         if (ret["code"] == HTTP_SUCCESS_CODE) {
             QMessageBox::information(this, "提示", "发送成功");
             close();
@@ -98,7 +98,7 @@ void AFDialog::addFriend() {
         }
     } else if (m_mode == 1) {
         json["group_id"] = m_id;
-        auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/addGroup", json);
+        auto ret = HttpUtil::post(HTTP_SERVER_URL "/group/addGroup", json);
         if (ret["code"] == HTTP_SUCCESS_CODE) {
             QMessageBox::information(this, "提示", "发送成功");
             close();

@@ -114,7 +114,7 @@ void FGSWidget::handleUserClickSearchPushButton() {
     json.insert("token", IMStore::getInstance()->getToken());
     if (m_searchMode == 0) {
         clearAllFSRItems();
-        auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/searchFriend", json);
+        auto ret = HttpUtil::post(HTTP_SERVER_URL "/friend/searchFriend", json);
         if (ret["code"].toInt() == HTTP_SUCCESS_CODE) {
             IMStore::getInstance()->addFSRs(ret);
         } else {
@@ -122,7 +122,7 @@ void FGSWidget::handleUserClickSearchPushButton() {
         }
     } else {
         clearAllGSRItems();
-        auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/searchGroup", json);
+        auto ret = HttpUtil::post(HTTP_SERVER_URL "/group/searchGroup", json);
         if (ret["code"].toInt() == HTTP_SUCCESS_CODE) {
             IMStore::getInstance()->addGSRs(ret);
         } else {

@@ -29,7 +29,7 @@ void CGWidget::handleClickCreatePushButton() {
     json["token"] = IMStore::getInstance()->getToken();
     json["name"] = name;
     json["desc"] = desc;
-    auto ret = HttpUtil::post(HTTP_SERVER_URL "/user/createGroup", json);
+    auto ret = HttpUtil::post(HTTP_SERVER_URL "/group/createGroup", json);
     if (ret["code"].toInt() == HTTP_SUCCESS_CODE) {
         QMessageBox::information(this, "提示", "创建成功");
         close();

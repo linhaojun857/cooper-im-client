@@ -96,9 +96,9 @@ void ApplyNotifyItem::responseFriendApply(int agree) {
     json["token"] = IMStore::getInstance()->getToken();
     QJsonObject ret;
     if (m_FGMode == 0) {
-        ret = HttpUtil::post(HTTP_SERVER_URL "/user/responseFriendApply", json);
+        ret = HttpUtil::post(HTTP_SERVER_URL "/friend/responseFriendApply", json);
     } else {
-        ret = HttpUtil::post(HTTP_SERVER_URL "/user/responseGroupApply", json);
+        ret = HttpUtil::post(HTTP_SERVER_URL "/group/responseGroupApply", json);
     }
     if (ret["code"] == HTTP_SUCCESS_CODE) {
         ui->m_agreePushButton->hide();
