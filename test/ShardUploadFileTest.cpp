@@ -34,7 +34,6 @@ int main(int argc, char* argv[]) {
     }
     // 开对应数量的线程进行分片
     std::vector<QByteArray> shards(shardCount);
-    std::vector<QFuture<void>> ShardFutures(shardCount);
     for (int i = 0; i < shardCount; ++i) {
         file.seek(i * shardSize);
         if (i == shardCount - 1) {

@@ -12,7 +12,7 @@
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
     // 弹出文件选择框，选择上传文件
-    QString fileName = QFileDialog::getOpenFileName(nullptr, "选择文件", ".", "All files(*.*)");
+    QString fileName = QFileDialog::getOpenFileName(nullptr, "选择文件", "E:/test/", "All files(*.*)");
     if (fileName.isEmpty()) {
         return 0;
     }
@@ -22,7 +22,9 @@ int main(int argc, char* argv[]) {
         QMessageBox::warning(nullptr, "提示", "文件打开失败");
         return 0;
     }
+    auto fileMd5 = QCryptographicHash::hash(file.readAll(), QCryptographicHash::Md5).toHex();
     fileName = fileName.mid(fileName.lastIndexOf("/") + 1);
+    file.seek(0);
     QByteArray data = file.readAll();
     file.close();
     // 使用QHttpMultiPart上传文件，image/png
@@ -31,7 +33,11 @@ int main(int argc, char* argv[]) {
     filePart.setHeader(QNetworkRequest::ContentDispositionHeader,
                        QVariant(R"(form-data; name="file"; filename=")" + fileName + "\""));
     filePart.setBody(data);
+    QHttpPart fileMd5Part;
+    fileMd5Part.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(R"(form-data; name="file_md5")"));
+    fileMd5Part.setBody(fileMd5);
     multiPart->append(filePart);
+    multiPart->append(fileMd5Part);
     // 使用QNetworkAccessManager发送请求
     auto manager = new QNetworkAccessManager();
     QNetworkRequest request;
