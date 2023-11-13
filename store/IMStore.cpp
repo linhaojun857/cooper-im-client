@@ -140,8 +140,11 @@ void IMStore::setMainWidgetInfo() {
 }
 
 void IMStore::setToken(const QJsonObject& json) {
-    qDebug() << "IMStore::setToken";
     m_token = json["token"].toString();
+}
+
+void IMStore::setToken(const QString& token) {
+    m_token = token;
 }
 
 QString IMStore::getToken() {

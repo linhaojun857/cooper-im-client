@@ -66,6 +66,8 @@ public:
 
     void setToken(const QJsonObject& json);
 
+    void setToken(const QString& token);
+
     QString getToken();
 
     void addFriend(const QJsonObject& json);
