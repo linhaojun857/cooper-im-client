@@ -48,13 +48,26 @@ QJsonObject HttpUtil::post(const QString& url, const QJsonObject& json) {
     return QJsonDocument::fromJson(byteArray).object();
 }
 
-bool HttpUtil::upload(const QString& filePath) {
+QString HttpUtil::upload(const QString& filePath) {
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly)) {
-        return false;
+        return "";
     }
     auto fileMd5 = QCryptographicHash::hash(file.readAll(), QCryptographicHash::Md5).toHex();
     QString fileName = filePath.mid(filePath.lastIndexOf("/") + 1);
+    QJsonObject json;
+    json["token"] = IMStore::getInstance()->getToken();
+    json["filename"] = fileName;
+    json["file_md5"] = QString(fileMd5);
+    auto cRet = HttpUtil::post(HTTP_SERVER_URL "/file/checkBeforeUpload", json);
+    if (cRet["code"].toInt() == HTTP_SUCCESS_CODE) {
+        if (cRet["exist"].toInt() == 1) {
+            qDebug() << "file exist";
+            return cRet["file_url"].toString();
+        }
+    } else {
+        return "";
+    }
     file.seek(0);
     QByteArray data = file.readAll();
     file.close();
@@ -79,19 +92,37 @@ bool HttpUtil::upload(const QString& filePath) {
     loop.exec();
     if (reply->error() != QNetworkReply::NoError) {
         qDebug() << reply->errorString();
-        return false;
+        return "";
     }
-    qDebug() << QJsonDocument::fromJson(reply->readAll()).object();
-    return true;
+    QJsonObject ret = QJsonDocument::fromJson(reply->readAll()).object();
+    qDebug() << ret;
+    if (ret["code"].toInt() == HTTP_SUCCESS_CODE) {
+        return ret["file_url"].toString();
+    } else {
+        return "";
+    }
 }
 
-bool HttpUtil::shardUpload(const QString& filePath) {
+QString HttpUtil::shardUpload(const QString& filePath) {
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly)) {
-        return false;
+        return "";
     }
     QString fileName = filePath.mid(filePath.lastIndexOf("/") + 1);
     auto fileMd5 = QCryptographicHash::hash(file.readAll(), QCryptographicHash::Md5).toHex();
+    QJsonObject json;
+    json["token"] = IMStore::getInstance()->getToken();
+    json["filename"] = fileName;
+    json["file_md5"] = QString(fileMd5);
+    auto cRet = HttpUtil::post(HTTP_SERVER_URL "/file/checkBeforeUpload", json);
+    if (cRet["code"].toInt() == HTTP_SUCCESS_CODE) {
+        if (cRet["exist"].toInt() == 1) {
+            qDebug() << "file exist";
+            return cRet["file_url"].toString();
+        }
+    } else {
+        return "";
+    }
     file.seek(0);
     int shardSize = 1024 * 1024;
     int shardCount = static_cast<int>(file.size()) / shardSize;
@@ -113,8 +144,9 @@ bool HttpUtil::shardUpload(const QString& filePath) {
     QVector<QFuture<void>> uploadFutures(shardCount);
     QString suId = QUuid::createUuid().toString().toUtf8();
     suId.replace(0, 1, "").replace(suId.size() - 1, 1, "").replace("-", "");
+    QString fileUrl;
     for (int i = 0; i < shardCount; ++i) {
-        uploadFutures[i] = QtConcurrent::run([=, &shards]() {
+        uploadFutures[i] = QtConcurrent::run([=, &shards, &fileUrl]() {
             auto* multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
             QHttpPart filePart;
             filePart.setHeader(QNetworkRequest::ContentDispositionHeader,
@@ -157,11 +189,15 @@ bool HttpUtil::shardUpload(const QString& filePath) {
                 qDebug() << reply->errorString();
                 return;
             }
-            qDebug() << QJsonDocument::fromJson(reply->readAll()).object();
+            QJsonObject ret = QJsonDocument::fromJson(reply->readAll()).object();
+            qDebug() << ret;
+            if (ret["code"].toInt() == HTTP_SUCCESS_CODE && ret["complete"].toInt() == 1) {
+                fileUrl = ret["file_url"].toString();
+            }
         });
     }
     for (auto& future : uploadFutures) {
         future.waitForFinished();
     }
-    return true;
+    return fileUrl;
 }

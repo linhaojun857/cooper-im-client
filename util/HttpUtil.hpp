@@ -10,9 +10,9 @@ public:
 
     static QJsonObject post(const QString& url, const QJsonObject& json);
 
-    static bool upload(const QString& filePath);
+    static QString upload(const QString& filePath);
 
-    static bool shardUpload(const QString& filePath);
+    static QString shardUpload(const QString& filePath);
 };
 
 #endif
