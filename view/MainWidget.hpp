@@ -39,6 +39,7 @@ private:
     QMap<int, QPushButton*> m_tabBtnMap;
     MessageWidget* m_messageWidget = nullptr;
     CotPWidget* m_cotPWidget = nullptr;
+    QVBoxLayout* m_exploreLayout = nullptr;
 };
 
 #endif

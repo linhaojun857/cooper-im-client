@@ -100,6 +100,9 @@ add_library(cooper_im_lib
         view/GSRItem.hpp
         view/GSRItem.cpp
         view/GSRItem.ui
+        view/ExploreItem.hpp
+        view/ExploreItem.cpp
+        view/ExploreItem.ui
         # core
         core/IMKernel.hpp
         core/IMKernel.cpp

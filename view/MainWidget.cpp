@@ -14,6 +14,7 @@
 #include "mock/Mock.hpp"
 #include "store/IMStore.hpp"
 #include "ui_MainWidget.h"
+#include "view/ExploreItem.hpp"
 
 FRAMELESSHELPER_USE_NAMESPACE
 
@@ -26,6 +27,7 @@ MainWidget::MainWidget(QWidget* parent) : QWidget(parent), ui(new Ui::MainWidget
     setMaximumWidth(300);
     setMinimumHeight(635);
     setMaximumHeight(635);
+    ui->m_tabWidget->tabBar()->hide();
     connect(ui->m_minimizePushButton, SIGNAL(clicked(bool)), this, SLOT(showMinimized()));
     connect(ui->m_closePushButton, SIGNAL(clicked(bool)), this, SLOT(close()));
     connect(ui->m_optionPushButton, &QPushButton::clicked, [this]() {
@@ -56,11 +58,27 @@ MainWidget::MainWidget(QWidget* parent) : QWidget(parent), ui(new Ui::MainWidget
     FramelessWidgetsHelper::get(this)->setHitTestVisible(ui->m_optionPushButton);
     FramelessWidgetsHelper::get(this)->setHitTestVisible(ui->m_minimizePushButton);
     FramelessWidgetsHelper::get(this)->setHitTestVisible(ui->m_closePushButton);
-    m_cotPWidget = new CotPWidget(ui->m_tabWidget->widget(1));
-    m_cotPWidget->setGeometry(0, 0, 300, 503);
     m_messageWidget = new MessageWidget(ui->m_tabWidget->widget(0));
     m_messageWidget->setGeometry(0, 0, 300, 503);
-    ui->m_tabWidget->tabBar()->hide();
+    m_cotPWidget = new CotPWidget(ui->m_tabWidget->widget(1));
+    m_cotPWidget->setGeometry(0, 0, 300, 503);
+    m_exploreLayout = new QVBoxLayout();
+    m_exploreLayout->setContentsMargins(0, 0, 0, 0);
+    m_exploreLayout->setSpacing(0);
+    ui->m_tabWidget->widget(2)->setLayout(m_exploreLayout);
+    auto pyqItem = new ExploreItem();
+    pyqItem->setName("朋友圈");
+    m_exploreLayout->addWidget(pyqItem);
+    connect(pyqItem, &ExploreItem::clicked, []() {
+        qDebug() << "pyq clicked";
+    });
+    auto liveItem = new ExploreItem();
+    liveItem->setName("直播");
+    m_exploreLayout->addWidget(liveItem);
+    connect(liveItem, &ExploreItem::clicked, []() {
+        qDebug() << "live clicked";
+    });
+    m_exploreLayout->addStretch();
     m_tabBtnMap[0] = ui->m_msgPushButton;
     m_tabBtnMap[1] = ui->m_cotPPushButton;
     m_tabBtnMap[2] = ui->m_pyqPushButton;

@@ -3,7 +3,7 @@
 #include "entity/Entity.hpp"
 
 Friend test() {
-    Friend friend1(1, "username1", "nickname1", "avatar1", "status1", "feeling1");
+    Friend friend1(1, "username1", "nickname1", "avatar1", "status1", "feeling1", "test_session_id");
     return friend1;
 }
 
