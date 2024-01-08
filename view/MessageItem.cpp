@@ -70,6 +70,7 @@ void MessageItem::setAvatar(const QString& url) {
 
 void MessageItem::setName(const QString& name) {
     m_name = name;
+    ui->m_nameLabel->setText(name);
 }
 
 void MessageItem::setRecentMsg(const QString& recentMsg) {

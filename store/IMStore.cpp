@@ -458,3 +458,13 @@ QString IMStore::getLatestGroupMessageByGroupId(int groupId) {
     }
     return "";
 }
+
+void IMStore::createLiveLobbyWidgetOnce() {
+    if (!m_liveLobbyWidget) {
+        m_liveLobbyWidget = new LiveLobbyWidget();
+    }
+}
+
+LiveLobbyWidget* IMStore::getLiveLobbyWidget() {
+    return m_liveLobbyWidget;
+}

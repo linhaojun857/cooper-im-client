@@ -97,10 +97,12 @@ void FGSWidget::clearAllGSRItems() {
 
 void FGSWidget::addFSRItem(FSRItem* fsrItem, int row, int column) {
     m_fsrItemsLayout->addWidget(fsrItem, row, column);
+    m_fsrItems.append(fsrItem);
 }
 
 void FGSWidget::addGSRItem(GSRItem* gsrItem, int row, int column) {
     m_gsrItemsLayout->addWidget(gsrItem, row, column);
+    m_gsrItems.append(gsrItem);
 }
 
 void FGSWidget::handleUserClickSearchPushButton() {

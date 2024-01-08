@@ -21,7 +21,7 @@ public:
 
     void setId(int id);
 
-    int getId() const;
+    [[nodiscard]] int getId() const;
 
     void setAvatar(const QString& url);
 

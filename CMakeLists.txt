@@ -103,6 +103,15 @@ add_library(cooper_im_lib
         view/ExploreItem.hpp
         view/ExploreItem.cpp
         view/ExploreItem.ui
+        view/LiveLobbyWidget.hpp
+        view/LiveLobbyWidget.cpp
+        view/LiveLobbyWidget.ui
+        view/LiveRoomItem.hpp
+        view/LiveRoomItem.cpp
+        view/LiveRoomItem.ui
+        view/OpenLiveWidget.hpp
+        view/OpenLiveWidget.cpp
+        view/OpenLiveWidget.ui
         # core
         core/IMKernel.hpp
         core/IMKernel.cpp

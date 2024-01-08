@@ -12,6 +12,7 @@
 #include "view/FGSWidget.hpp"
 #include "view/FriendItem.hpp"
 #include "view/FriendWidget.hpp"
+#include "view/LiveLobbyWidget.hpp"
 #include "view/MainWidget.hpp"
 #include "view/MessageWidget.hpp"
 #include "view/NotifyWidget.hpp"
@@ -138,6 +139,10 @@ public:
 
     QString getLatestGroupMessageByGroupId(int groupId);
 
+    void createLiveLobbyWidgetOnce();
+
+    LiveLobbyWidget* getLiveLobbyWidget();
+
 private:
     QSqlDatabase m_database;
     Self* m_self = nullptr;
@@ -165,6 +170,7 @@ private:
     NotifyWidget* m_notifyWidget = nullptr;
     QMap<int, Group*> m_groups;
     QMap<int, GroupItem*> m_groupItems;
+    LiveLobbyWidget* m_liveLobbyWidget = nullptr;
 };
 
 #endif
