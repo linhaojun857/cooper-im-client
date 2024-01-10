@@ -22,6 +22,7 @@ find_package(Qt6 COMPONENTS
         WebEngineWidgets
         WebChannel
         Sql
+        MultiMedia
         REQUIRED)
 
 add_library(cooper_im_lib
@@ -112,6 +113,15 @@ add_library(cooper_im_lib
         view/OpenLiveWidget.hpp
         view/OpenLiveWidget.cpp
         view/OpenLiveWidget.ui
+        view/RecordDialog.hpp
+        view/RecordDialog.cpp
+        view/RecordDialog.ui
+        view/PictureWidget.hpp
+        view/PictureWidget.cpp
+        view/PictureWidget.ui
+        view/PlayerDialog.hpp
+        view/PlayerDialog.cpp
+        view/PlayerDialog.ui
         # core
         core/IMKernel.hpp
         core/IMKernel.cpp
@@ -128,7 +138,22 @@ add_library(cooper_im_lib
         mock/Mock.cpp
         # store
         store/IMStore.hpp
-        store/IMStore.cpp)
+        store/IMStore.cpp
+        # media
+        ## recorder
+        media/recorder/common.hpp
+        media/recorder/AudioRecorder.hpp
+        media/recorder/AudioRecorder.cpp
+        media/recorder/SaveVideoFileThread.hpp
+        media/recorder/SaveVideoFileThread.cpp
+        media/recorder/VideoRecorder.hpp
+        media/recorder/VideoRecorder.cpp
+        ## player
+        media/player/PacketQueue.hpp
+        media/player/PacketQueue.cpp
+        media/player/VideoPlayer.hpp
+        media/player/VideoPlayer.cpp
+)
 
 target_include_directories(cooper_im_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(cooper_im_lib PUBLIC
@@ -141,9 +166,27 @@ target_link_libraries(cooper_im_lib PUBLIC
         Qt::WebEngineWidgets
         Qt::WebChannel
         Qt::Sql
+        Qt::Multimedia
         FramelessHelper::Core
         FramelessHelper::Widgets
 )
+target_include_directories(cooper_im_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(cooper_im_lib PUBLIC D:/CppLibAndDll/ffmpeg-4.2.2-win64/include)
+target_link_libraries(cooper_im_lib PUBLIC D:/CppLibAndDll/ffmpeg-4.2.2-win64/lib/avcodec.lib)
+target_link_libraries(cooper_im_lib PUBLIC D:/CppLibAndDll/ffmpeg-4.2.2-win64/lib/avdevice.lib)
+target_link_libraries(cooper_im_lib PUBLIC D:/CppLibAndDll/ffmpeg-4.2.2-win64/lib/avfilter.lib)
+target_link_libraries(cooper_im_lib PUBLIC D:/CppLibAndDll/ffmpeg-4.2.2-win64/lib/avformat.lib)
+target_link_libraries(cooper_im_lib PUBLIC D:/CppLibAndDll/ffmpeg-4.2.2-win64/lib/avutil.lib)
+target_link_libraries(cooper_im_lib PUBLIC D:/CppLibAndDll/ffmpeg-4.2.2-win64/lib/postproc.lib)
+target_link_libraries(cooper_im_lib PUBLIC D:/CppLibAndDll/ffmpeg-4.2.2-win64/lib/swresample.lib)
+target_link_libraries(cooper_im_lib PUBLIC D:/CppLibAndDll/ffmpeg-4.2.2-win64/lib/swscale.lib)
+target_include_directories(cooper_im_lib PUBLIC D:/CppLibAndDll/opencv/build/include)
+target_link_libraries(cooper_im_lib PUBLIC D:/CppLibAndDll/opencv/build/x64/vc15/lib/opencv_world420.lib)
+target_link_libraries(cooper_im_lib PUBLIC D:/CppLibAndDll/opencv/build/x64/vc15/lib/opencv_world420d.lib)
+target_include_directories(cooper_im_lib PUBLIC D:/CppLibAndDll/SDL2-2.0.10/include)
+target_link_libraries(cooper_im_lib PUBLIC D:/CppLibAndDll/SDL2-2.0.10/lib/x64/SDL2.lib)
+target_link_libraries(cooper_im_lib PUBLIC D:/CppLibAndDll/SDL2-2.0.10/lib/x64/SDL2main.lib)
+target_link_libraries(cooper_im_lib PUBLIC D:/CppLibAndDll/SDL2-2.0.10/lib/x64/SDL2test.lib)
 
 add_executable(cooper_im_client
         main.cpp

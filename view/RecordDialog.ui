@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>RecordDialog</class>
+ <widget class="QDialog" name="RecordDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>710</width>
+    <height>500</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>710</width>
+    <height>500</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>710</width>
+    <height>500</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>RecordDialog</string>
+  </property>
+  <widget class="QWidget" name="widget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>20</y>
+     <width>560</width>
+     <height>400</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(0, 0, 0);</string>
+   </property>
+   <widget class="QLabel" name="lb_showImage">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>560</width>
+      <height>400</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>560</width>
+      <height>400</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>560</width>
+      <height>400</height>
+     </size>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="scaledContents">
+     <bool>false</bool>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="gb_cameraDevice">
+   <property name="geometry">
+    <rect>
+     <x>585</x>
+     <y>30</y>
+     <width>120</width>
+     <height>80</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="title">
+    <string>摄像头</string>
+   </property>
+   <widget class="QComboBox" name="cmb_cameraDevice">
+    <property name="geometry">
+     <rect>
+      <x>15</x>
+      <y>30</y>
+      <width>90</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="currentText">
+     <string>默认设备</string>
+    </property>
+    <property name="placeholderText">
+     <string/>
+    </property>
+    <item>
+     <property name="text">
+      <string>默认设备</string>
+     </property>
+    </item>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="gb_audioDevice">
+   <property name="geometry">
+    <rect>
+     <x>585</x>
+     <y>110</y>
+     <width>120</width>
+     <height>80</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="title">
+    <string>音频</string>
+   </property>
+   <widget class="QComboBox" name="cmb_audioDevice">
+    <property name="geometry">
+     <rect>
+      <x>15</x>
+      <y>30</y>
+      <width>90</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="currentText">
+     <string>默认设备</string>
+    </property>
+    <property name="placeholderText">
+     <string/>
+    </property>
+    <item>
+     <property name="text">
+      <string>默认设备</string>
+     </property>
+    </item>
+   </widget>
+  </widget>
+  <widget class="QCheckBox" name="cb_camera">
+   <property name="geometry">
+    <rect>
+     <x>610</x>
+     <y>210</y>
+     <width>79</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>摄像头</string>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="cb_audio">
+   <property name="geometry">
+    <rect>
+     <x>610</x>
+     <y>240</y>
+     <width>79</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>音频</string>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pb_start">
+   <property name="geometry">
+    <rect>
+     <x>610</x>
+     <y>305</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>开始</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pb_end">
+   <property name="geometry">
+    <rect>
+     <x>610</x>
+     <y>340</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>结束</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lb_url">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>446</y>
+     <width>54</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>URL:</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="le_url">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>440</y>
+     <width>411</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <property name="text">
+    <string>rtmp://127.0.0.1:9935/videotest/user=100</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pb_setUrl">
+   <property name="geometry">
+    <rect>
+     <x>540</x>
+     <y>440</y>
+     <width>121</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>设置直播地址</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="cb_desktop">
+   <property name="geometry">
+    <rect>
+     <x>610</x>
+     <y>270</y>
+     <width>79</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>桌面</string>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
