@@ -5,23 +5,23 @@
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
-class PictureWidget;
+class LivePictureWidget;
 }
 QT_END_NAMESPACE
 
-class PictureWidget : public QWidget {
+class LivePictureWidget : public QWidget {
     Q_OBJECT
 
 public:
-    explicit PictureWidget(QWidget* parent = nullptr);
+    explicit LivePictureWidget(QWidget* parent = nullptr);
 
-    ~PictureWidget() override;
+    ~LivePictureWidget() override;
 
 public slots:
     void slots_setImage(const QImage& image);
 
 private:
-    Ui::PictureWidget* ui;
+    Ui::LivePictureWidget* ui;
 };
 
 #endif

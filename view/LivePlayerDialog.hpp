@@ -8,28 +8,24 @@
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
-class PlayerDialog;
+class LivePlayerDialog;
 }
 QT_END_NAMESPACE
 
-class PlayerDialog : public QDialog {
+class LivePlayerDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit PlayerDialog(QWidget* parent = nullptr);
+    explicit LivePlayerDialog(QWidget* parent = nullptr);
 
-    ~PlayerDialog() override;
+    ~LivePlayerDialog() override;
+
+    void start(int roomId);
 
 private slots:
-    void handleClickOpenPB();
-
     void handleClickResumePB();
 
     void handleClickPausePB();
-
-    void handleClickStopPB();
-
-    void handleClickSetUrlPB();
 
     void setImage(const QImage& image);
 
@@ -42,7 +38,7 @@ private slots:
     bool eventFilter(QObject* watched, QEvent* event) override;
 
 private:
-    Ui::PlayerDialog* ui;
+    Ui::LivePlayerDialog* ui;
     VideoPlayer* m_player;
     QTimer m_timer;
     int isStop{};

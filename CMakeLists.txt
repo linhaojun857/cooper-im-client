@@ -113,15 +113,15 @@ add_library(cooper_im_lib
         view/OpenLiveWidget.hpp
         view/OpenLiveWidget.cpp
         view/OpenLiveWidget.ui
-        view/RecordDialog.hpp
-        view/RecordDialog.cpp
-        view/RecordDialog.ui
-        view/PictureWidget.hpp
-        view/PictureWidget.cpp
-        view/PictureWidget.ui
-        view/PlayerDialog.hpp
-        view/PlayerDialog.cpp
-        view/PlayerDialog.ui
+        view/LiveRecordDialog.hpp
+        view/LiveRecordDialog.cpp
+        view/LiveRecordDialog.ui
+        view/LivePictureWidget.hpp
+        view/LivePictureWidget.cpp
+        view/LivePictureWidget.ui
+        view/LivePlayerDialog.hpp
+        view/LivePlayerDialog.cpp
+        view/LivePlayerDialog.ui
         # core
         core/IMKernel.hpp
         core/IMKernel.cpp

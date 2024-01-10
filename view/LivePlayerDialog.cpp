@@ -1,4 +1,4 @@
-#include "PlayerDialog.hpp"
+#include "LivePlayerDialog.hpp"
 
 #include <QFileDialog>
 #include <QInputDialog>
@@ -7,16 +7,14 @@
 #include <QPoint>
 #include <QStyle>
 
-#include "ui_PlayerDialog.h"
+#include "define/IMDefine.hpp"
+#include "ui_LivePlayerDialog.h"
 
-PlayerDialog::PlayerDialog(QWidget* parent) : QDialog(parent), ui(new Ui::PlayerDialog) {
+LivePlayerDialog::LivePlayerDialog(QWidget* parent) : QDialog(parent), ui(new Ui::LivePlayerDialog) {
     ui->setupUi(this);
     m_player = new VideoPlayer();
-    connect(ui->m_openPB, SIGNAL(clicked()), this, SLOT(handleClickOpenPB()));
     connect(ui->m_resumePB, SIGNAL(clicked()), this, SLOT(handleClickResumePB()));
     connect(ui->m_pausePB, SIGNAL(clicked()), this, SLOT(handleClickPausePB()));
-    connect(ui->m_stopPB, SIGNAL(clicked()), this, SLOT(handleClickStopPB()));
-    connect(ui->m_setUrlPB, SIGNAL(clicked()), this, SLOT(handleClickSetUrlPB()));
     connect(m_player, SIGNAL(SIG_setOneImage(QImage)), this, SLOT(setImage(QImage)));
     connect(m_player, SIGNAL(SIG_PlayerStateChanged(int)), this, SLOT(slot_PlayerStateChanged(int)));
     connect(m_player, SIGNAL(SIG_TotalTime(qint64)), this, SLOT(slot_getTotalTime(qint64)));
@@ -27,49 +25,29 @@ PlayerDialog::PlayerDialog(QWidget* parent) : QDialog(parent), ui(new Ui::Player
     slot_PlayerStateChanged(PlayerState::Stop);
 }
 
-void PlayerDialog::handleClickOpenPB() {
-    QString path = QFileDialog::getOpenFileName(this, "选择要播放的文件", "E:/test/",
-                                                "视频文件 (*.flv *.rmvb *.avi *.MP4 *.mkv);; 所有文件(*.*);;");
-    if (!path.isEmpty()) {
-        qDebug() << path;
-        QFileInfo info(path);
-        if (info.exists()) {
-            m_player->stop(true);
-            m_player->setFileName(path);
-            slot_PlayerStateChanged(PlayerState::Playing);
-        } else {
-            QMessageBox::information(this, "提示", "打开文件失败");
-        }
-    }
+LivePlayerDialog::~LivePlayerDialog() {
+    delete ui;
 }
 
-void PlayerDialog::handleClickResumePB() {
+void LivePlayerDialog::start(int roomId) {
+    QString url = LIVE_BASE_URL + QString::number(roomId);
+    m_player->setFileName(url);
+    slot_PlayerStateChanged(PlayerState::Playing);
+}
+
+void LivePlayerDialog::handleClickResumePB() {
     if (m_player->getPlayerState() != Pause)
         return;
     m_player->play();
 }
 
-void PlayerDialog::handleClickPausePB() {
+void LivePlayerDialog::handleClickPausePB() {
     if (m_player->getPlayerState() != Playing)
         return;
     m_player->pause();
 }
 
-void PlayerDialog::handleClickStopPB() {
-    m_player->stop(true);
-}
-
-void PlayerDialog::handleClickSetUrlPB() {
-    QString url =
-        QInputDialog::getText(this, "设置", "输入链接地址", QLineEdit::Normal, "rtmp://127.0.0.1:9935/vod/test.mp4");
-    if (url.isEmpty()) {
-        return;
-    }
-    m_player->setFileName(url);
-    slot_PlayerStateChanged(PlayerState::Playing);
-}
-
-void PlayerDialog::setImage(const QImage& image) {
+void LivePlayerDialog::setImage(const QImage& image) {
     QPixmap pixmap;
     if (!image.isNull()) {
         pixmap = QPixmap::fromImage(image.scaled(ui->m_showLabel->size(), Qt::KeepAspectRatio));
@@ -79,7 +57,7 @@ void PlayerDialog::setImage(const QImage& image) {
     ui->m_showLabel->setPixmap(pixmap);
 }
 
-void PlayerDialog::slot_PlayerStateChanged(int state) {
+void LivePlayerDialog::slot_PlayerStateChanged(int state) {
     switch (state) {
         case PlayerState::Stop:
             qDebug() << "VideoPlayer::Stop";
@@ -101,12 +79,14 @@ void PlayerDialog::slot_PlayerStateChanged(int state) {
             this->update();
             isStop = false;
             break;
+        default:
+            break;
     }
 }
 
-void PlayerDialog::slot_getTotalTime(qint64 uSec) {
+void LivePlayerDialog::slot_getTotalTime(qint64 uSec) {
     qint64 Sec = uSec / 1000000;
-    ui->m_progressSlider->setRange(0, Sec);  // 精确到秒
+    ui->m_progressSlider->setRange(0, (int)Sec);
     QString hStr = QString("00%1").arg(Sec / 3600);
     QString mStr = QString("00%1").arg(Sec / 60);
     QString sStr = QString("00%1").arg(Sec % 60);
@@ -114,10 +94,10 @@ void PlayerDialog::slot_getTotalTime(qint64 uSec) {
     ui->m_totalTimeLabel->setText(str);
 }
 
-void PlayerDialog::slot_TimerTimeOut() {
+void LivePlayerDialog::slot_TimerTimeOut() {
     if (QObject::sender() == &m_timer) {
-        qint64 Sec = m_player->getCurrentTime() / 1000000;
-        ui->m_progressSlider->setValue(Sec);
+        qint64 Sec = (qint64)m_player->getCurrentTime() / 1000000;
+        ui->m_progressSlider->setValue((int)Sec);
         QString hStr = QString("00%1").arg(Sec / 3600);
         QString mStr = QString("00%1").arg(Sec / 60 % 60);
         QString sStr = QString("00%1").arg(Sec % 60);
@@ -133,7 +113,7 @@ void PlayerDialog::slot_TimerTimeOut() {
     }
 }
 
-bool PlayerDialog::eventFilter(QObject* watched, QEvent* event) {
+bool LivePlayerDialog::eventFilter(QObject* watched, QEvent* event) {
     if (watched == ui->m_progressSlider) {
         if (event->type() == QEvent::MouseButtonPress) {
             auto mouseEvent = dynamic_cast<QMouseEvent*>(event);
@@ -150,8 +130,4 @@ bool PlayerDialog::eventFilter(QObject* watched, QEvent* event) {
         }
     }
     return QDialog::eventFilter(watched, event);
-}
-
-PlayerDialog::~PlayerDialog() {
-    delete ui;
 }

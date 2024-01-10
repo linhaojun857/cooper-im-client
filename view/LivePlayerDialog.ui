@@ -1,57 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>PlayerDialog</class>
- <widget class="QDialog" name="PlayerDialog">
+ <class>LivePlayerDialog</class>
+ <widget class="QDialog" name="LivePlayerDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>700</width>
+    <width>880</width>
     <height>525</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>700</width>
-    <height>525</height>
+    <width>0</width>
+    <height>0</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>700</width>
-    <height>525</height>
+    <width>10000</width>
+    <height>10000</height>
    </size>
   </property>
   <property name="windowTitle">
-   <string>PlayerDialog</string>
+   <string>LivePlayerDialog</string>
   </property>
   <property name="styleSheet">
    <string notr="true">border: 0px;
 background-color: #ffffff;</string>
   </property>
-  <widget class="QPushButton" name="m_openPB">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>485</y>
-     <width>70</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">border: 1px solid #000000;</string>
-   </property>
-   <property name="text">
-    <string>打开</string>
-   </property>
-  </widget>
   <widget class="QWidget" name="widget" native="true">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>700</width>
-     <height>450</height>
+     <width>650</width>
+     <height>440</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -62,8 +46,8 @@ background-color: #ffffff;</string>
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>700</width>
-      <height>450</height>
+      <width>650</width>
+      <height>440</height>
      </rect>
     </property>
     <property name="text">
@@ -75,8 +59,8 @@ background-color: #ffffff;</string>
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>460</y>
-     <width>80</width>
+     <y>457</y>
+     <width>60</width>
      <height>20</height>
     </rect>
    </property>
@@ -95,8 +79,8 @@ background-color: #ffffff;</string>
   <widget class="QSlider" name="m_progressSlider">
    <property name="geometry">
     <rect>
-     <x>100</x>
-     <y>460</y>
+     <x>80</x>
+     <y>457</y>
      <width>500</width>
      <height>18</height>
     </rect>
@@ -108,9 +92,9 @@ background-color: #ffffff;</string>
   <widget class="QLabel" name="m_totalTimeLabel">
    <property name="geometry">
     <rect>
-     <x>600</x>
-     <y>460</y>
-     <width>80</width>
+     <x>585</x>
+     <y>457</y>
+     <width>60</width>
      <height>20</height>
     </rect>
    </property>
@@ -120,7 +104,7 @@ background-color: #ffffff;</string>
     </font>
    </property>
    <property name="text">
-    <string>00:03:00</string>
+    <string>00:00:00</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
@@ -130,9 +114,9 @@ background-color: #ffffff;</string>
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>485</y>
+     <y>487</y>
      <width>70</width>
-     <height>30</height>
+     <height>26</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -145,10 +129,10 @@ background-color: #ffffff;</string>
   <widget class="QPushButton" name="m_pausePB">
    <property name="geometry">
     <rect>
-     <x>180</x>
-     <y>485</y>
+     <x>20</x>
+     <y>487</y>
      <width>70</width>
-     <height>30</height>
+     <height>26</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -158,37 +142,63 @@ background-color: #ffffff;</string>
     <string>暂停</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="m_stopPB">
+  <widget class="QWidget" name="widget_2" native="true">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>485</y>
-     <width>70</width>
-     <height>30</height>
+     <x>650</x>
+     <y>0</y>
+     <width>230</width>
+     <height>525</height>
     </rect>
    </property>
-   <property name="styleSheet">
-    <string notr="true">border: 1px solid #000000;</string>
-   </property>
-   <property name="text">
-    <string>停止</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="m_setUrlPB">
-   <property name="geometry">
-    <rect>
-     <x>600</x>
-     <y>485</y>
-     <width>70</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">border: 1px solid #000000;</string>
-   </property>
-   <property name="text">
-    <string>url</string>
-   </property>
+   <widget class="QPlainTextEdit" name="plainTextEdit">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>415</y>
+      <width>230</width>
+      <height>110</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: #ffffff;
+border-top: 1px solid #000000;</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>490</y>
+      <width>60</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 1px solid #000000;</string>
+    </property>
+    <property name="text">
+     <string>发送</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>250</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>  聊天室</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

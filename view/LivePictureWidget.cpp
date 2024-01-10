@@ -1,17 +1,17 @@
-#include "PictureWidget.hpp"
+#include "LivePictureWidget.hpp"
 
-#include "ui_PictureWidget.h"
+#include "ui_LivePictureWidget.h"
 
-PictureWidget::PictureWidget(QWidget* parent) : QWidget(parent), ui(new Ui::PictureWidget) {
+LivePictureWidget::LivePictureWidget(QWidget* parent) : QWidget(parent), ui(new Ui::LivePictureWidget) {
     ui->setupUi(this);
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 }
 
-PictureWidget::~PictureWidget() {
+LivePictureWidget::~LivePictureWidget() {
     delete ui;
 }
 
-void PictureWidget::slots_setImage(const QImage& image) {
+void LivePictureWidget::slots_setImage(const QImage& image) {
     if (image.isNull()) {
         return;
     }

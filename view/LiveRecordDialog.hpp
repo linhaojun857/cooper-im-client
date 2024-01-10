@@ -4,28 +4,34 @@
 #include <QDialog>
 
 #include "media/recorder/SaveVideoFileThread.hpp"
-#include "view/PictureWidget.hpp"
+#include "view/LivePictureWidget.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
-class RecordDialog;
+class LiveRecordDialog;
 }
 QT_END_NAMESPACE
 
-class RecordDialog : public QDialog {
+class LiveRecordDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit RecordDialog(QWidget* parent = nullptr);
+    explicit LiveRecordDialog(QWidget* parent = nullptr);
 
-    ~RecordDialog() override;
+    ~LiveRecordDialog() override;
+
+    void start(int roomId);
 
 public slots:
     void slots_setImage(const QImage& image);
 
+    void handleClickPbPause();
+
+    void handleClickPbEnd();
+
 private:
-    Ui::RecordDialog* ui;
-    PictureWidget* m_pictureWidget = nullptr;
+    Ui::LiveRecordDialog* ui;
+    LivePictureWidget* m_pictureWidget = nullptr;
     SaveVideoFileThread* m_saveVideoFileThread = nullptr;
     QString m_saveUrl;
 };
