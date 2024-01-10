@@ -25,6 +25,10 @@
   <property name="windowTitle">
    <string>PlayerDialog</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">border: 0px;
+background-color: #ffffff;</string>
+  </property>
   <widget class="QPushButton" name="m_openPB">
    <property name="geometry">
     <rect>
@@ -33,6 +37,9 @@
      <width>70</width>
      <height>30</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 1px solid #000000;</string>
    </property>
    <property name="text">
     <string>打开</string>
@@ -128,6 +135,9 @@
      <height>30</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">border: 1px solid #000000;</string>
+   </property>
    <property name="text">
     <string>恢复</string>
    </property>
@@ -140,6 +150,9 @@
      <width>70</width>
      <height>30</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 1px solid #000000;</string>
    </property>
    <property name="text">
     <string>暂停</string>
@@ -154,6 +167,9 @@
      <height>30</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">border: 1px solid #000000;</string>
+   </property>
    <property name="text">
     <string>停止</string>
    </property>
@@ -166,6 +182,9 @@
      <width>70</width>
      <height>30</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 1px solid #000000;</string>
    </property>
    <property name="text">
     <string>url</string>
