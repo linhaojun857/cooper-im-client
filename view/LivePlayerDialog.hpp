@@ -3,8 +3,10 @@
 
 #include <QDialog>
 #include <QTimer>
+#include <QVBoxLayout>
 
 #include "media/player/VideoPlayer.hpp"
+#include "view/LiveRoomMsgItem.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -22,6 +24,8 @@ public:
 
     void start(int roomId);
 
+    void addLiveRoomMsgItem(LiveRoomMsgItem* liveRoomMsgItem);
+
 private slots:
     void handleClickResumePB();
 
@@ -37,11 +41,13 @@ private slots:
 
     bool eventFilter(QObject* watched, QEvent* event) override;
 
+    void handleClickSendMsgPB();
+
 private:
     Ui::LivePlayerDialog* ui;
     VideoPlayer* m_player;
     QTimer m_timer;
-    int isStop{};
+    QVBoxLayout* m_msgLayout = nullptr;
 };
 
 #endif

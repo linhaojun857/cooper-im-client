@@ -5,24 +5,44 @@
 #include <QMessageBox>
 #include <QMouseEvent>
 #include <QPoint>
+#include <QScrollBar>
 #include <QStyle>
 
 #include "define/IMDefine.hpp"
+#include "mock/Mock.hpp"
 #include "ui_LivePlayerDialog.h"
 
 LivePlayerDialog::LivePlayerDialog(QWidget* parent) : QDialog(parent), ui(new Ui::LivePlayerDialog) {
     ui->setupUi(this);
+    setWindowIcon(QIcon(":/img/logo.ico"));
+
     m_player = new VideoPlayer();
+
     connect(ui->m_resumePB, SIGNAL(clicked()), this, SLOT(handleClickResumePB()));
     connect(ui->m_pausePB, SIGNAL(clicked()), this, SLOT(handleClickPausePB()));
+    connect(ui->m_sendMsgPB, SIGNAL(clicked()), this, SLOT(handleClickSendMsgPB()));
     connect(m_player, SIGNAL(SIG_setOneImage(QImage)), this, SLOT(setImage(QImage)));
     connect(m_player, SIGNAL(SIG_PlayerStateChanged(int)), this, SLOT(slot_PlayerStateChanged(int)));
     connect(m_player, SIGNAL(SIG_TotalTime(qint64)), this, SLOT(slot_getTotalTime(qint64)));
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(slot_TimerTimeOut()));
-    ui->m_progressSlider->installEventFilter(this);
-    m_timer.setInterval(500);
+
     m_player->m_playerState = PlayerState::Stop;
     slot_PlayerStateChanged(PlayerState::Stop);
+    ui->m_progressSlider->installEventFilter(this);
+    m_timer.setInterval(500);
+
+    ui->m_scrollArea->setFrameStyle(QFrame::NoFrame);
+    ui->m_scrollArea->setFrameShape(QFrame::NoFrame);
+    ui->m_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->m_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    auto widget = new QWidget();
+    ui->m_scrollArea->setWidget(widget);
+
+    m_msgLayout = new QVBoxLayout();
+    m_msgLayout->setContentsMargins(0, 0, 0, 0);
+    m_msgLayout->setSpacing(0);
+    widget->setLayout(m_msgLayout);
+    m_msgLayout->addStretch();
 }
 
 LivePlayerDialog::~LivePlayerDialog() {
@@ -33,6 +53,10 @@ void LivePlayerDialog::start(int roomId) {
     QString url = LIVE_BASE_URL + QString::number(roomId);
     m_player->setFileName(url);
     slot_PlayerStateChanged(PlayerState::Playing);
+}
+
+void LivePlayerDialog::addLiveRoomMsgItem(LiveRoomMsgItem* liveRoomMsgItem) {
+    m_msgLayout->insertWidget(m_msgLayout->count() - 1, liveRoomMsgItem);
 }
 
 void LivePlayerDialog::handleClickResumePB() {
@@ -59,26 +83,24 @@ void LivePlayerDialog::setImage(const QImage& image) {
 
 void LivePlayerDialog::slot_PlayerStateChanged(int state) {
     switch (state) {
-        case PlayerState::Stop:
+        case PlayerState::Stop: {
             qDebug() << "VideoPlayer::Stop";
             m_timer.stop();
             ui->m_progressSlider->setValue(0);
             ui->m_totalTimeLabel->setText("00:00:00");
             ui->m_curtTimeLabel->setText("00:00:00");
-            {
-                QImage img;
-                img.fill(Qt::black);
-                setImage(img);
-            }
+            QImage img;
+            img.fill(Qt::black);
+            setImage(img);
             this->update();
-            isStop = true;
             break;
-        case PlayerState::Playing:
+        }
+        case PlayerState::Playing: {
             qDebug() << "VideoPlayer::Playing";
             m_timer.start();
             this->update();
-            isStop = false;
             break;
+        }
         default:
             break;
     }
@@ -103,11 +125,10 @@ void LivePlayerDialog::slot_TimerTimeOut() {
         QString sStr = QString("00%1").arg(Sec % 60);
         QString str = QString("%1:%2:%3").arg(hStr.right(2)).arg(mStr.right(2)).arg(sStr.right(2));
         ui->m_curtTimeLabel->setText(str);
-        if (ui->m_progressSlider->value() == ui->m_progressSlider->maximum() &&
-            m_player->m_playerState == PlayerState::Stop) {
-            slot_PlayerStateChanged(PlayerState::Stop);
-        } else if (ui->m_progressSlider->value() + 1 == ui->m_progressSlider->maximum() &&
-                   m_player->m_playerState == PlayerState::Stop) {
+        if ((ui->m_progressSlider->value() == ui->m_progressSlider->maximum() &&
+             m_player->m_playerState == PlayerState::Stop) ||
+            (ui->m_progressSlider->value() + 1 == ui->m_progressSlider->maximum() &&
+             m_player->m_playerState == PlayerState::Stop)) {
             slot_PlayerStateChanged(PlayerState::Stop);
         }
     }
@@ -130,4 +151,16 @@ bool LivePlayerDialog::eventFilter(QObject* watched, QEvent* event) {
         }
     }
     return QDialog::eventFilter(watched, event);
+}
+
+void LivePlayerDialog::handleClickSendMsgPB() {
+    // for test
+    static int index = 0;
+    auto liveRoomMsgItem = new LiveRoomMsgItem();
+    liveRoomMsgItem->setAvatar(Mock::urls[index++ % Mock::urls.size()]);
+    liveRoomMsgItem->setNicknameAndMsg(Mock::nicknames[index % Mock::nicknames.size()],
+                                       QString("这是第%1条消息这是第%1条消息").arg(index));
+    addLiveRoomMsgItem(liveRoomMsgItem);
+    ui->m_scrollArea->verticalScrollBar()->setValue(ui->m_scrollArea->verticalScrollBar()->maximum());
+    index++;
 }

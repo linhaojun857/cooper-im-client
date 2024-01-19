@@ -122,6 +122,9 @@ add_library(cooper_im_lib
         view/LivePlayerDialog.hpp
         view/LivePlayerDialog.cpp
         view/LivePlayerDialog.ui
+        view/LiveRoomMsgItem.hpp
+        view/LiveRoomMsgItem.cpp
+        view/LiveRoomMsgItem.ui
         # core
         core/IMKernel.hpp
         core/IMKernel.cpp
