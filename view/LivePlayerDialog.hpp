@@ -28,12 +28,20 @@ public:
 
     void setLiveRoomId(int roomId);
 
+    void closeLive();
+
+    void setLiveRoomOwnerAvatar(const QString& liveRoomOwnerAvatarUrl);
+
+    void setLiveRoomOwnerName(const QString& liveRoomOwnerName);
+
+    void setLiveRoomViewerCount(int liveRoomViewerCount);
+
 private slots:
     void handleClickResumePB();
 
     void handleClickPausePB();
 
-    void setImage(const QImage& image);
+    void slot_setImage(const QImage& image);
 
     void slot_PlayerStateChanged(int state);
 
@@ -44,12 +52,6 @@ private slots:
     bool eventFilter(QObject* watched, QEvent* event) override;
 
     void handleClickSendMsgPB();
-
-    void setLiveRoomOwnerAvatar(const QString& liveRoomOwnerAvatarUrl);
-
-    void setLiveRoomOwnerName(const QString& liveRoomOwnerName);
-
-    void setLiveRoomViewerCount(int liveRoomViewerCount);
 
 private:
     Ui::LivePlayerDialog* ui;

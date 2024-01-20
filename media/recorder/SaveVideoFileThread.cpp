@@ -513,6 +513,7 @@ void SaveVideoFileThread::slots_setInfo(STRU_AV_FORMAT av_format) {
 }
 
 void SaveVideoFileThread::slots_openVideo() {
+    isStop = false;
     if (m_avFormat.hasCamera || m_avFormat.hasDesk) {
         m_videoRecorder->slot_openVideo();
         m_videoBeginFlag = true;

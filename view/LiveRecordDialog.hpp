@@ -22,6 +22,8 @@ public:
 
     void start(int roomId);
 
+    void setLiveRoomId(int roomId);
+
 public slots:
     void slots_setImage(const QImage& image);
 
@@ -35,6 +37,7 @@ private:
     SaveVideoFileThread* m_saveVideoFileThread = nullptr;
     QString m_saveUrl;
     bool m_adjustFlag = true;
+    int m_liveRoomId = 0;
 };
 
 #endif

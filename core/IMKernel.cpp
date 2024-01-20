@@ -67,6 +67,10 @@ void IMKernel::sendGroupMsg(const GroupMessage& groupMessage) {
     m_mediator->sendData(json);
 }
 
+void IMKernel::sendLiveMsg(const QJsonObject& json) {
+    m_mediator->sendData(json);
+}
+
 void IMKernel::dealData(const QJsonObject& jsonObject) {
     auto type = jsonObject["type"].toInt();
     auto it = m_handlers.find(type);
@@ -87,6 +91,9 @@ void IMKernel::initHandlers() {
     m_handlers[PROTOCOL_TYPE_GROUP_ENTITY] = std::bind(&IMKernel::handleGroupEntity, _1);
     m_handlers[PROTOCOL_TYPE_GROUP_MESSAGE_RECV] = std::bind(&IMKernel::handleGroupMessageRecv, _1);
     m_handlers[PROTOCOL_TYPE_GROUP_MESSAGE_SEND] = std::bind(&IMKernel::handleGroupMessageSend, _1);
+    m_handlers[PROTOCOL_TYPE_LIVE_ROOM_END] = std::bind(&IMKernel::handleLiveRoomEnd, _1);
+    m_handlers[PROTOCOL_TYPE_LIVE_ROOM_MSG_RECV] = std::bind(&IMKernel::handleLiveRoomMSGRecv, _1);
+    m_handlers[PROTOCOL_TYPE_LIVE_ROOM_UPDATE_VIEWER_COUNT] = std::bind(&IMKernel::handleLiveRoomUpdateViewerCount, _1);
 }
 
 void IMKernel::handleErrorMsg(const QJsonObject& json) {
@@ -161,7 +168,6 @@ void IMKernel::handleGroupApplyNotifyI(const QJsonObject& json) {
 }
 
 void IMKernel::handleGroupApplyNotifyP(const QJsonObject& json) {
-    qDebug() << "IMKernel::handleGroupApplyNotifyP:\n" << json;
     auto ga = GroupApply::fromJson(json);
     if (!IMStore::getInstance()->haveFANItemP(ga->from_id)) {
         auto ganItem = new ApplyNotifyItem();
@@ -208,7 +214,6 @@ void IMKernel::handleGroupEntity(const QJsonObject& json) {
 }
 
 void IMKernel::handleGroupMessageRecv(const QJsonObject& json) {
-    qDebug() << "IMKernel::handleGroupMessageRecv begin";
     auto gm = GroupMessage::fromJson(json);
     DataSync::syncGroupMessagesByServerPush(json);
     if (gm.group_id == IMStore::getInstance()->getChatDialog()->getCurrentGroupId()) {
@@ -216,12 +221,30 @@ void IMKernel::handleGroupMessageRecv(const QJsonObject& json) {
         WebHelper::scrollToBottom();
     }
     IMStore::getInstance()->updateGroupMessageItem(gm);
-    qDebug() << "IMKernel::handleGroupMessageRecv end";
 }
 
 void IMKernel::handleGroupMessageSend(const QJsonObject& json) {
-    qDebug() << "IMKernel::handleGroupMessageSend begin";
     auto gm = GroupMessage::fromJson(json);
     DataSync::syncGroupMessagesByServerPush(json);
-    qDebug() << "IMKernel::handleGroupMessageSend end";
+}
+
+void IMKernel::handleLiveRoomEnd(const QJsonObject& json) {
+    (void)json;
+    IMStore::getInstance()->getLivePlayerDialog()->closeLive();
+}
+
+void IMKernel::handleLiveRoomMSGRecv(const QJsonObject& json) {
+    auto msg = json["msg"].toString();
+    auto nickname = json["nickname"].toString();
+    auto avatar = json["avatar"].toString();
+    auto livePlayerDialog = IMStore::getInstance()->getLivePlayerDialog();
+    auto liveRoomMsgItem = new LiveRoomMsgItem();
+    liveRoomMsgItem->setAvatar(avatar);
+    liveRoomMsgItem->setNicknameAndMsg(nickname, msg);
+    livePlayerDialog->addLiveRoomMsgItem(liveRoomMsgItem);
+}
+
+void IMKernel::handleLiveRoomUpdateViewerCount(const QJsonObject& json) {
+    auto livePlayerDialog = IMStore::getInstance()->getLivePlayerDialog();
+    livePlayerDialog->setLiveRoomViewerCount(json["viewer_count"].toInt());
 }

@@ -11,6 +11,7 @@
 #include <QStyle>
 #include <QtConcurrent/QtConcurrent>
 
+#include "core/IMKernel.hpp"
 #include "define/IMDefine.hpp"
 #include "mock/Mock.hpp"
 #include "store/IMStore.hpp"
@@ -27,7 +28,7 @@ LivePlayerDialog::LivePlayerDialog(QWidget* parent) : QDialog(parent), ui(new Ui
     connect(ui->m_resumePB, SIGNAL(clicked()), this, SLOT(handleClickResumePB()));
     connect(ui->m_pausePB, SIGNAL(clicked()), this, SLOT(handleClickPausePB()));
     connect(ui->m_sendMsgPB, SIGNAL(clicked()), this, SLOT(handleClickSendMsgPB()));
-    connect(m_player, SIGNAL(SIG_setOneImage(QImage)), this, SLOT(setImage(QImage)));
+    connect(m_player, SIGNAL(SIG_setOneImage(QImage)), this, SLOT(slot_setImage(QImage)));
     connect(m_player, SIGNAL(SIG_PlayerStateChanged(int)), this, SLOT(slot_PlayerStateChanged(int)));
     connect(m_player, SIGNAL(SIG_TotalTime(qint64)), this, SLOT(slot_getTotalTime(qint64)));
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(slot_TimerTimeOut()));
@@ -92,6 +93,38 @@ void LivePlayerDialog::setLiveRoomId(int roomId) {
     setLiveRoomViewerCount(liveRoom["viewer_count"].toInt());
 }
 
+void LivePlayerDialog::closeLive() {
+    slot_PlayerStateChanged(PlayerState::Stop);
+    m_player->stop(true);
+}
+
+void LivePlayerDialog::setLiveRoomOwnerAvatar(const QString& liveRoomOwnerAvatarUrl) {
+    std::ignore = QtConcurrent::run([=]() {
+        auto manager = new QNetworkAccessManager();
+        QNetworkRequest request(liveRoomOwnerAvatarUrl);
+        QNetworkReply* reply = manager->get(request);
+        QEventLoop loop;
+        QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+        loop.exec();
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray data = reply->readAll();
+            QPixmap pixmap;
+            pixmap.loadFromData(data);
+            ui->m_liveRoomOwnerAvatarLabel->setPixmap(pixmap);
+        } else {
+            qDebug() << "load failed: " << reply->errorString();
+        }
+    });
+}
+
+void LivePlayerDialog::setLiveRoomOwnerName(const QString& liveRoomOwnerName) {
+    ui->m_liveRoomOwnerNameLabel->setText(liveRoomOwnerName);
+}
+
+void LivePlayerDialog::setLiveRoomViewerCount(int liveRoomViewerCount) {
+    ui->m_liveRoomViewerCountLabel->setText("观看人数: " + QString::number(liveRoomViewerCount));
+}
+
 void LivePlayerDialog::handleClickResumePB() {
     if (m_player->getPlayerState() != Pause)
         return;
@@ -104,7 +137,7 @@ void LivePlayerDialog::handleClickPausePB() {
     m_player->pause();
 }
 
-void LivePlayerDialog::setImage(const QImage& image) {
+void LivePlayerDialog::slot_setImage(const QImage& image) {
     if (image.isNull()) {
         return;
     }
@@ -132,7 +165,7 @@ void LivePlayerDialog::slot_PlayerStateChanged(int state) {
             ui->m_curtTimeLabel->setText("00:00:00");
             QImage img;
             img.fill(Qt::black);
-            setImage(img);
+            slot_setImage(img);
             this->update();
             break;
         }
@@ -195,31 +228,16 @@ bool LivePlayerDialog::eventFilter(QObject* watched, QEvent* event) {
 }
 
 void LivePlayerDialog::handleClickSendMsgPB() {
-}
-
-void LivePlayerDialog::setLiveRoomOwnerAvatar(const QString& liveRoomOwnerAvatarUrl) {
-    std::ignore = QtConcurrent::run([=]() {
-        auto manager = new QNetworkAccessManager();
-        QNetworkRequest request(liveRoomOwnerAvatarUrl);
-        QNetworkReply* reply = manager->get(request);
-        QEventLoop loop;
-        QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-        loop.exec();
-        if (reply->error() == QNetworkReply::NoError) {
-            QByteArray data = reply->readAll();
-            QPixmap pixmap;
-            pixmap.loadFromData(data);
-            ui->m_liveRoomOwnerAvatarLabel->setPixmap(pixmap);
-        } else {
-            qDebug() << "load failed: " << reply->errorString();
-        }
-    });
-}
-
-void LivePlayerDialog::setLiveRoomOwnerName(const QString& liveRoomOwnerName) {
-    ui->m_liveRoomOwnerNameLabel->setText(liveRoomOwnerName);
-}
-
-void LivePlayerDialog::setLiveRoomViewerCount(int liveRoomViewerCount) {
-    ui->m_liveRoomViewerCountLabel->setText("观看人数: " + QString::number(liveRoomViewerCount));
+    QJsonObject json;
+    json["type"] = PROTOCOL_TYPE_LIVE_ROOM_MSG_SEND;
+    json["token"] = IMStore::getInstance()->getToken();
+    json["room_id"] = m_liveRoomId;
+    QString msg = ui->m_plainTextEdit->toPlainText();
+    json["msg"] = msg;
+    ui->m_plainTextEdit->clear();
+    auto item = new LiveRoomMsgItem();
+    item->setAvatar(IMStore::getInstance()->getSelf()->avatar);
+    item->setNicknameAndMsg(IMStore::getInstance()->getSelf()->nickname, msg);
+    addLiveRoomMsgItem(item);
+    IMStore::getInstance()->getIMKernel()->sendLiveMsg(json);
 }

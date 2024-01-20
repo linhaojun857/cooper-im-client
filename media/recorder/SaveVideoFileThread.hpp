@@ -89,7 +89,7 @@ public slots:
 
     void slots_closeVideo();
 
-private:
+public:
     VideoRecorder* m_videoRecorder = nullptr;
     AudioRecorder* m_audioRecorder = nullptr;
     STRU_AV_FORMAT m_avFormat;

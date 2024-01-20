@@ -30,6 +30,8 @@ public:
 
     void sendGroupMsg(const GroupMessage& groupMessage);
 
+    void sendLiveMsg(const QJsonObject& json);
+
 public slots:
     void dealData(const QJsonObject& jsonObject);
 
@@ -57,6 +59,12 @@ private:
     static void handleGroupMessageRecv(const QJsonObject& json);
 
     static void handleGroupMessageSend(const QJsonObject& json);
+
+    static void handleLiveRoomEnd(const QJsonObject& json);
+
+    static void handleLiveRoomMSGRecv(const QJsonObject& json);
+
+    static void handleLiveRoomUpdateViewerCount(const QJsonObject& json);
 
 private:
     TcpClientMediator* m_mediator = nullptr;

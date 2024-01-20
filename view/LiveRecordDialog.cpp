@@ -1,7 +1,9 @@
 #include "LiveRecordDialog.hpp"
 
 #include "define/IMDefine.hpp"
+#include "store/IMStore.hpp"
 #include "ui_LiveRecordDialog.h"
+#include "util/HttpUtil.hpp"
 
 LiveRecordDialog::LiveRecordDialog(QWidget* parent) : QDialog(parent), ui(new Ui::LiveRecordDialog) {
     ui->setupUi(this);
@@ -36,6 +38,7 @@ LiveRecordDialog::~LiveRecordDialog() {
 }
 
 void LiveRecordDialog::start(int roomId) {
+    m_liveRoomId = roomId;
     showMinimized();
     STRU_AV_FORMAT format;
     format.fileName = LIVE_BASE_URL + QString::number(roomId);
@@ -46,8 +49,16 @@ void LiveRecordDialog::start(int roomId) {
     format.videoBitRate = 1000000;
     format.width = 1920;
     format.height = 1080;
+    m_saveVideoFileThread->video_st = {nullptr};
+    m_saveVideoFileThread->audio_st = {nullptr};
+    m_saveVideoFileThread->video_pts = 0;
+    m_saveVideoFileThread->audio_pts = 0;
     m_saveVideoFileThread->slots_setInfo(format);
     m_saveVideoFileThread->slots_openVideo();
+}
+
+void LiveRecordDialog::setLiveRoomId(int roomId) {
+    m_liveRoomId = roomId;
 }
 
 void LiveRecordDialog::slots_setImage(const QImage& image) {
@@ -74,7 +85,17 @@ void LiveRecordDialog::handleClickPbPause() {
 void LiveRecordDialog::handleClickPbEnd() {
     m_pictureWidget->hide();
     m_saveVideoFileThread->slots_closeVideo();
-    QImage image = QImage(1920, 1080, QImage::Format_RGB888);
+
+    QImage image;
     image.fill(Qt::black);
     slots_setImage(image);
+
+    QJsonObject json;
+    json["token"] = IMStore::getInstance()->getToken();
+    json["room_id"] = m_liveRoomId;
+    auto ret = HttpUtil::post(HTTP_SERVER_URL "/live/closeLive", json);
+    if (ret["code"].toInt() != HTTP_SUCCESS_CODE) {
+        return;
+    }
+    this->hide();
 }

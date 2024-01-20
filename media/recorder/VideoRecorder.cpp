@@ -19,8 +19,10 @@ void VideoRecorder::run() {
 }
 
 void VideoRecorder::slot_openVideo() {
-    cap.open(0);
-    if (!cap.isOpened()) {
+    isStop = false;
+    cap = new VideoCapture();
+    cap->open(0);
+    if (!cap->isOpened()) {
         QMessageBox::information(nullptr, tr("提示"), tr("视频没有打开"));
         return;
     }
@@ -31,13 +33,15 @@ void VideoRecorder::slot_openVideo() {
 void VideoRecorder::slot_closeVideo() {
     //    timer->stop();
     isStop = true;
-    if (cap.isOpened())
-        cap.release();
+    if (cap->isOpened()) {
+        cap->release();
+        delete cap;
+    }
 }
 
 void VideoRecorder::slot_getVideoFrame() {
     Mat frame;
-    if (!cap.read(frame)) {
+    if (!cap->read(frame)) {
         return;
     }
     cvtColor(frame, frame, CV_BGR2RGB);
