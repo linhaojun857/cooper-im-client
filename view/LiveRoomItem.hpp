@@ -34,7 +34,7 @@ signals:
     void liveRoomCoverClicked();
 
 public slots:
-    void handleLiveRoomCoverClicked();
+    void handleLiveRoomCoverClicked() const;
 
 private:
     Ui::LiveRoomItem* ui;

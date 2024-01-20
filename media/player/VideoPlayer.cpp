@@ -482,7 +482,7 @@ void VideoPlayer::pause() {
     m_playerState = Pause;
 }
 void VideoPlayer::stop(bool isWait) {
-    m_videoState.quit = 1;
+    m_videoState.quit = true;
     if (isWait)  // 阻塞标志
     {
         while (m_videoState.videoStream != -1 && !m_videoState.readThreadFinished)  // 等待读取线程退出

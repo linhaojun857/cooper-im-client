@@ -26,6 +26,8 @@ public:
 
     void addLiveRoomMsgItem(LiveRoomMsgItem* liveRoomMsgItem);
 
+    void setLiveRoomId(int roomId);
+
 private slots:
     void handleClickResumePB();
 
@@ -43,11 +45,19 @@ private slots:
 
     void handleClickSendMsgPB();
 
+    void setLiveRoomOwnerAvatar(const QString& liveRoomOwnerAvatarUrl);
+
+    void setLiveRoomOwnerName(const QString& liveRoomOwnerName);
+
+    void setLiveRoomViewerCount(int liveRoomViewerCount);
+
 private:
     Ui::LivePlayerDialog* ui;
     VideoPlayer* m_player;
     QTimer m_timer;
     QVBoxLayout* m_msgLayout = nullptr;
+    bool m_adjustFlag = true;
+    int m_liveRoomId = 0;
 };
 
 #endif

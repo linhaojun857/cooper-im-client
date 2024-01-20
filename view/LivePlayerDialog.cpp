@@ -1,20 +1,26 @@
 #include "LivePlayerDialog.hpp"
 
-#include <QFileDialog>
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QMouseEvent>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 #include <QPoint>
 #include <QScrollBar>
 #include <QStyle>
+#include <QtConcurrent/QtConcurrent>
 
 #include "define/IMDefine.hpp"
 #include "mock/Mock.hpp"
+#include "store/IMStore.hpp"
 #include "ui_LivePlayerDialog.h"
+#include "util/HttpUtil.hpp"
 
 LivePlayerDialog::LivePlayerDialog(QWidget* parent) : QDialog(parent), ui(new Ui::LivePlayerDialog) {
     ui->setupUi(this);
     setWindowIcon(QIcon(":/img/logo.ico"));
+    setWindowTitle("直播间");
 
     m_player = new VideoPlayer();
 
@@ -25,6 +31,19 @@ LivePlayerDialog::LivePlayerDialog(QWidget* parent) : QDialog(parent), ui(new Ui
     connect(m_player, SIGNAL(SIG_PlayerStateChanged(int)), this, SLOT(slot_PlayerStateChanged(int)));
     connect(m_player, SIGNAL(SIG_TotalTime(qint64)), this, SLOT(slot_getTotalTime(qint64)));
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(slot_TimerTimeOut()));
+
+    connect(this, &LivePlayerDialog::finished, [=](int result) {
+        (void)result;
+        slot_PlayerStateChanged(PlayerState::Stop);
+        m_player->stop(true);
+        QJsonObject json;
+        json["token"] = IMStore::getInstance()->getToken();
+        json["room_id"] = m_liveRoomId;
+        auto ret = HttpUtil::post(HTTP_SERVER_URL "/live/leaveLive", json);
+        if (ret["code"].toInt() != HTTP_SUCCESS_CODE) {
+            return;
+        }
+    });
 
     m_player->m_playerState = PlayerState::Stop;
     slot_PlayerStateChanged(PlayerState::Stop);
@@ -59,6 +78,20 @@ void LivePlayerDialog::addLiveRoomMsgItem(LiveRoomMsgItem* liveRoomMsgItem) {
     m_msgLayout->insertWidget(m_msgLayout->count() - 1, liveRoomMsgItem);
 }
 
+void LivePlayerDialog::setLiveRoomId(int roomId) {
+    m_liveRoomId = roomId;
+    QJsonObject json;
+    json["room_id"] = roomId;
+    auto ret = HttpUtil::post(HTTP_SERVER_URL "/live/getOpenedLiveInfoByRoomId", json);
+    if (ret["code"].toInt() != HTTP_SUCCESS_CODE) {
+        return;
+    }
+    auto liveRoom = ret["live_room"].toObject();
+    setLiveRoomOwnerAvatar(liveRoom["owner_avatar"].toString());
+    setLiveRoomOwnerName(liveRoom["owner_nickname"].toString());
+    setLiveRoomViewerCount(liveRoom["viewer_count"].toInt());
+}
+
 void LivePlayerDialog::handleClickResumePB() {
     if (m_player->getPlayerState() != Pause)
         return;
@@ -72,13 +105,21 @@ void LivePlayerDialog::handleClickPausePB() {
 }
 
 void LivePlayerDialog::setImage(const QImage& image) {
-    QPixmap pixmap;
-    if (!image.isNull()) {
-        pixmap = QPixmap::fromImage(image.scaled(ui->m_showLabel->size(), Qt::KeepAspectRatio));
-    } else {
-        pixmap = QPixmap::fromImage(image);
+    if (image.isNull()) {
+        return;
     }
-    ui->m_showLabel->setPixmap(pixmap);
+    if (m_adjustFlag) {
+        double ratio = image.height() * 1.0 / image.width();
+        double height = ratio * ui->m_showLabel->width();
+        if (height > ui->m_showLabel->height()) {
+            height = ui->m_showLabel->height();
+        }
+        ui->m_showLabel->setFixedSize(ui->m_showLabel->width(), (int)height);
+        ui->m_showLabel->move((ui->m_showLabel->parentWidget()->width() - ui->m_showLabel->width()) / 2,
+                              (ui->m_showLabel->parentWidget()->height() - ui->m_showLabel->height()) / 2);
+        m_adjustFlag = false;
+    }
+    ui->m_showLabel->setPixmap(QPixmap::fromImage(image));
 }
 
 void LivePlayerDialog::slot_PlayerStateChanged(int state) {
@@ -154,13 +195,31 @@ bool LivePlayerDialog::eventFilter(QObject* watched, QEvent* event) {
 }
 
 void LivePlayerDialog::handleClickSendMsgPB() {
-    // for test
-    static int index = 0;
-    auto liveRoomMsgItem = new LiveRoomMsgItem();
-    liveRoomMsgItem->setAvatar(Mock::urls[index++ % Mock::urls.size()]);
-    liveRoomMsgItem->setNicknameAndMsg(Mock::nicknames[index % Mock::nicknames.size()],
-                                       QString("这是第%1条消息这是第%1条消息").arg(index));
-    addLiveRoomMsgItem(liveRoomMsgItem);
-    ui->m_scrollArea->verticalScrollBar()->setValue(ui->m_scrollArea->verticalScrollBar()->maximum());
-    index++;
+}
+
+void LivePlayerDialog::setLiveRoomOwnerAvatar(const QString& liveRoomOwnerAvatarUrl) {
+    std::ignore = QtConcurrent::run([=]() {
+        auto manager = new QNetworkAccessManager();
+        QNetworkRequest request(liveRoomOwnerAvatarUrl);
+        QNetworkReply* reply = manager->get(request);
+        QEventLoop loop;
+        QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+        loop.exec();
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray data = reply->readAll();
+            QPixmap pixmap;
+            pixmap.loadFromData(data);
+            ui->m_liveRoomOwnerAvatarLabel->setPixmap(pixmap);
+        } else {
+            qDebug() << "load failed: " << reply->errorString();
+        }
+    });
+}
+
+void LivePlayerDialog::setLiveRoomOwnerName(const QString& liveRoomOwnerName) {
+    ui->m_liveRoomOwnerNameLabel->setText(liveRoomOwnerName);
+}
+
+void LivePlayerDialog::setLiveRoomViewerCount(int liveRoomViewerCount) {
+    ui->m_liveRoomViewerCountLabel->setText("观看人数: " + QString::number(liveRoomViewerCount));
 }

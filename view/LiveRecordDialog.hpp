@@ -34,6 +34,7 @@ private:
     LivePictureWidget* m_pictureWidget = nullptr;
     SaveVideoFileThread* m_saveVideoFileThread = nullptr;
     QString m_saveUrl;
+    bool m_adjustFlag = true;
 };
 
 #endif

@@ -22,6 +22,10 @@ IMStore::IMStore() {
     m_cgWidget = new CGWidget();
 }
 
+IMStore::~IMStore() {
+    // todo
+}
+
 void IMStore::setIMKernel(IMKernel* imKernel) {
     m_imKernel = imKernel;
 }
@@ -459,12 +463,17 @@ QString IMStore::getLatestGroupMessageByGroupId(int groupId) {
     return "";
 }
 
-void IMStore::createLiveLobbyWidgetOnce() {
-    if (!m_liveLobbyWidget) {
-        m_liveLobbyWidget = new LiveLobbyWidget();
-    }
+LiveLobbyWidget* IMStore::getLiveLobbyWidget() {
+    static LiveLobbyWidget liveLobbyWidget;
+    return &liveLobbyWidget;
 }
 
-LiveLobbyWidget* IMStore::getLiveLobbyWidget() {
-    return m_liveLobbyWidget;
+LiveRecordDialog* IMStore::getLiveRecordDialog() {
+    static LiveRecordDialog liveRecordDialog;
+    return &liveRecordDialog;
+}
+
+LivePlayerDialog* IMStore::getLivePlayerDialog() {
+    static LivePlayerDialog livePlayerDialog;
+    return &livePlayerDialog;
 }

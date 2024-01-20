@@ -13,6 +13,8 @@
 #include "view/FriendItem.hpp"
 #include "view/FriendWidget.hpp"
 #include "view/LiveLobbyWidget.hpp"
+#include "view/LivePlayerDialog.hpp"
+#include "view/LiveRecordDialog.hpp"
 #include "view/MainWidget.hpp"
 #include "view/MessageWidget.hpp"
 #include "view/NotifyWidget.hpp"
@@ -26,6 +28,8 @@ public:
     QSqlDatabase* getDatabase();
 
     IMStore();
+
+    ~IMStore();
 
     void setIMKernel(IMKernel* imKernel);
 
@@ -139,9 +143,11 @@ public:
 
     QString getLatestGroupMessageByGroupId(int groupId);
 
-    void createLiveLobbyWidgetOnce();
-
     LiveLobbyWidget* getLiveLobbyWidget();
+
+    LiveRecordDialog* getLiveRecordDialog();
+
+    LivePlayerDialog* getLivePlayerDialog();
 
 private:
     QSqlDatabase m_database;
@@ -170,7 +176,6 @@ private:
     NotifyWidget* m_notifyWidget = nullptr;
     QMap<int, Group*> m_groups;
     QMap<int, GroupItem*> m_groupItems;
-    LiveLobbyWidget* m_liveLobbyWidget = nullptr;
 };
 
 #endif

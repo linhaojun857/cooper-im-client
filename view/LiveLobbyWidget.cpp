@@ -62,13 +62,14 @@ void LiveLobbyWidget::flushLiveRooms() {
     }
     auto liveRooms = ret["live_rooms"].toArray();
     int index = 0;
-    for (auto&& liveRoom : liveRooms) {
+    for (auto&& obj : liveRooms) {
+        auto liveRoom = obj.toObject();
         auto* item = new LiveRoomItem();
-        item->setLiveRoomId(liveRoom.toObject()["id"].toInt());
-        item->setLiveRoomCover(liveRoom.toObject()["cover"].toString());
-        item->setLiveRoomOwnerAvatar(liveRoom.toObject()["owner_avatar"].toString());
-        item->setLiveRoomOwnerName(liveRoom.toObject()["owner_nickname"].toString());
-        item->setLiveRoomViewerCount(liveRoom.toObject()["viewer_count"].toInt());
+        item->setLiveRoomId(liveRoom["id"].toInt());
+        item->setLiveRoomCover(liveRoom["cover"].toString());
+        item->setLiveRoomOwnerAvatar(liveRoom["owner_avatar"].toString());
+        item->setLiveRoomOwnerName(liveRoom["owner_nickname"].toString());
+        item->setLiveRoomViewerCount(liveRoom["viewer_count"].toInt());
         addLiveRoomItem(item, index / 3, index % 3);
         index++;
     }

@@ -1,11 +1,15 @@
 #include "LiveRoomItem.hpp"
 
+#include <QMessageBox>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QtConcurrent/QtConcurrent>
 
+#include "define/IMDefine.hpp"
+#include "store/IMStore.hpp"
 #include "ui_LiveRoomItem.h"
+#include "util/HttpUtil.hpp"
 
 LiveRoomItem::LiveRoomItem(QWidget* parent) : QWidget(parent), ui(new Ui::LiveRoomItem) {
     ui->setupUi(this);
@@ -84,5 +88,17 @@ void LiveRoomItem::setLiveRoomViewerCount(int liveRoomViewerCount) {
     ui->m_liveRoomViewerCountLabel->setText("观看人数: " + QString::number(liveRoomViewerCount));
 }
 
-void LiveRoomItem::handleLiveRoomCoverClicked() {
+void LiveRoomItem::handleLiveRoomCoverClicked() const {
+    QJsonObject json;
+    json["token"] = IMStore::getInstance()->getToken();
+    json["room_id"] = m_liveRoomId;
+    auto ret = HttpUtil::post(HTTP_SERVER_URL "/live/enterLive", json);
+    if (ret["code"].toInt() != HTTP_SUCCESS_CODE) {
+        QMessageBox::warning((QWidget*)this, "提示", ret["msg"].toString());
+        return;
+    }
+    auto livePlayerDialog = IMStore::getInstance()->getLivePlayerDialog();
+    livePlayerDialog->setLiveRoomId(m_liveRoomId);
+    livePlayerDialog->show();
+    livePlayerDialog->start(m_liveRoomId);
 }
