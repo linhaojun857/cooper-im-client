@@ -1,8 +1,10 @@
 #ifndef config_IMCONFIG_HPP_
 #define config_IMCONFIG_HPP_
 
-#define APP_TCP_SERVER_IP ("127.0.0.1")
-#define APP_TCP_SERVER_PORT (8888)
+#define APP_BUSINESS_TCP_SERVER_IP ("127.0.0.1")
+#define APP_BUSINESS_SERVER_PORT ("8888")
+#define APP_MEDIA_SERVER_IP ("127.0.0.1")
+#define APP_MEDIA_SERVER_PORT ("11111")
 #define PING_TYPE 100
 #define PONG_TYPE 200
 

@@ -16,8 +16,8 @@ TcpClientMediator::~TcpClientMediator() {
     }
 }
 
-bool TcpClientMediator::openNet() {
-    return m_pNet->openNet();
+bool TcpClientMediator::openNet(const std::string& ip, const std::string& port) {
+    return m_pNet->openNet(ip, port);
 }
 
 void TcpClientMediator::closeNet() {
@@ -36,6 +36,10 @@ bool TcpClientMediator::sendData(QJsonObject jsonObject) {
     QJsonDocument jsonDocument(jsonObject);
     QByteArray byteArray = jsonDocument.toJson(QJsonDocument::Compact);
     return m_pNet->sendData(byteArray.data(), (int)byteArray.size());
+}
+
+bool TcpClientMediator::sendRaw(char* buf, int size) {
+    return m_pNet->sendRaw(buf, size);
 }
 
 void TcpClientMediator::dealData(char* buf, int size) {

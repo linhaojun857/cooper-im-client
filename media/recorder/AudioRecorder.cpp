@@ -4,7 +4,6 @@ AudioRecorder::AudioRecorder() {
     // 声卡采样格式
     format.setSampleRate(AudioCollectFrequency);
     format.setChannelCount(2);
-    format.setSampleRate(44100);
     format.setSampleFormat(QAudioFormat::Int16);
 
     m_playState = state_stop;

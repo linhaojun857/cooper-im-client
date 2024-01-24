@@ -125,6 +125,9 @@ add_library(cooper_im_lib
         view/LiveRoomMsgItem.hpp
         view/LiveRoomMsgItem.cpp
         view/LiveRoomMsgItem.ui
+        view/TestAudioRWWidget.hpp
+        view/TestAudioRWWidget.cpp
+        view/TestAudioRWWidget.ui
         # core
         core/IMKernel.hpp
         core/IMKernel.cpp
@@ -156,6 +159,15 @@ add_library(cooper_im_lib
         media/player/PacketQueue.cpp
         media/player/VideoPlayer.hpp
         media/player/VideoPlayer.cpp
+        ## call
+        ### audio
+        media/call/audio/AudioReader.hpp
+        media/call/audio/AudioReader.cpp
+        media/call/audio/AudioWriter.hpp
+        media/call/audio/AudioWriter.cpp
+        ### video
+        media/call/video/VideoReader.hpp
+        media/call/video/VideoReader.cpp
 )
 
 target_include_directories(cooper_im_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
@@ -175,6 +187,7 @@ target_link_libraries(cooper_im_lib PUBLIC
 )
 target_include_directories(cooper_im_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(cooper_im_lib PUBLIC D:/CppLibAndDll/ffmpeg-4.2.2-win64/include)
+# ffmpeg
 target_link_libraries(cooper_im_lib PUBLIC D:/CppLibAndDll/ffmpeg-4.2.2-win64/lib/avcodec.lib)
 target_link_libraries(cooper_im_lib PUBLIC D:/CppLibAndDll/ffmpeg-4.2.2-win64/lib/avdevice.lib)
 target_link_libraries(cooper_im_lib PUBLIC D:/CppLibAndDll/ffmpeg-4.2.2-win64/lib/avfilter.lib)
@@ -183,13 +196,18 @@ target_link_libraries(cooper_im_lib PUBLIC D:/CppLibAndDll/ffmpeg-4.2.2-win64/li
 target_link_libraries(cooper_im_lib PUBLIC D:/CppLibAndDll/ffmpeg-4.2.2-win64/lib/postproc.lib)
 target_link_libraries(cooper_im_lib PUBLIC D:/CppLibAndDll/ffmpeg-4.2.2-win64/lib/swresample.lib)
 target_link_libraries(cooper_im_lib PUBLIC D:/CppLibAndDll/ffmpeg-4.2.2-win64/lib/swscale.lib)
+# opencv
 target_include_directories(cooper_im_lib PUBLIC D:/CppLibAndDll/opencv/build/include)
 target_link_libraries(cooper_im_lib PUBLIC D:/CppLibAndDll/opencv/build/x64/vc15/lib/opencv_world420.lib)
 target_link_libraries(cooper_im_lib PUBLIC D:/CppLibAndDll/opencv/build/x64/vc15/lib/opencv_world420d.lib)
+# sdl
 target_include_directories(cooper_im_lib PUBLIC D:/CppLibAndDll/SDL2-2.0.10/include)
 target_link_libraries(cooper_im_lib PUBLIC D:/CppLibAndDll/SDL2-2.0.10/lib/x64/SDL2.lib)
 target_link_libraries(cooper_im_lib PUBLIC D:/CppLibAndDll/SDL2-2.0.10/lib/x64/SDL2main.lib)
 target_link_libraries(cooper_im_lib PUBLIC D:/CppLibAndDll/SDL2-2.0.10/lib/x64/SDL2test.lib)
+# speex
+target_include_directories(cooper_im_lib PUBLIC D:/CppLibAndDll/speex/include)
+target_link_libraries(cooper_im_lib PUBLIC D:/CppLibAndDll/speex/lib/speex.lib)
 
 add_executable(cooper_im_client
         main.cpp

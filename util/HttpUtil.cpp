@@ -73,14 +73,14 @@ QString HttpUtil::upload(const QString& filePath) {
     file.close();
     auto* multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
     QHttpPart filePart;
-    filePart.setHeader(QNetworkRequest::ContentDispositionHeader,
-                       QVariant(R"(form-data; name="file"; filename=")" + fileName + "\""));
-    filePart.setBody(data);
     QHttpPart fileMd5Part;
     fileMd5Part.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(R"(form-data; name="file_md5")"));
     fileMd5Part.setBody(fileMd5);
-    multiPart->append(filePart);
+    filePart.setHeader(QNetworkRequest::ContentDispositionHeader,
+                       QVariant(R"(form-data; name="file"; filename=")" + fileName + "\""));
+    filePart.setBody(data);
     multiPart->append(fileMd5Part);
+    multiPart->append(filePart);
     auto manager = new QNetworkAccessManager();
     QNetworkRequest request;
     request.setUrl(QUrl(HTTP_SERVER_URL "/file/upload"));
@@ -124,7 +124,7 @@ QString HttpUtil::shardUpload(const QString& filePath) {
         return "";
     }
     file.seek(0);
-    int shardSize = 1024 * 1024;
+    int shardSize = 10 * 1024 * 1024;
     int shardCount = static_cast<int>(file.size()) / shardSize;
     if (file.size() % shardSize != 0) {
         ++shardCount;
@@ -148,10 +148,6 @@ QString HttpUtil::shardUpload(const QString& filePath) {
     for (int i = 0; i < shardCount; ++i) {
         uploadFutures[i] = QtConcurrent::run([=, &shards, &fileUrl]() {
             auto* multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
-            QHttpPart filePart;
-            filePart.setHeader(QNetworkRequest::ContentDispositionHeader,
-                               QVariant(R"(form-data; name="file"; filename=")" + fileName + "\""));
-            filePart.setBody(shards[i]);
             QHttpPart suIdPart;
             suIdPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(R"(form-data; name="su_id")"));
             suIdPart.setBody(suId.toUtf8());
@@ -170,12 +166,16 @@ QString HttpUtil::shardUpload(const QString& filePath) {
             QHttpPart fileMd5Part;
             fileMd5Part.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(R"(form-data; name="file_md5")"));
             fileMd5Part.setBody(fileMd5);
-            multiPart->append(filePart);
+            QHttpPart filePart;
+            filePart.setHeader(QNetworkRequest::ContentDispositionHeader,
+                               QVariant(R"(form-data; name="file"; filename=")" + fileName + "\""));
+            filePart.setBody(shards[i]);
             multiPart->append(suIdPart);
             multiPart->append(shardIndexPart);
             multiPart->append(shardSizePart);
             multiPart->append(shardCountPart);
             multiPart->append(fileMd5Part);
+            multiPart->append(filePart);
             auto manager = new QNetworkAccessManager();
             QNetworkRequest request;
             request.setUrl(QUrl(HTTP_SERVER_URL "/file/shardUpload"));

@@ -1,5 +1,5 @@
-#ifndef core_PacketQueue_hpp
-#define core_PacketQueue_hpp
+#ifndef media_player_PacketQueue_hpp
+#define media_player_PacketQueue_hpp
 
 #ifdef __cplusplus
 extern "C" {

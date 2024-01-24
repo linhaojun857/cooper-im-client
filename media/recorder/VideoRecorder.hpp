@@ -1,5 +1,5 @@
-#ifndef core_VideoRecorder_hpp
-#define core_VideoRecorder_hpp
+#ifndef media_recorder_VideoRecorder_hpp
+#define media_recorder_VideoRecorder_hpp
 
 #include <QApplication>
 #include <QBuffer>
@@ -31,7 +31,7 @@ public slots:
     void slot_closeVideo();     // 关闭采集
 
 private:
-    VideoCapture* cap;                                       // opencv 采集摄像头对象
+    VideoCapture* cap;                                      // opencv 采集摄像头对象
     QTimer* timer = nullptr;                                // 定时器
     bool isStop = false;                                    // 是否停止采集
     int ImageToYuvBuffer(QImage& image, uint8_t** buffer);  // RGB24 转为 yuv420p

@@ -1,5 +1,5 @@
-#ifndef core_AudioRecorder_hpp
-#define core_AudioRecorder_hpp
+#ifndef media_recorder_AudioRecorder_hpp
+#define media_recorder_AudioRecorder_hpp
 
 #include <QAudioFormat>
 #include <QAudioInput>

@@ -166,6 +166,10 @@ public:
 private:
     void handleClickSendPushButton();
 
+    void handleClickVideoCallPushButton();
+
+    void handleClickAudioCallPushButton();
+
 private:
     Ui::ChatDialog* ui;
     int m_mode = 0;

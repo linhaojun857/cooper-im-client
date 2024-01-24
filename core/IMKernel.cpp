@@ -12,7 +12,7 @@ using namespace std::placeholders;
 
 IMKernel::IMKernel(QObject* parent) {
     m_mediator = new TcpClientMediator();
-    if (!m_mediator->openNet()) {
+    if (!m_mediator->openNet(APP_BUSINESS_TCP_SERVER_IP, APP_BUSINESS_SERVER_PORT)) {
         QMessageBox::warning(nullptr, "提示", "打开网路失败");
         exit(0);
     }

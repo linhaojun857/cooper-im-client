@@ -106,51 +106,6 @@ BufferDataNode* SaveVideoFileThread::audioDataQueue_get() {
     return node;
 }
 
-int SaveVideoFileThread::write_frame(AVFormatContext* fmt_ctx, AVCodecContext* c, AVStream* st, AVFrame* frame) {
-    int ret;
-
-    if (!frame) {
-        return -1;
-    }
-
-    // send the frame to the encoder
-    ret = avcodec_send_frame(c, frame);
-    if (ret < 0) {
-        fprintf(stderr, "Error sending a frame to the encoder\n");
-        return -1;
-    }
-
-    while (ret >= 0) {
-        AVPacket pkt = {0};
-
-        ret = avcodec_receive_packet(c, &pkt);
-        if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF)
-            break;
-        else if (ret < 0) {
-            fprintf(stderr, "Error encoding a frame\n");
-            return -1;
-        }
-
-        /* rescale output packet timestamp values from codec to stream timebase */
-        av_packet_rescale_ts(&pkt, c->time_base, st->time_base);
-        pkt.stream_index = st->index;
-
-        //        pkt.pts *= 2;
-        //        pkt.dts *= 2;
-        printf("Write 1 Packet. size:%5d\tpts:%lld\tdts:%lld\ttime:%lld\n", pkt.size, pkt.pts, pkt.dts, time(nullptr));
-
-        /* Write the compressed frame to the media file. */
-        ret = av_interleaved_write_frame(fmt_ctx, &pkt);
-        av_packet_unref(&pkt);
-        if (ret < 0) {
-            fprintf(stderr, "Error while writing output packet\n");
-            return -1;
-        }
-    }
-
-    return ret == AVERROR_EOF ? 1 : 0;
-}
-
 int SaveVideoFileThread::write_frame(AVFormatContext* fmt_ctx, AVCodecContext* c, AVStream* st, AVFrame* frame,
                                      int64_t& pts, OutputStream* ost) {
     int ret;
@@ -175,8 +130,6 @@ int SaveVideoFileThread::write_frame(AVFormatContext* fmt_ctx, AVCodecContext* c
         av_packet_rescale_ts(&pkt, c->time_base, st->time_base);
         pkt.stream_index = st->index;
         pts = av_rescale_q(ost->next_pts, st->time_base, {1, 1000});
-        //        printf("Write 1 Packet. size:%5d\tpts:%lld\tdts:%lld\ttime:%s\n", pkt.size, pkt.pts, pkt.dts,
-        //               QTime::currentTime().toString("hh:mm:ss.zzz").toStdString().c_str());
         /* Write the compressed frame to the media file. */
         ret = av_interleaved_write_frame(fmt_ctx, &pkt);
         av_packet_unref(&pkt);

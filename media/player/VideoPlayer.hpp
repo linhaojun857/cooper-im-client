@@ -1,5 +1,5 @@
-#ifndef core_VideoPlayer_hpp
-#define core_VideoPlayer_hpp
+#ifndef media_player_VideoPlayer_hpp
+#define media_player_VideoPlayer_hpp
 
 #include <QImage>
 #include <QObject>

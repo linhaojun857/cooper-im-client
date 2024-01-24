@@ -223,6 +223,8 @@ ChatDialog::ChatDialog(QWidget* parent) : QDialog(parent), ui(new Ui::ChatDialog
     });
     connect(ui->m_minimizePushButton, SIGNAL(clicked(bool)), this, SLOT(showMinimized()));
     connect(ui->m_sendPushButton, &QPushButton::clicked, this, &ChatDialog::handleClickSendPushButton);
+    connect(ui->m_videoCallPushButton, &QPushButton::clicked, this, &ChatDialog::handleClickVideoCallPushButton);
+    connect(ui->m_audioCallPushButton, &QPushButton::clicked, this, &ChatDialog::handleClickAudioCallPushButton);
 
     FramelessWidgetsHelper::get(this)->extendsContentIntoTitleBar();
     FramelessWidgetsHelper::get(this)->setTitleBarWidget(ui->m_headerWidget);
@@ -408,4 +410,12 @@ void ChatDialog::handleClickSendPushButton() {
         WebHelper::addSelfGroupMsg(gm);
     }
     WebHelper::scrollToBottom();
+}
+
+void ChatDialog::handleClickVideoCallPushButton() {
+
+}
+
+void ChatDialog::handleClickAudioCallPushButton() {
+
 }

@@ -14,7 +14,7 @@ TcpClientNet::TcpClientNet(INetMediator* pMediator) : m_sock(INVALID_SOCKET), m_
 
 TcpClientNet::~TcpClientNet() = default;
 
-bool TcpClientNet::openNet() {
+bool TcpClientNet::openNet(const std::string& ip, const std::string& port) {
     WORD version = MAKEWORD(2, 2);
     WSADATA wsaData;
 
@@ -40,8 +40,8 @@ bool TcpClientNet::openNet() {
     // 连接服务器
     sockaddr_in serverAddr{};
     serverAddr.sin_family = AF_INET;
-    inet_pton(AF_INET, APP_TCP_SERVER_IP, &serverAddr.sin_addr);
-    serverAddr.sin_port = htons(APP_TCP_SERVER_PORT);
+    inet_pton(AF_INET, ip.c_str(), &serverAddr.sin_addr);
+    serverAddr.sin_port = htons(std::stoi(port));
     int ret = connect(m_sock, (sockaddr*)&serverAddr, sizeof(serverAddr));
     if (SOCKET_ERROR == ret) {
         qDebug() << "Connect error: " << WSAGetLastError();
@@ -95,6 +95,18 @@ bool TcpClientNet::sendData(char* buf, int size) {
         return false;
     }
     // 再发包的内容
+    if (::send(m_sock, buf, size, 0) == SOCKET_ERROR) {
+        qDebug() << "TcpClientNet::sendData() send err: " << WSAGetLastError();
+        return false;
+    }
+    return true;
+}
+
+bool TcpClientNet::sendRaw(char* buf, int size) {
+    qDebug() << __FUNCTION__;
+    if (!buf || size <= 0) {
+        qDebug() << "TcpClientNet::sendData() buf is nullptr or size <= 0";
+    }
     if (::send(m_sock, buf, size, 0) == SOCKET_ERROR) {
         qDebug() << "TcpClientNet::sendData() send err: " << WSAGetLastError();
         return false;

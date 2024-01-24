@@ -1,5 +1,5 @@
-#ifndef core_SaveVideoFileThread_hpp
-#define core_SaveVideoFileThread_hpp
+#ifndef media_recorder_SaveVideoFileThread_hpp
+#define media_recorder_SaveVideoFileThread_hpp
 
 #include <QMutex>
 #include <QThread>
@@ -69,7 +69,6 @@ public:
     void open_video(AVFormatContext* oc, AVCodec* codec, OutputStream* ost);
     void open_audio(AVFormatContext* oc, AVCodec* codec, OutputStream* ost);
     void close_stream(AVFormatContext* oc, OutputStream* ost);
-    int write_frame(AVFormatContext* fmt_ctx, AVCodecContext* c, AVStream* st, AVFrame* frame);
     int write_frame(AVFormatContext* fmt_ctx, AVCodecContext* c, AVStream* st, AVFrame* frame, int64_t& pts,
                     OutputStream* ost);
     bool write_video_frame(AVFormatContext* oc, OutputStream* ost, double time);

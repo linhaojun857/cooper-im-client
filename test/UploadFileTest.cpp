@@ -4,6 +4,8 @@
 #include "store/IMStore.hpp"
 #include "util/HttpUtil.hpp"
 
+#undef main
+
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
     QString fileName = QFileDialog::getOpenFileName(nullptr, "选择文件", "E:/test/", "All files(*.*)");

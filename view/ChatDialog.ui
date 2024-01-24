@@ -61,7 +61,7 @@ border-top: 1px solid #000000;</string>
      <height>23</height>
     </rect>
    </property>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="m_videoCallPushButton">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -74,10 +74,10 @@ border-top: 1px solid #000000;</string>
      <string notr="true">background-color: #ffffff;</string>
     </property>
     <property name="text">
-     <string>表情包</string>
+     <string>视频通话</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_3">
+   <widget class="QPushButton" name="m_audioCallPushButton">
     <property name="geometry">
      <rect>
       <x>60</x>
@@ -90,7 +90,7 @@ border-top: 1px solid #000000;</string>
      <string notr="true">background-color: #ffffff;</string>
     </property>
     <property name="text">
-     <string>文件</string>
+     <string>语音通话</string>
     </property>
    </widget>
   </widget>

@@ -1,5 +1,5 @@
-#ifndef core_common_hpp
-#define core_common_hpp
+#ifndef media_recorder_common_hpp
+#define media_recorder_common_hpp
 extern "C" {
 #include "libavcodec/avcodec.h"
 #include "libavdevice/avdevice.h"
@@ -13,9 +13,9 @@ extern "C" {
 #include <QMessageBox>
 #include <QTime>
 
-#include "opencv2/core/core.hpp"
-#include "opencv2/highgui/highgui.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2/core.hpp"
+#include "opencv2/highgui.hpp"
+#include "opencv2/imgproc.hpp"
 #include "opencv2/imgproc/types_c.h"
 
 using namespace cv;

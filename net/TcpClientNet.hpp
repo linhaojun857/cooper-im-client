@@ -9,13 +9,15 @@ public:
 
     ~TcpClientNet() override;
 
-    bool openNet() override;
+    bool openNet(const std::string& ip, const std::string& port) override;
 
     void closeNet() override;
 
     bool send(std::string str) override;
 
     bool sendData(char* buf, int size) override;
+
+    bool sendRaw(char* buf, int size) override;
 
 protected:
     void recvData() override;
