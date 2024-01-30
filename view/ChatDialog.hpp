@@ -11,6 +11,7 @@
 
 #include "entity/Entity.hpp"
 #include "view/ChatItem.hpp"
+#include "view/VideoCallDialog.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -162,6 +163,8 @@ public:
     [[nodiscard]] int getCurrentPeerId() const;
 
     [[nodiscard]] int getCurrentGroupId() const;
+
+    void showVideoCallRequestDialog(int peerId);
 
 private:
     void handleClickSendPushButton();

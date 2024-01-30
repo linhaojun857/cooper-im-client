@@ -97,7 +97,7 @@ void LiveRoomItem::handleLiveRoomCoverClicked() const {
         QMessageBox::warning((QWidget*)this, "提示", ret["msg"].toString());
         return;
     }
-    auto livePlayerDialog = IMStore::getInstance()->getLivePlayerDialog();
+    auto livePlayerDialog = IMStore::getLivePlayerDialog();
     livePlayerDialog->setLiveRoomId(m_liveRoomId);
     livePlayerDialog->show();
     livePlayerDialog->start(m_liveRoomId);

@@ -77,8 +77,8 @@ MainWidget::MainWidget(QWidget* parent) : QWidget(parent), ui(new Ui::MainWidget
     m_exploreLayout->addWidget(liveItem);
     connect(liveItem, &ExploreItem::clicked, []() {
         qDebug() << "live clicked";
-        IMStore::getInstance()->getLiveLobbyWidget()->show();
-        IMStore::getInstance()->getLiveLobbyWidget()->flushLiveRooms();
+        IMStore::getLiveLobbyWidget()->show();
+        IMStore::getLiveLobbyWidget()->flushLiveRooms();
     });
     m_exploreLayout->addStretch();
     m_tabBtnMap[0] = ui->m_msgPushButton;

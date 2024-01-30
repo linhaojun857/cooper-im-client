@@ -37,6 +37,12 @@ bool TcpClientNet::openNet(const std::string& ip, const std::string& port) {
     // 创建套接字
     m_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
+    int nSendBuf = 8 * 1024 * 1024;
+    setsockopt(m_sock, SOL_SOCKET, SO_SNDBUF, (const char*)&nSendBuf, sizeof(int));
+
+    int nRecvBuf = 8 * 1024 * 1024;
+    setsockopt(m_sock, SOL_SOCKET, SO_RCVBUF, (const char*)&nRecvBuf, sizeof(int));
+
     // 连接服务器
     sockaddr_in serverAddr{};
     serverAddr.sin_family = AF_INET;
@@ -103,7 +109,6 @@ bool TcpClientNet::sendData(char* buf, int size) {
 }
 
 bool TcpClientNet::sendRaw(char* buf, int size) {
-    qDebug() << __FUNCTION__;
     if (!buf || size <= 0) {
         qDebug() << "TcpClientNet::sendData() buf is nullptr or size <= 0";
     }

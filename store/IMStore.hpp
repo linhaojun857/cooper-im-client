@@ -143,11 +143,15 @@ public:
 
     QString getLatestGroupMessageByGroupId(int groupId);
 
-    LiveLobbyWidget* getLiveLobbyWidget();
+    static LiveLobbyWidget* getLiveLobbyWidget();
 
-    LiveRecordDialog* getLiveRecordDialog();
+    static LiveRecordDialog* getLiveRecordDialog();
 
-    LivePlayerDialog* getLivePlayerDialog();
+    static LivePlayerDialog* getLivePlayerDialog();
+
+    void setVideoCallDialog(VideoCallDialog* videoCallDialog);
+
+    VideoCallDialog* getVideoCallDialog();
 
 private:
     QSqlDatabase m_database;
@@ -176,6 +180,7 @@ private:
     NotifyWidget* m_notifyWidget = nullptr;
     QMap<int, Group*> m_groups;
     QMap<int, GroupItem*> m_groupItems;
+    VideoCallDialog* m_videoCallDialog = nullptr;
 };
 
 #endif

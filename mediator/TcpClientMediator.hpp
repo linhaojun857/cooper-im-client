@@ -26,8 +26,15 @@ public:
 
     void dealData(char* buf, int size) override;
 
+    void setMode(int mode);
+
 signals:
-    void SIG_readyData(const QJsonObject& jsonObject);
+    void SIG_readyBusinessData(const QJsonObject& jsonObject);
+
+    void SIG_readyMediaData(char* buf, int size);
+
+public:
+    int m_mode = 1;
 };
 
 #endif

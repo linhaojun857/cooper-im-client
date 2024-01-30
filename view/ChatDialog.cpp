@@ -382,6 +382,10 @@ int ChatDialog::getCurrentGroupId() const {
     return m_currentGroupId;
 }
 
+void ChatDialog::showVideoCallRequestDialog(int peerId) {
+
+}
+
 void ChatDialog::handleClickSendPushButton() {
     qDebug() << "ChatDialog::handleClickSendPushButton";
     QString message = ui->m_plainTextEdit->toPlainText();
@@ -413,9 +417,20 @@ void ChatDialog::handleClickSendPushButton() {
 }
 
 void ChatDialog::handleClickVideoCallPushButton() {
-
+    if (IMStore::getInstance()->getVideoCallDialog() != nullptr) {
+        QMessageBox::warning(this, "提示", "不能同时发起多个视频通话");
+        return;
+    }
+    auto videoCallDialog = new VideoCallDialog();
+    videoCallDialog->setPeerId(m_currentPeerId);
+    videoCallDialog->show();
+    QJsonObject json;
+    json["type"] = PROTOCOL_TYPE_VIDEO_CALL_REQUEST;
+    json["token"] = IMStore::getInstance()->getToken();
+    json["from_id"] = IMStore::getInstance()->getSelf()->id;
+    json["to_id"] = m_currentPeerId;
+    IMStore::getInstance()->getIMKernel()->sendVideoCallRequest(json);
 }
 
 void ChatDialog::handleClickAudioCallPushButton() {
-
 }

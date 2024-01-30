@@ -35,12 +35,10 @@ void LiveRoomMsgItem::setAvatar(const QString& avatarUrl) {
 }
 
 void LiveRoomMsgItem::setNicknameAndMsg(const QString& nickname, const QString& msg) {
-    QString content = nickname + ": " + msg;
     //    int oldHeight = ui->m_nicknameAndMsgLabel->height();
     QFontMetrics fontMetrics(ui->m_nicknameAndMsgLabel->font());
     QString elideText = fontMetrics.elidedText(QString("%1: %2").arg(nickname, msg), Qt::ElideRight,
                                                ui->m_nicknameAndMsgLabel->width());
-    ui->m_nicknameAndMsgLabel->setText(elideText);
     ui->m_nicknameAndMsgLabel->setText(elideText);
     //    ui->m_nicknameAndMsgLabel->setWordWrap(true);
     //    ui->m_nicknameAndMsgLabel->adjustSize();

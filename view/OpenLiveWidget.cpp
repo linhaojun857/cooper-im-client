@@ -62,7 +62,7 @@ void OpenLiveWidget::handleOpenLivePushButtonClicked() {
     if (ret["code"].toInt() == HTTP_SUCCESS_CODE) {
         qDebug() << ret["msg"].toString();
         int roomId = ret["room_id"].toInt();
-        auto liveRecordDialog = IMStore::getInstance()->getLiveRecordDialog();
+        auto liveRecordDialog = IMStore::getLiveRecordDialog();
         liveRecordDialog->show();
         liveRecordDialog->start(roomId);
     } else {

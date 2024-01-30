@@ -8,6 +8,16 @@
 #include "store/IMStore.hpp"
 #include "view/ApplyNotifyItem.hpp"
 
+#define ADD_BUSINESS_HANDLER(type, method)                         \
+    m_businessHandlers[type] = [](auto&& PH1) {                    \
+        return IMKernel::method(std::forward<decltype(PH1)>(PH1)); \
+    };
+
+#define ADD_MEDIA_HANDLER(type, method)                                                              \
+    m_mediaHandlers[type] = [](auto&& PH1, auto&& PH2) {                                             \
+        return IMKernel::method(std::forward<decltype(PH1)>(PH1), std::forward<decltype(PH2)>(PH2)); \
+    };
+
 using namespace std::placeholders;
 
 IMKernel::IMKernel(QObject* parent) {
@@ -16,7 +26,7 @@ IMKernel::IMKernel(QObject* parent) {
         QMessageBox::warning(nullptr, "提示", "打开网路失败");
         exit(0);
     }
-    connect(m_mediator, SIGNAL(SIG_readyData(const QJsonObject&)), this, SLOT(dealData(const QJsonObject&)));
+    connect(m_mediator, &TcpClientMediator::SIG_readyBusinessData, this, &IMKernel::dealBusinessData);
     initHandlers();
     IMStore::getInstance()->setIMKernel(this);
     createLRWidget();
@@ -39,7 +49,7 @@ void IMKernel::createMainWidget() {
 
 void IMKernel::sendAuthMsg() {
     QJsonObject json;
-    json["type"] = PROTOCOL_TYPE_AUTH_MSG;
+    json["type"] = PROTOCOL_TYPE_BUSINESS_AUTH_MSG;
     json["token"] = IMStore::getInstance()->getToken();
     m_mediator->sendData(json);
 }
@@ -71,29 +81,81 @@ void IMKernel::sendLiveMsg(const QJsonObject& json) {
     m_mediator->sendData(json);
 }
 
-void IMKernel::dealData(const QJsonObject& jsonObject) {
+void IMKernel::sendVideoCallRequest(const QJsonObject& json) {
+    m_mediator->sendData(json);
+}
+
+void IMKernel::sendVideoCallResponse(const QJsonObject& json) {
+    m_mediator->sendData(json);
+}
+
+void IMKernel::openAVCall() {
+    if (m_avCallMediator) {
+        QMessageBox::warning(nullptr, "提示", "同时只能开启一个音视频通话");
+        return;
+    }
+    m_avCallMediator = new TcpClientMediator();
+    m_avCallMediator->setMode(2);
+    if (!m_avCallMediator->openNet(APP_MEDIA_SERVER_IP, APP_MEDIA_SERVER_PORT)) {
+        QMessageBox::warning(nullptr, "提示", "打开网路失败");
+        exit(0);
+    }
+    connect(m_avCallMediator, &TcpClientMediator::SIG_readyMediaData, this, &IMKernel::dealMediaData);
+    int type = PROTOCOL_TYPE_MEDIA_AUTH_MSG;
+    QString token = IMStore::getInstance()->getToken();
+    int size = (int)(4 + token.size());
+    m_avCallMediator->sendRaw((char*)&size, sizeof(size));
+    m_avCallMediator->sendRaw((char*)&type, sizeof(type));
+    m_avCallMediator->sendRaw(token.toUtf8().data(), (int)token.size());
+}
+
+void IMKernel::closeAVCall() {
+    m_avCallMediator->closeNet();
+    delete m_avCallMediator;
+    m_avCallMediator = nullptr;
+}
+
+TcpClientMediator* IMKernel::getAVCallMediator() {
+    return m_avCallMediator;
+}
+
+void IMKernel::dealBusinessData(const QJsonObject& jsonObject) {
     auto type = jsonObject["type"].toInt();
-    auto it = m_handlers.find(type);
-    if (it != m_handlers.end()) {
+    auto it = m_businessHandlers.find(type);
+    if (it != m_businessHandlers.end()) {
         it.value()(jsonObject);
     }
 }
 
+void IMKernel::dealMediaData(char* buf, int size) {
+    int type = *(int*)buf;
+    auto it = m_mediaHandlers.find(type);
+    if (it != m_mediaHandlers.end()) {
+        it.value()(buf, size);
+    }
+}
+
 void IMKernel::initHandlers() {
-    m_handlers[PROTOCOL_TYPE_ERROR_MSG] = std::bind(&IMKernel::handleErrorMsg, _1);
-    m_handlers[PROTOCOL_TYPE_FRIEND_APPLY_NOTIFY_I] = std::bind(&IMKernel::handleFriendApplyNotifyI, _1);
-    m_handlers[PROTOCOL_TYPE_FRIEND_APPLY_NOTIFY_P] = std::bind(&IMKernel::handleFriendApplyNotifyP, _1);
-    m_handlers[PROTOCOL_TYPE_FRIEND_ENTITY] = std::bind(&IMKernel::handleFriendEntity, _1);
-    m_handlers[PROTOCOL_TYPE_PERSON_MESSAGE_RECV] = std::bind(&IMKernel::handlePersonMessageRecv, _1);
-    m_handlers[PROTOCOL_TYPE_PERSON_MESSAGE_SEND] = std::bind(&IMKernel::handlePersonMessageSend, _1);
-    m_handlers[PROTOCOL_TYPE_GROUP_APPLY_NOTIFY_I] = std::bind(&IMKernel::handleGroupApplyNotifyI, _1);
-    m_handlers[PROTOCOL_TYPE_GROUP_APPLY_NOTIFY_P] = std::bind(&IMKernel::handleGroupApplyNotifyP, _1);
-    m_handlers[PROTOCOL_TYPE_GROUP_ENTITY] = std::bind(&IMKernel::handleGroupEntity, _1);
-    m_handlers[PROTOCOL_TYPE_GROUP_MESSAGE_RECV] = std::bind(&IMKernel::handleGroupMessageRecv, _1);
-    m_handlers[PROTOCOL_TYPE_GROUP_MESSAGE_SEND] = std::bind(&IMKernel::handleGroupMessageSend, _1);
-    m_handlers[PROTOCOL_TYPE_LIVE_ROOM_END] = std::bind(&IMKernel::handleLiveRoomEnd, _1);
-    m_handlers[PROTOCOL_TYPE_LIVE_ROOM_MSG_RECV] = std::bind(&IMKernel::handleLiveRoomMSGRecv, _1);
-    m_handlers[PROTOCOL_TYPE_LIVE_ROOM_UPDATE_VIEWER_COUNT] = std::bind(&IMKernel::handleLiveRoomUpdateViewerCount, _1);
+    ADD_BUSINESS_HANDLER(PROTOCOL_TYPE_ERROR_MSG, handleErrorMsg);
+    ADD_BUSINESS_HANDLER(PROTOCOL_TYPE_FRIEND_APPLY_NOTIFY_I, handleFriendApplyNotifyI);
+    ADD_BUSINESS_HANDLER(PROTOCOL_TYPE_FRIEND_APPLY_NOTIFY_P, handleFriendApplyNotifyP);
+    ADD_BUSINESS_HANDLER(PROTOCOL_TYPE_FRIEND_ENTITY, handleFriendEntity);
+    ADD_BUSINESS_HANDLER(PROTOCOL_TYPE_PERSON_MESSAGE_RECV, handlePersonMessageRecv);
+    ADD_BUSINESS_HANDLER(PROTOCOL_TYPE_PERSON_MESSAGE_SEND, handlePersonMessageSend);
+    ADD_BUSINESS_HANDLER(PROTOCOL_TYPE_GROUP_APPLY_NOTIFY_I, handleGroupApplyNotifyI);
+    ADD_BUSINESS_HANDLER(PROTOCOL_TYPE_GROUP_APPLY_NOTIFY_P, handleGroupApplyNotifyP);
+    ADD_BUSINESS_HANDLER(PROTOCOL_TYPE_GROUP_ENTITY, handleGroupEntity);
+    ADD_BUSINESS_HANDLER(PROTOCOL_TYPE_GROUP_MESSAGE_RECV, handleGroupMessageRecv);
+    ADD_BUSINESS_HANDLER(PROTOCOL_TYPE_GROUP_MESSAGE_SEND, handleGroupMessageSend);
+    ADD_BUSINESS_HANDLER(PROTOCOL_TYPE_LIVE_ROOM_END, handleLiveRoomEnd);
+    ADD_BUSINESS_HANDLER(PROTOCOL_TYPE_LIVE_ROOM_MSG_RECV, handleLiveRoomMSGRecv);
+    ADD_BUSINESS_HANDLER(PROTOCOL_TYPE_LIVE_ROOM_UPDATE_VIEWER_COUNT, handleLiveRoomUpdateViewerCount);
+    ADD_BUSINESS_HANDLER(PROTOCOL_TYPE_VIDEO_CALL_REQUEST, handleVideoCallRequest);
+    ADD_BUSINESS_HANDLER(PROTOCOL_TYPE_VIDEO_CALL_RESPONSE, handleVideoCallResponse);
+    ADD_BUSINESS_HANDLER(PROTOCOL_TYPE_VIDEO_CALL_END, handleVideoCallEnd);
+
+    ADD_MEDIA_HANDLER(PROTOCOL_TYPE_VIDEO_CALL_AUDIO_FRAME, handleVideoCallAudioFrame);
+    ADD_MEDIA_HANDLER(PROTOCOL_TYPE_VIDEO_CALL_VIDEO_FRAME, handleVideoCallVideoFrame);
 }
 
 void IMKernel::handleErrorMsg(const QJsonObject& json) {
@@ -230,14 +292,14 @@ void IMKernel::handleGroupMessageSend(const QJsonObject& json) {
 
 void IMKernel::handleLiveRoomEnd(const QJsonObject& json) {
     (void)json;
-    IMStore::getInstance()->getLivePlayerDialog()->closeLive();
+    IMStore::getLivePlayerDialog()->closeLive();
 }
 
 void IMKernel::handleLiveRoomMSGRecv(const QJsonObject& json) {
     auto msg = json["msg"].toString();
     auto nickname = json["nickname"].toString();
     auto avatar = json["avatar"].toString();
-    auto livePlayerDialog = IMStore::getInstance()->getLivePlayerDialog();
+    auto livePlayerDialog = IMStore::getLivePlayerDialog();
     auto liveRoomMsgItem = new LiveRoomMsgItem();
     liveRoomMsgItem->setAvatar(avatar);
     liveRoomMsgItem->setNicknameAndMsg(nickname, msg);
@@ -245,6 +307,58 @@ void IMKernel::handleLiveRoomMSGRecv(const QJsonObject& json) {
 }
 
 void IMKernel::handleLiveRoomUpdateViewerCount(const QJsonObject& json) {
-    auto livePlayerDialog = IMStore::getInstance()->getLivePlayerDialog();
+    auto livePlayerDialog = IMStore::getLivePlayerDialog();
     livePlayerDialog->setLiveRoomViewerCount(json["viewer_count"].toInt());
+}
+
+void IMKernel::handleVideoCallRequest(const QJsonObject& json) {
+    auto from_id = json["from_id"].toInt();
+    auto* dialog = new VideoCallRequestDialog();
+    dialog->setPeerId(from_id);
+    dialog->show();
+}
+
+void IMKernel::handleVideoCallResponse(const QJsonObject& json) {
+    int code = json["code"].toInt();
+    if (code == 1) {
+        IMStore::getInstance()->getVideoCallDialog()->showMessageBox("对方不在线");
+    } else if (code == 2) {
+        IMStore::getInstance()->getVideoCallDialog()->showMessageBox("对方拒绝通话");
+    } else if (code == 3) {
+        IMStore::getInstance()->getVideoCallDialog()->showMessageBox("对方忙");
+    } else if (code == 4) {
+        auto dialog = IMStore::getInstance()->getVideoCallDialog();
+        if (dialog) {
+            dialog->startCall();
+        }
+    }
+}
+
+void IMKernel::handleVideoCallAudioFrame(char* buf, int size) {
+    QByteArray audioData(buf + 20, size - 20);
+    auto dialog = IMStore::getInstance()->getVideoCallDialog();
+    if (dialog) {
+        dialog->playAudio(audioData);
+    }
+    delete buf;
+}
+
+void IMKernel::handleVideoCallVideoFrame(char* buf, int size) {
+    int width = *(int*)(buf + 20);
+    int height = *(int*)(buf + 24);
+    QImage image((uchar*)(buf + 28), width, height, QImage::Format_RGB888);
+    auto dialog = IMStore::getInstance()->getVideoCallDialog();
+    if (dialog) {
+        dialog->playVideo(image);
+    }
+    delete buf;
+}
+
+void IMKernel::handleVideoCallEnd(const QJsonObject& json) {
+    qDebug() << "handleVideoCallEnd";
+    (void)json;
+    auto dialog = IMStore::getInstance()->getVideoCallDialog();
+    if (dialog) {
+        dialog->close();
+    }
 }

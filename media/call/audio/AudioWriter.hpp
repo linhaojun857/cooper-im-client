@@ -7,7 +7,6 @@
 #include <QAudioSink>
 #include <QDebug>
 #include <QObject>
-#include <QTimer>
 
 class AudioWriter : public QObject {
     Q_OBJECT

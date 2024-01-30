@@ -1,5 +1,4 @@
 #include <QApplication>
-#include <QThread>
 
 #include "view/TestAudioRWWidget.hpp"
 

@@ -22,9 +22,7 @@ IMStore::IMStore() {
     m_cgWidget = new CGWidget();
 }
 
-IMStore::~IMStore() {
-    // todo
-}
+IMStore::~IMStore() = default;
 
 void IMStore::setIMKernel(IMKernel* imKernel) {
     m_imKernel = imKernel;
@@ -476,4 +474,12 @@ LiveRecordDialog* IMStore::getLiveRecordDialog() {
 LivePlayerDialog* IMStore::getLivePlayerDialog() {
     static LivePlayerDialog livePlayerDialog;
     return &livePlayerDialog;
+}
+
+void IMStore::setVideoCallDialog(VideoCallDialog* videoCallDialog) {
+    m_videoCallDialog = videoCallDialog;
+}
+
+VideoCallDialog* IMStore::getVideoCallDialog() {
+    return m_videoCallDialog;
 }

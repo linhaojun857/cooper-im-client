@@ -43,14 +43,21 @@ bool TcpClientMediator::sendRaw(char* buf, int size) {
 }
 
 void TcpClientMediator::dealData(char* buf, int size) {
-    qDebug() << __FUNCTION__;
-    QByteArray byteArray(buf, size);
-    QJsonDocument jsonDocument = QJsonDocument::fromJson(byteArray);
-    QJsonObject jsonObject = jsonDocument.object();
-    if (jsonObject["type"].toInt() == PING_TYPE) {
-        jsonObject["type"] = PONG_TYPE;
-        sendData(jsonObject);
-        return;
+    if (m_mode == 1) {
+        QByteArray byteArray(buf, size);
+        QJsonDocument jsonDocument = QJsonDocument::fromJson(byteArray);
+        QJsonObject jsonObject = jsonDocument.object();
+        if (jsonObject["type"].toInt() == PING_TYPE) {
+            jsonObject["type"] = PONG_TYPE;
+            sendData(jsonObject);
+            return;
+        }
+        emit SIG_readyBusinessData(jsonObject);
+    } else if (m_mode == 2) {
+        emit SIG_readyMediaData(buf, size);
     }
-    emit SIG_readyData(jsonObject);
+}
+
+void TcpClientMediator::setMode(int mode) {
+    m_mode = mode;
 }

@@ -8,12 +8,15 @@
 #include "mediator/TcpClientMediator.hpp"
 #include "view/LRWidget.hpp"
 #include "view/MainWidget.hpp"
+#include "view/VideoCallRequestDialog.hpp"
 
 class IMKernel : public QObject {
     Q_OBJECT
 public:
     using ProtocolType = int;
-    using Handler = std::function<void(const QJsonObject& json)>;
+    using BusinessHandler = std::function<void(const QJsonObject& json)>;
+    using MediaHandler = std::function<void(char* buf, int size)>;
+
     explicit IMKernel(QObject* parent = nullptr);
 
     ~IMKernel() override;
@@ -32,8 +35,20 @@ public:
 
     void sendLiveMsg(const QJsonObject& json);
 
+    void sendVideoCallRequest(const QJsonObject& json);
+
+    void sendVideoCallResponse(const QJsonObject& json);
+
+    void openAVCall();
+
+    void closeAVCall();
+
+    TcpClientMediator* getAVCallMediator();
+
 public slots:
-    void dealData(const QJsonObject& jsonObject);
+    void dealBusinessData(const QJsonObject& jsonObject);
+
+    void dealMediaData(char* buf, int size);
 
 private:
     void initHandlers();
@@ -66,11 +81,23 @@ private:
 
     static void handleLiveRoomUpdateViewerCount(const QJsonObject& json);
 
+    static void handleVideoCallRequest(const QJsonObject& json);
+
+    static void handleVideoCallResponse(const QJsonObject& json);
+
+    static void handleVideoCallAudioFrame(char* buf, int size);
+
+    static void handleVideoCallVideoFrame(char* buf, int size);
+
+    static void handleVideoCallEnd(const QJsonObject& json);
+
 private:
     TcpClientMediator* m_mediator = nullptr;
+    TcpClientMediator* m_avCallMediator = nullptr;
     LRWidget* m_lRWidget = nullptr;
     MainWidget* m_mainWidget = nullptr;
-    QMap<ProtocolType, Handler> m_handlers;
+    QMap<ProtocolType, BusinessHandler> m_businessHandlers;
+    QMap<ProtocolType, MediaHandler> m_mediaHandlers;
 };
 
 #endif

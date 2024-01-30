@@ -24,9 +24,9 @@ signals:
     void SIG_audioFrame(const QByteArray& arr);
 
 public slots:
-    void start();
+    void openAudio();
 
-    void pause();
+    void pauseAudio();
 
     void slot_readMore();
 

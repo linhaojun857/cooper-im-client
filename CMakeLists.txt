@@ -128,6 +128,15 @@ add_library(cooper_im_lib
         view/TestAudioRWWidget.hpp
         view/TestAudioRWWidget.cpp
         view/TestAudioRWWidget.ui
+        view/VideoCallDialog.hpp
+        view/VideoCallDialog.cpp
+        view/VideoCallDialog.ui
+        view/AudioCallDialog.hpp
+        view/AudioCallDialog.cpp
+        view/AudioCallDialog.ui
+        view/VideoCallRequestDialog.hpp
+        view/VideoCallRequestDialog.cpp
+        view/VideoCallRequestDialog.ui
         # core
         core/IMKernel.hpp
         core/IMKernel.cpp

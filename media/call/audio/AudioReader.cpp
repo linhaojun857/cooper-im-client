@@ -26,7 +26,7 @@ AudioReader::~AudioReader() {
     speex_bits_destroy(&m_bitsEnc);
 }
 
-void AudioReader::start() {
+void AudioReader::openAudio() {
     if (m_audioState != Record) {
         m_audioSource = new QAudioSource(m_format);
         m_buf = m_audioSource->start();
@@ -37,7 +37,7 @@ void AudioReader::start() {
     m_audioState = Record;
 }
 
-void AudioReader::pause() {
+void AudioReader::pauseAudio() {
     if (m_audioState == Record) {
         if (m_audioSource) {
             m_audioSource->stop();
