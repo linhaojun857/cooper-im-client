@@ -9,7 +9,7 @@ public:
 
     ~TcpClientNet() override;
 
-    bool openNet(const std::string& ip, const std::string& port) override;
+    bool openNet(const std::string& ip, const std::string& port, int mode) override;
 
     void closeNet() override;
 

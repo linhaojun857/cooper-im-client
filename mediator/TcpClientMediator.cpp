@@ -16,8 +16,9 @@ TcpClientMediator::~TcpClientMediator() {
     }
 }
 
-bool TcpClientMediator::openNet(const std::string& ip, const std::string& port) {
-    return m_pNet->openNet(ip, port);
+bool TcpClientMediator::openNet(const std::string& ip, const std::string& port, int mode) {
+    m_mode = mode;
+    return m_pNet->openNet(ip, port, mode);
 }
 
 void TcpClientMediator::closeNet() {
@@ -56,8 +57,4 @@ void TcpClientMediator::dealData(char* buf, int size) {
     } else if (m_mode == 2) {
         emit SIG_readyMediaData(buf, size);
     }
-}
-
-void TcpClientMediator::setMode(int mode) {
-    m_mode = mode;
 }

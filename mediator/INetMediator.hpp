@@ -13,7 +13,7 @@ public:
 
     ~INetMediator() override = default;
 
-    virtual bool openNet(const std::string& ip, const std::string& port) = 0;
+    virtual bool openNet(const std::string& ip, const std::string& port, int mode) = 0;
 
     virtual void closeNet() = 0;
 

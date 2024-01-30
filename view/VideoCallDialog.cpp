@@ -75,10 +75,9 @@ void VideoCallDialog::startCall() {
 }
 
 void VideoCallDialog::closeCall() {
-    qDebug() << "closeCall";
-    IMStore::getInstance()->getIMKernel()->closeAVCall();
     m_audioReader->pauseAudio();
     m_videoReader->slot_closeVideo();
+    IMStore::getInstance()->getIMKernel()->closeAVCall();
 }
 
 void VideoCallDialog::playAudio(const QByteArray& arr) {

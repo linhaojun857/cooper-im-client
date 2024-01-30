@@ -22,7 +22,7 @@ using namespace std::placeholders;
 
 IMKernel::IMKernel(QObject* parent) {
     m_mediator = new TcpClientMediator();
-    if (!m_mediator->openNet(APP_BUSINESS_TCP_SERVER_IP, APP_BUSINESS_SERVER_PORT)) {
+    if (!m_mediator->openNet(APP_BUSINESS_TCP_SERVER_IP, APP_BUSINESS_SERVER_PORT, BUSINESS_MODE)) {
         QMessageBox::warning(nullptr, "提示", "打开网路失败");
         exit(0);
     }
@@ -95,8 +95,7 @@ void IMKernel::openAVCall() {
         return;
     }
     m_avCallMediator = new TcpClientMediator();
-    m_avCallMediator->setMode(2);
-    if (!m_avCallMediator->openNet(APP_MEDIA_SERVER_IP, APP_MEDIA_SERVER_PORT)) {
+    if (!m_avCallMediator->openNet(APP_MEDIA_SERVER_IP, APP_MEDIA_SERVER_PORT, MEDIA_MODE)) {
         QMessageBox::warning(nullptr, "提示", "打开网路失败");
         exit(0);
     }
@@ -355,7 +354,6 @@ void IMKernel::handleVideoCallVideoFrame(char* buf, int size) {
 }
 
 void IMKernel::handleVideoCallEnd(const QJsonObject& json) {
-    qDebug() << "handleVideoCallEnd";
     (void)json;
     auto dialog = IMStore::getInstance()->getVideoCallDialog();
     if (dialog) {

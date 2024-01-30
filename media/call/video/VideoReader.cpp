@@ -21,7 +21,7 @@ void VideoReader::run() {
 
 void VideoReader::slot_getVideoFrame() {
     Mat frame;
-    if (!m_cap->read(frame)) {
+    if (!m_cap.read(frame)) {
         return;
     }
     cvtColor(frame, frame, CV_BGR2RGB);
@@ -34,9 +34,8 @@ void VideoReader::slot_getVideoFrame() {
 }
 
 void VideoReader::slot_openVideo() {
-    m_cap = new VideoCapture();
-    m_cap->open(0);
-    if (!m_cap->isOpened()) {
+    m_cap.open(0);
+    if (!m_cap.isOpened()) {
         QMessageBox::information(nullptr, tr("提示"), tr("视频没有打开"));
         return;
     }
@@ -46,10 +45,8 @@ void VideoReader::slot_openVideo() {
 
 void VideoReader::slot_closeVideo() {
     m_isStop = true;
-    if (m_cap->isOpened()) {
-        m_cap->release();
-        delete m_cap;
-        m_cap = nullptr;
+    if (m_cap.isOpened()) {
+        m_cap.release();
     }
     this->wait();
 }

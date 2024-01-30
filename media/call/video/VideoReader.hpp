@@ -35,7 +35,7 @@ public slots:
     void slot_closeVideo();
 
 private:
-    VideoCapture* m_cap{};
+    VideoCapture m_cap;
     bool m_isStop = false;
 };
 

@@ -12,7 +12,7 @@ public:
 
     ~TcpClientMediator() override;
 
-    bool openNet(const std::string& ip, const std::string& port) override;
+    bool openNet(const std::string& ip, const std::string& port, int mode) override;
 
     void closeNet() override;
 
@@ -25,8 +25,6 @@ public:
     bool sendRaw(char* buf, int size) override;
 
     void dealData(char* buf, int size) override;
-
-    void setMode(int mode);
 
 signals:
     void SIG_readyBusinessData(const QJsonObject& jsonObject);
