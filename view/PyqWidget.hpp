@@ -1,7 +1,10 @@
 #ifndef view_PyqWidget_hpp
 #define view_PyqWidget_hpp
 
+#include <QVBoxLayout>
 #include <QWidget>
+
+#include "view/PyqItem.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,6 +22,7 @@ public:
 
 private:
     Ui::PyqWidget* ui;
+    QVBoxLayout* m_pyqItemLayout = nullptr;
 };
 
 #endif

@@ -53,6 +53,12 @@ add_library(cooper_im_lib
         view/PyqWidget.hpp
         view/PyqWidget.cpp
         view/PyqWidget.ui
+        view/PyqItem.hpp
+        view/PyqItem.cpp
+        view/PyqItem.ui
+        view/PyqCommentItem.hpp
+        view/PyqCommentItem.cpp
+        view/PyqCommentItem.ui
         view/FriendWidget.hpp
         view/FriendWidget.cpp
         view/FriendWidget.ui
