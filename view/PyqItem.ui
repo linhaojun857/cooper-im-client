@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>487</width>
-    <height>255</height>
+    <height>252</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -170,7 +170,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
      <x>65</x>
      <y>212</y>
      <width>399</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -186,7 +186,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-bottom: 1px solid #d9d9d9;</string>
+     <string notr="true"/>
     </property>
     <property name="html">
      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -203,10 +203,13 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>25</y>
+      <y>22</y>
       <width>399</width>
       <height>0</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
    </widget>
   </widget>

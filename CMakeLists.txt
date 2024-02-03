@@ -59,6 +59,9 @@ add_library(cooper_im_lib
         view/PyqCommentItem.hpp
         view/PyqCommentItem.cpp
         view/PyqCommentItem.ui
+        view/PostPyqWidget.hpp
+        view/PostPyqWidget.cpp
+        view/PostPyqWidget.ui
         view/FriendWidget.hpp
         view/FriendWidget.cpp
         view/FriendWidget.ui
