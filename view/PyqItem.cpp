@@ -13,6 +13,20 @@ PyqItem::PyqItem(QWidget* parent) : QWidget(parent), ui(new Ui::PyqItem) {
     connect(ui->m_deletePushButton, &QPushButton::clicked, this, &PyqItem::handleClickDeletePushButton);
     connect(ui->m_likePushButton, &QPushButton::clicked, this, &PyqItem::handleClickLikePushButton);
     connect(ui->m_commentPushButton, &QPushButton::clicked, this, &PyqItem::handleClickCommentPushButton);
+
+    m_imageLabelsLayout = new QGridLayout();
+    m_imageLabelsLayout->setContentsMargins(0, 0, 0, 0);
+    m_imageLabelsLayout->setSpacing(0);
+    m_imageLabelsLayout->setAlignment(Qt::AlignTop);
+    m_imageLabelsLayout->setColumnMinimumWidth(0, 134);
+    m_imageLabelsLayout->setColumnMinimumWidth(1, 134);
+    m_imageLabelsLayout->setColumnMinimumWidth(2, 134);
+
+    m_commentLayout = new QVBoxLayout();
+    m_commentLayout->setContentsMargins(0, 0, 0, 0);
+    m_commentLayout->setSpacing(0);
+    ui->m_commentInnerWidget->setLayout(m_commentLayout);
+    m_commentLayout->addStretch();
 }
 
 PyqItem::~PyqItem() {
@@ -62,6 +76,12 @@ void PyqItem::setContent(const QString& pyqContent) {
     ui->m_commentWidget->move(ui->m_commentWidget->x(), ui->m_commentWidget->y() + deltaHeight);
 }
 
+void PyqItem::setNoImage() {
+    ui->m_imageWidget->hide();
+    int deltaHeight = -ui->m_imageWidget->height() - 10;
+    changeLayoutWhenSetImages(deltaHeight);
+}
+
 void PyqItem::setImages(const QList<QString>& imageUrls) {
     qsizetype size = imageUrls.size();
     if (size <= 3) {
@@ -94,6 +114,30 @@ void PyqItem::setTime(long long int timestamp) {
     ui->m_timeLabel->setText(ret);
 }
 
+void PyqItem::setNoLike(bool hasComment) {
+    if (!hasComment || m_commentCount == 0) {
+        ui->m_commentWidget->hide();
+        int deltaHeight = -ui->m_commentWidget->height() - 6;
+        setFixedHeight(this->height() + deltaHeight);
+    } else {
+        ui->m_commentWidget->setFixedHeight(0);
+        ui->m_commentInnerWidget->move(ui->m_commentInnerWidget->x(),
+                                       ui->m_commentInnerWidget->y() - ui->m_likeListTextBrowser->height());
+    }
+}
+
+void PyqItem::setNoComment() {
+    ui->m_likeListTextBrowser->setStyleSheet("border-bottom: 0px;");
+}
+
+void PyqItem::addPyqCommentItem(PyqCommentItem* pyqCommentItem) {
+    pyqCommentItem->setParent(ui->m_commentInnerWidget);
+    m_commentLayout->insertWidget(m_commentLayout->count() - 1, pyqCommentItem);
+    int deltaHeight = pyqCommentItem->height();
+    changeLayoutWhenSetComments(deltaHeight);
+    m_commentCount++;
+}
+
 void PyqItem::handleClickDeletePushButton() {
 }
 
@@ -104,13 +148,6 @@ void PyqItem::handleClickCommentPushButton() {
 }
 
 void PyqItem::setImages3(const QList<QString>& imageUrls) {
-    m_imageLabelsLayout = new QGridLayout();
-    m_imageLabelsLayout->setContentsMargins(0, 0, 0, 0);
-    m_imageLabelsLayout->setSpacing(0);
-    m_imageLabelsLayout->setAlignment(Qt::AlignTop);
-    m_imageLabelsLayout->setColumnMinimumWidth(0, 134);
-    m_imageLabelsLayout->setColumnMinimumWidth(1, 134);
-    m_imageLabelsLayout->setColumnMinimumWidth(2, 134);
     ui->m_imageWidget->setLayout(m_imageLabelsLayout);
     for (int i = 0; i < imageUrls.size(); ++i) {
         auto label = new QLabel();
@@ -143,14 +180,6 @@ void PyqItem::setImages4(const QList<QString>& imageUrls) {
     int newHeight = ui->m_imageWidget->height();
     int deltaHeight = newHeight - oldHeight;
     changeLayoutWhenSetImages(deltaHeight);
-    m_imageLabelsLayout = new QGridLayout();
-    m_imageLabelsLayout->setContentsMargins(0, 0, 0, 0);
-    m_imageLabelsLayout->setSpacing(0);
-    m_imageLabelsLayout->setAlignment(Qt::AlignTop);
-    m_imageLabelsLayout->setColumnMinimumWidth(0, 134);
-    m_imageLabelsLayout->setColumnMinimumWidth(1, 134);
-    m_imageLabelsLayout->setColumnMinimumWidth(2, 134);
-    ui->m_imageWidget->setLayout(m_imageLabelsLayout);
     int index = 0;
     for (const auto& imageUrl : imageUrls) {
         auto label = new QLabel();
@@ -187,14 +216,6 @@ void PyqItem::setImages6(const QList<QString>& imageUrls) {
     int newHeight = ui->m_imageWidget->height();
     int deltaHeight = newHeight - oldHeight;
     changeLayoutWhenSetImages(deltaHeight);
-    m_imageLabelsLayout = new QGridLayout();
-    m_imageLabelsLayout->setContentsMargins(0, 0, 0, 0);
-    m_imageLabelsLayout->setSpacing(0);
-    m_imageLabelsLayout->setAlignment(Qt::AlignTop);
-    m_imageLabelsLayout->setColumnMinimumWidth(0, 134);
-    m_imageLabelsLayout->setColumnMinimumWidth(1, 134);
-    m_imageLabelsLayout->setColumnMinimumWidth(2, 134);
-    ui->m_imageWidget->setLayout(m_imageLabelsLayout);
     for (int i = 0; i < imageUrls.size(); ++i) {
         auto label = new QLabel();
         label->setFixedSize(134, 134);
@@ -226,14 +247,6 @@ void PyqItem::setImages9(const QList<QString>& imageUrls) {
     int newHeight = ui->m_imageWidget->height();
     int deltaHeight = newHeight - oldHeight;
     changeLayoutWhenSetImages(deltaHeight);
-    m_imageLabelsLayout = new QGridLayout();
-    m_imageLabelsLayout->setContentsMargins(0, 0, 0, 0);
-    m_imageLabelsLayout->setSpacing(0);
-    m_imageLabelsLayout->setAlignment(Qt::AlignTop);
-    m_imageLabelsLayout->setColumnMinimumWidth(0, 134);
-    m_imageLabelsLayout->setColumnMinimumWidth(1, 134);
-    m_imageLabelsLayout->setColumnMinimumWidth(2, 134);
-    ui->m_imageWidget->setLayout(m_imageLabelsLayout);
     for (int i = 0; i < imageUrls.size(); ++i) {
         auto label = new QLabel();
         label->setFixedSize(134, 134);
@@ -266,4 +279,10 @@ void PyqItem::changeLayoutWhenSetImages(int deltaHeight) {
     ui->m_likePushButton->move(ui->m_likePushButton->x(), ui->m_likePushButton->y() + deltaHeight);
     ui->m_commentPushButton->move(ui->m_commentPushButton->x(), ui->m_commentPushButton->y() + deltaHeight);
     ui->m_commentWidget->move(ui->m_commentWidget->x(), ui->m_commentWidget->y() + deltaHeight);
+}
+
+void PyqItem::changeLayoutWhenSetComments(int deltaHeight) {
+    setFixedHeight(this->height() + deltaHeight);
+    ui->m_commentWidget->setFixedHeight(ui->m_commentWidget->height() + deltaHeight);
+    ui->m_commentInnerWidget->setFixedHeight(ui->m_commentInnerWidget->height() + deltaHeight);
 }

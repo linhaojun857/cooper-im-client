@@ -17,6 +17,10 @@ public:
 
     ~PyqCommentItem() override;
 
+    void setCommonComment(const QString& nickname, const QString& comment);
+
+    void setReplyComment(const QString& fromNickname, const QString& toNickname, const QString& comment);
+
 private:
     Ui::PyqCommentItem* ui;
 };

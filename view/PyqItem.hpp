@@ -3,7 +3,10 @@
 
 #include <QGridLayout>
 #include <QLabel>
+#include <QVBoxLayout>
 #include <QWidget>
+
+#include "view/PyqCommentItem.hpp"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -25,9 +28,17 @@ public:
 
     void setContent(const QString& pyqContent);
 
+    void setNoImage();
+
     void setImages(const QList<QString>& imageUrls);
 
     void setTime(long long timestamp);
+
+    void setNoLike(bool hasComment);
+
+    void setNoComment();
+
+    void addPyqCommentItem(PyqCommentItem* pyqCommentItem);
 
 public slots:
     void handleClickDeletePushButton();
@@ -47,10 +58,14 @@ private:
 
     void changeLayoutWhenSetImages(int deltaHeight);
 
+    void changeLayoutWhenSetComments(int deltaHeight);
+
 private:
     Ui::PyqItem* ui;
     QList<QLabel*> m_imageLabels;
     QGridLayout* m_imageLabelsLayout = nullptr;
+    QVBoxLayout* m_commentLayout = nullptr;
+    int m_commentCount = 0;
 };
 
 #endif
