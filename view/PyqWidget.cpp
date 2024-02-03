@@ -23,3 +23,7 @@ PyqWidget::PyqWidget(QWidget* parent) : QWidget(parent), ui(new Ui::PyqWidget) {
 PyqWidget::~PyqWidget() {
     delete ui;
 }
+
+void PyqWidget::addPyqItem(PyqItem* pyqItem) {
+    m_pyqItemLayout->insertWidget(0, pyqItem);
+}

@@ -20,10 +20,10 @@ background-color: #ffffff;</string>
   <widget class="QPushButton" name="m_publishPushButton">
    <property name="geometry">
     <rect>
-     <x>397</x>
-     <y>15</y>
-     <width>70</width>
-     <height>30</height>
+     <x>402</x>
+     <y>10</y>
+     <width>60</width>
+     <height>26</height>
     </rect>
    </property>
    <property name="font">
@@ -41,10 +41,10 @@ background-color: #ffffff;</string>
   <widget class="QPushButton" name="m_settingPushButton">
    <property name="geometry">
     <rect>
-     <x>315</x>
-     <y>15</y>
-     <width>70</width>
-     <height>30</height>
+     <x>325</x>
+     <y>10</y>
+     <width>60</width>
+     <height>26</height>
     </rect>
    </property>
    <property name="font">
@@ -63,9 +63,9 @@ background-color: #ffffff;</string>
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>60</y>
+     <y>50</y>
      <width>487</width>
-     <height>640</height>
+     <height>650</height>
     </rect>
    </property>
    <property name="widgetResizable">
@@ -77,7 +77,7 @@ background-color: #ffffff;</string>
       <x>0</x>
       <y>0</y>
       <width>487</width>
-      <height>640</height>
+      <height>650</height>
      </rect>
     </property>
    </widget>

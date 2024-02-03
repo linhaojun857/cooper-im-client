@@ -119,6 +119,8 @@ void PyqItem::setNoLike(bool hasComment) {
         ui->m_commentWidget->hide();
         int deltaHeight = -ui->m_commentWidget->height() - 6;
         setFixedHeight(this->height() + deltaHeight);
+        setMinimumSize(this->width(), this->height());
+        setMaximumSize(this->width(), this->height());
     } else {
         ui->m_commentWidget->setFixedHeight(0);
         ui->m_commentInnerWidget->move(ui->m_commentInnerWidget->x(),
@@ -274,6 +276,8 @@ void PyqItem::setImages9(const QList<QString>& imageUrls) {
 
 void PyqItem::changeLayoutWhenSetImages(int deltaHeight) {
     setFixedHeight(this->height() + deltaHeight);
+    setMinimumSize(this->width(), this->height());
+    setMaximumSize(this->width(), this->height());
     ui->m_timeLabel->move(ui->m_timeLabel->x(), ui->m_timeLabel->y() + deltaHeight);
     ui->m_deletePushButton->move(ui->m_deletePushButton->x(), ui->m_deletePushButton->y() + deltaHeight);
     ui->m_likePushButton->move(ui->m_likePushButton->x(), ui->m_likePushButton->y() + deltaHeight);
@@ -283,6 +287,8 @@ void PyqItem::changeLayoutWhenSetImages(int deltaHeight) {
 
 void PyqItem::changeLayoutWhenSetComments(int deltaHeight) {
     setFixedHeight(this->height() + deltaHeight);
+    setMinimumSize(this->width(), this->height());
+    setMaximumSize(this->width(), this->height());
     ui->m_commentWidget->setFixedHeight(ui->m_commentWidget->height() + deltaHeight);
     ui->m_commentInnerWidget->setFixedHeight(ui->m_commentInnerWidget->height() + deltaHeight);
 }

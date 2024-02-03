@@ -20,6 +20,8 @@ public:
 
     ~PyqWidget() override;
 
+    void addPyqItem(PyqItem* pyqItem);
+
 private:
     Ui::PyqWidget* ui;
     QVBoxLayout* m_pyqItemLayout = nullptr;

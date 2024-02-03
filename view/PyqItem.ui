@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>487</width>
-    <height>277</height>
+    <height>260</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -33,7 +33,7 @@ background-color: #ffffff;</string>
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>20</y>
+     <y>5</y>
      <width>35</width>
      <height>35</height>
     </rect>
@@ -52,7 +52,7 @@ background-color: #ffffff;</string>
    <property name="geometry">
     <rect>
      <x>63</x>
-     <y>20</y>
+     <y>5</y>
      <width>100</width>
      <height>16</height>
     </rect>
@@ -73,7 +73,7 @@ background-color: #ffffff;</string>
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>38</y>
+     <y>23</y>
      <width>402</width>
      <height>28</height>
     </rect>
@@ -116,7 +116,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
    <property name="geometry">
     <rect>
      <x>65</x>
-     <y>70</y>
+     <y>55</y>
      <width>399</width>
      <height>133</height>
     </rect>
@@ -126,7 +126,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
    <property name="geometry">
     <rect>
      <x>64</x>
-     <y>210</y>
+     <y>195</y>
      <width>100</width>
      <height>16</height>
     </rect>
@@ -142,7 +142,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
    <property name="geometry">
     <rect>
      <x>427</x>
-     <y>210</y>
+     <y>195</y>
      <width>40</width>
      <height>16</height>
     </rect>
@@ -155,7 +155,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
    <property name="geometry">
     <rect>
      <x>387</x>
-     <y>210</y>
+     <y>195</y>
      <width>40</width>
      <height>16</height>
     </rect>
@@ -168,13 +168,13 @@ li.checked::marker { content: &quot;\2612&quot;; }
    <property name="geometry">
     <rect>
      <x>65</x>
-     <y>232</y>
+     <y>217</y>
      <width>399</width>
      <height>25</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: #f7f7f7;</string>
+    <string notr="true"/>
    </property>
    <widget class="QTextBrowser" name="m_likeListTextBrowser">
     <property name="geometry">
@@ -214,7 +214,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
    <property name="geometry">
     <rect>
      <x>347</x>
-     <y>210</y>
+     <y>195</y>
      <width>40</width>
      <height>16</height>
     </rect>
