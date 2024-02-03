@@ -21,7 +21,7 @@ background-color: #ffffff;</string>
    <property name="geometry">
     <rect>
      <x>402</x>
-     <y>10</y>
+     <y>5</y>
      <width>60</width>
      <height>26</height>
     </rect>
@@ -42,7 +42,7 @@ background-color: #ffffff;</string>
    <property name="geometry">
     <rect>
      <x>325</x>
-     <y>10</y>
+     <y>5</y>
      <width>60</width>
      <height>26</height>
     </rect>
@@ -63,9 +63,9 @@ background-color: #ffffff;</string>
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>50</y>
+     <y>45</y>
      <width>487</width>
-     <height>650</height>
+     <height>655</height>
     </rect>
    </property>
    <property name="widgetResizable">
@@ -77,7 +77,7 @@ background-color: #ffffff;</string>
       <x>0</x>
       <y>0</y>
       <width>487</width>
-      <height>650</height>
+      <height>655</height>
      </rect>
     </property>
    </widget>

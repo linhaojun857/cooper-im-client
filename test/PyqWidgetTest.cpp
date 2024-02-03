@@ -24,9 +24,14 @@ int main(int argc, char* argv[]) {
         item->setImages(imageUrls);
         item->setTime(QDateTime::currentDateTime().toSecsSinceEpoch());
         auto commentItem1 = new PyqCommentItem();
-        commentItem1->setCommonComment("张三",
-                                       "这是一条评论，这是一条评论，这是一条评论，这是一条评论，这是一条评论，这是一条"
-                                       "评论，这是一条评论，这是一条评论，这是一条评论");
+        if (i == 19) {
+            commentItem1->setCommonComment("张三", "这是一条评论");
+        } else {
+            commentItem1->setCommonComment(
+                "张三",
+                "这是一条评论，这是一条评论，这是一条评论，这是一条评论，这是一条评论，这是一条"
+                "评论，这是一条评论，这是一条评论，这是一条评论");
+        }
         auto commentItem2 = new PyqCommentItem();
         commentItem2->setReplyComment("李四", "张三", "这是一条回复");
         item->addPyqCommentItem(commentItem1);
