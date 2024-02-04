@@ -30,13 +30,13 @@ QJsonObject HttpUtil::get(const QString& url) {
 
 QJsonObject HttpUtil::post(const QString& url, const QJsonObject& json) {
     auto manager = new QNetworkAccessManager();
+    QByteArray arr = QJsonDocument(json).toJson(QJsonDocument::Compact);
     QNetworkRequest request;
     request.setUrl(QUrl(url));
     request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
-    request.setHeader(QNetworkRequest::ContentLengthHeader,
-                      QVariant(QJsonDocument(json).toJson(QJsonDocument::Compact).size()));
+    request.setHeader(QNetworkRequest::ContentLengthHeader, QVariant(arr.size()));
     request.setRawHeader("Connection", "close");
-    auto reply = manager->post(request, QJsonDocument(json).toJson(QJsonDocument::Compact));
+    auto reply = manager->post(request, arr);
     QEventLoop loop;
     QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
     loop.exec();

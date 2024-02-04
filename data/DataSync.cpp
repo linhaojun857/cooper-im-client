@@ -2,7 +2,6 @@
 
 #include <QJsonArray>
 
-#include "core/IMKernel.hpp"
 #include "define/IMDefine.hpp"
 #include "entity/Entity.hpp"
 #include "store/IMStore.hpp"

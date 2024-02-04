@@ -63,7 +63,7 @@ private:
 private:
     Ui::PyqItem* ui;
     QList<QLabel*> m_imageLabels;
-    QGridLayout* m_imageLabelsLayout = nullptr;
+    QGridLayout* m_imageLayout = nullptr;
     QVBoxLayout* m_commentLayout = nullptr;
     int m_commentCount = 0;
 };

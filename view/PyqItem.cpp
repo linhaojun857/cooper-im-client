@@ -3,30 +3,30 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
-#include <QScrollBar>
 #include <QtConcurrent/QtConcurrent>
 
 #include "ui_PyqItem.h"
 
 PyqItem::PyqItem(QWidget* parent) : QWidget(parent), ui(new Ui::PyqItem) {
     ui->setupUi(this);
-    connect(ui->m_deletePushButton, &QPushButton::clicked, this, &PyqItem::handleClickDeletePushButton);
-    connect(ui->m_likePushButton, &QPushButton::clicked, this, &PyqItem::handleClickLikePushButton);
-    connect(ui->m_commentPushButton, &QPushButton::clicked, this, &PyqItem::handleClickCommentPushButton);
-
-    m_imageLabelsLayout = new QGridLayout();
-    m_imageLabelsLayout->setContentsMargins(0, 0, 0, 0);
-    m_imageLabelsLayout->setSpacing(0);
-    m_imageLabelsLayout->setAlignment(Qt::AlignTop);
-    m_imageLabelsLayout->setColumnMinimumWidth(0, 134);
-    m_imageLabelsLayout->setColumnMinimumWidth(1, 134);
-    m_imageLabelsLayout->setColumnMinimumWidth(2, 134);
+    m_imageLayout = new QGridLayout();
+    m_imageLayout->setContentsMargins(0, 0, 0, 0);
+    m_imageLayout->setSpacing(0);
+    m_imageLayout->setAlignment(Qt::AlignTop);
+    m_imageLayout->setColumnMinimumWidth(0, 134);
+    m_imageLayout->setColumnMinimumWidth(1, 134);
+    m_imageLayout->setColumnMinimumWidth(2, 134);
+    ui->m_imageWidget->setLayout(m_imageLayout);
 
     m_commentLayout = new QVBoxLayout();
     m_commentLayout->setContentsMargins(0, 0, 0, 0);
     m_commentLayout->setSpacing(0);
     ui->m_commentInnerWidget->setLayout(m_commentLayout);
     m_commentLayout->addStretch();
+
+    connect(ui->m_deletePushButton, &QPushButton::clicked, this, &PyqItem::handleClickDeletePushButton);
+    connect(ui->m_likePushButton, &QPushButton::clicked, this, &PyqItem::handleClickLikePushButton);
+    connect(ui->m_commentPushButton, &QPushButton::clicked, this, &PyqItem::handleClickCommentPushButton);
 }
 
 PyqItem::~PyqItem() {
@@ -34,6 +34,11 @@ PyqItem::~PyqItem() {
     for (auto label : m_imageLabels) {
         delete label;
     }
+    delete m_imageLayout;
+    for (int i = 0; i < m_commentLayout->count(); ++i) {
+        delete m_commentLayout->itemAt(i)->widget();
+    }
+    delete m_commentLayout;
 }
 
 void PyqItem::setAvatar(const QString& avatarUrl) {
@@ -150,7 +155,6 @@ void PyqItem::handleClickCommentPushButton() {
 }
 
 void PyqItem::setImages3(const QList<QString>& imageUrls) {
-    ui->m_imageWidget->setLayout(m_imageLabelsLayout);
     for (int i = 0; i < imageUrls.size(); ++i) {
         auto label = new QLabel();
         label->setFixedSize(134, 134);
@@ -171,7 +175,7 @@ void PyqItem::setImages3(const QList<QString>& imageUrls) {
                 qDebug() << "load failed: " << reply->errorString();
             }
         });
-        m_imageLabelsLayout->addWidget(label, i / 3, i % 3);
+        m_imageLayout->addWidget(label, i / 3, i % 3);
         m_imageLabels.append(label);
     }
 }
@@ -203,7 +207,7 @@ void PyqItem::setImages4(const QList<QString>& imageUrls) {
                 qDebug() << "load failed: " << reply->errorString();
             }
         });
-        m_imageLabelsLayout->addWidget(label, index / 3, index % 3);
+        m_imageLayout->addWidget(label, index / 3, index % 3);
         index++;
         if (index == 2) {
             index++;
@@ -238,7 +242,7 @@ void PyqItem::setImages6(const QList<QString>& imageUrls) {
                 qDebug() << "load failed: " << reply->errorString();
             }
         });
-        m_imageLabelsLayout->addWidget(label, i / 3, i % 3);
+        m_imageLayout->addWidget(label, i / 3, i % 3);
         m_imageLabels.append(label);
     }
 }
@@ -269,7 +273,7 @@ void PyqItem::setImages9(const QList<QString>& imageUrls) {
                 qDebug() << "load failed: " << reply->errorString();
             }
         });
-        m_imageLabelsLayout->addWidget(label, i / 3, i % 3);
+        m_imageLayout->addWidget(label, i / 3, i % 3);
         m_imageLabels.append(label);
     }
 }
