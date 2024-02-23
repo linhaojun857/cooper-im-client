@@ -70,15 +70,15 @@ MainWidget::MainWidget(QWidget* parent) : QWidget(parent), ui(new Ui::MainWidget
     pyqItem->setName("朋友圈");
     m_exploreLayout->addWidget(pyqItem);
     connect(pyqItem, &ExploreItem::clicked, []() {
-        qDebug() << "pyq clicked";
+        IMStore::getPyqWidget()->show();
+        IMStore::getPyqWidget()->flushData();
     });
     auto liveItem = new ExploreItem();
     liveItem->setName("直播");
     m_exploreLayout->addWidget(liveItem);
     connect(liveItem, &ExploreItem::clicked, []() {
-        qDebug() << "live clicked";
         IMStore::getLiveLobbyWidget()->show();
-        IMStore::getLiveLobbyWidget()->flushLiveRooms();
+        IMStore::getLiveLobbyWidget()->flushData();
     });
     m_exploreLayout->addStretch();
     m_tabBtnMap[0] = ui->m_msgPushButton;

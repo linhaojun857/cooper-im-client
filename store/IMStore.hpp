@@ -18,6 +18,7 @@
 #include "view/MainWidget.hpp"
 #include "view/MessageWidget.hpp"
 #include "view/NotifyWidget.hpp"
+#include "view/PyqWidget.hpp"
 
 class IMKernel;
 
@@ -144,6 +145,8 @@ public:
     QString getLatestGroupMessageByGroupId(int groupId);
 
     static LiveLobbyWidget* getLiveLobbyWidget();
+
+    static PyqWidget* getPyqWidget();
 
     static LiveRecordDialog* getLiveRecordDialog();
 

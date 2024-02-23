@@ -45,6 +45,20 @@ PostPyqWidget::~PostPyqWidget() {
     delete m_uploadPushButton;
 }
 
+void PostPyqWidget::reset() {
+    ui->m_contentTextEdit->clear();
+    for (auto label : m_imageLabels) {
+        delete label;
+    }
+    m_imageLabels.clear();
+    m_imageUrls.clear();
+    m_imageLayout->addWidget(m_uploadPushButton, 0, 0);
+    ui->m_imageWidget->setFixedHeight(360);
+    setMinimumSize(width(), 360);
+    setMaximumSize(width(), 360);
+    ui->m_publishPushButton->move(ui->m_publishPushButton->x(), 310);
+}
+
 void PostPyqWidget::handleClickPublishPushButton() {
     QJsonObject json;
     json["token"] = IMStore::getInstance()->getToken();

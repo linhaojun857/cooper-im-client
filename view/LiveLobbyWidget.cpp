@@ -45,7 +45,7 @@ void LiveLobbyWidget::addLiveRoomItem(LiveRoomItem* item, int row, int column) {
     m_liveRoomItems.append(item);
 }
 
-void LiveLobbyWidget::clearLiveRoomItems() {
+void LiveLobbyWidget::clearData() {
     QLayoutItem* child;
     while ((child = m_liveRoomItemsLayout->takeAt(0)) != nullptr) {
         delete child->widget();
@@ -54,8 +54,8 @@ void LiveLobbyWidget::clearLiveRoomItems() {
     m_liveRoomItems.clear();
 }
 
-void LiveLobbyWidget::flushLiveRooms() {
-    clearLiveRoomItems();
+void LiveLobbyWidget::flushData() {
+    clearData();
     auto ret = HttpUtil::get(HTTP_SERVER_URL "/live/getOpenedLives");
     if (ret["code"].toInt() != HTTP_SUCCESS_CODE) {
         return;

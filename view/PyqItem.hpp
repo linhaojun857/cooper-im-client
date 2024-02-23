@@ -22,6 +22,10 @@ public:
 
     ~PyqItem() override;
 
+    void setId(int id);
+
+    void setUserId(int userId);
+
     void setAvatar(const QString& avatarUrl);
 
     void setNickname(const QString& nickname);
@@ -62,6 +66,8 @@ private:
 
 private:
     Ui::PyqItem* ui;
+    int m_id = 0;
+    int m_userId = 0;
     QList<QLabel*> m_imageLabels;
     QGridLayout* m_imageLayout = nullptr;
     QVBoxLayout* m_commentLayout = nullptr;

@@ -466,6 +466,11 @@ LiveLobbyWidget* IMStore::getLiveLobbyWidget() {
     return &liveLobbyWidget;
 }
 
+PyqWidget* IMStore::getPyqWidget() {
+    static PyqWidget pyqWidget;
+    return &pyqWidget;
+}
+
 LiveRecordDialog* IMStore::getLiveRecordDialog() {
     static LiveRecordDialog liveRecordDialog;
     return &liveRecordDialog;

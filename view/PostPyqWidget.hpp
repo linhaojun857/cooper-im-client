@@ -20,6 +20,8 @@ public:
 
     ~PostPyqWidget() override;
 
+    void reset();
+
 private:
     void handleClickPublishPushButton();
 

@@ -4,6 +4,7 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
+#include "view/PostPyqWidget.hpp"
 #include "view/PyqItem.hpp"
 
 QT_BEGIN_NAMESPACE
@@ -22,9 +23,23 @@ public:
 
     void addPyqItem(PyqItem* pyqItem);
 
+    void clearData();
+
+    void flushData();
+
+    void loadData();
+
+private:
+    void handleClickPostPushButton();
+
+    void loadMoreData(int value);
+
 private:
     Ui::PyqWidget* ui;
     QVBoxLayout* m_pyqItemLayout = nullptr;
+    PostPyqWidget* m_postPyqWidget = nullptr;
+    int m_currentPage = 1;
+    int m_pageSize = 10;
 };
 
 #endif

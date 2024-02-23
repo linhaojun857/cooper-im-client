@@ -5,6 +5,7 @@
 #include <QNetworkRequest>
 #include <QtConcurrent/QtConcurrent>
 
+#include "store/IMStore.hpp"
 #include "ui_PyqItem.h"
 
 PyqItem::PyqItem(QWidget* parent) : QWidget(parent), ui(new Ui::PyqItem) {
@@ -27,6 +28,17 @@ PyqItem::PyqItem(QWidget* parent) : QWidget(parent), ui(new Ui::PyqItem) {
     connect(ui->m_deletePushButton, &QPushButton::clicked, this, &PyqItem::handleClickDeletePushButton);
     connect(ui->m_likePushButton, &QPushButton::clicked, this, &PyqItem::handleClickLikePushButton);
     connect(ui->m_commentPushButton, &QPushButton::clicked, this, &PyqItem::handleClickCommentPushButton);
+}
+
+void PyqItem::setId(int id) {
+    m_id = id;
+}
+
+void PyqItem::setUserId(int userId) {
+    m_userId = userId;
+    if (userId != IMStore::getInstance()->getSelf()->id) {
+        ui->m_deletePushButton->hide();
+    }
 }
 
 PyqItem::~PyqItem() {

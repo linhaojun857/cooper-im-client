@@ -23,9 +23,9 @@ public:
 
     void addLiveRoomItem(LiveRoomItem* item, int row, int column);
 
-    void clearLiveRoomItems();
+    void clearData();
 
-    void flushLiveRooms();
+    void flushData();
 
 public slots:
     void handleClickSearchPushButton();

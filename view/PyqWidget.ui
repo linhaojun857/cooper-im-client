@@ -29,7 +29,7 @@
    <string notr="true">border: 0px;
 background-color: #ffffff;</string>
   </property>
-  <widget class="QPushButton" name="m_publishPushButton">
+  <widget class="QPushButton" name="m_postPushButton">
    <property name="geometry">
     <rect>
      <x>402</x>
