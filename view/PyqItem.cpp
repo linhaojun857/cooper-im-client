@@ -112,6 +112,29 @@ void PyqItem::setImages(const QList<QString>& imageUrls) {
     }
 }
 
+void PyqItem::setLikeList(const QList<QString>& likeList) {
+    int oldHeight = ui->m_likeListTextBrowser->size().rheight();
+    QString str;
+    for (int i = 0; i < likeList.size(); i++) {
+        str += likeList[i];
+        if (i != likeList.size() - 1) {
+            str += "、";
+        }
+    }
+    str += "点赞了";
+    ui->m_likeListTextBrowser->setText(str);
+    ui->m_likeListTextBrowser->document()->setTextWidth(ui->m_likeListTextBrowser->width());
+    ui->m_likeListTextBrowser->setFixedHeight((int)(ui->m_likeListTextBrowser->document()->size().height()));
+    ui->m_likeListTextBrowser->setFixedWidth((int)(ui->m_likeListTextBrowser->document()->size().width()));
+    int newHeight = ui->m_likeListTextBrowser->size().rheight();
+    int deltaHeight = newHeight - oldHeight;
+    if (deltaHeight == 0) {
+        return;
+    }
+    deltaHeight -= 2;
+    ui->m_commentInnerWidget->move(ui->m_commentInnerWidget->x(), ui->m_commentInnerWidget->y() + deltaHeight);
+}
+
 void PyqItem::setTime(long long int timestamp) {
     QDateTime currentTime = QDateTime::currentDateTime();
     QDateTime messageTime = QDateTime::fromSecsSinceEpoch(timestamp);

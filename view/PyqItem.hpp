@@ -36,6 +36,8 @@ public:
 
     void setImages(const QList<QString>& imageUrls);
 
+    void setLikeList(const QList<QString>& likeList);
+
     void setTime(long long timestamp);
 
     void setNoLike(bool hasComment);
